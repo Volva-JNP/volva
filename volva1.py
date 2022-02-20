@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
 import plotly.figure_factory as ff
-import volva_text
+from volva_text import *
 from volva_fct import *
 
 
