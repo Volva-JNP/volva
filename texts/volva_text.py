@@ -5,8 +5,6 @@ Created on Sat Feb 19 19:03:22 2022
 @author: jk
 """
 
-path = 'volva_datas_utlimate_one.csv'
-path_brut = 'volumesMARS2021.csv'
 
 intro = '''
 # VOLVA PROJECT
