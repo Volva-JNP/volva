@@ -5,6 +5,7 @@ Created on Sat Feb 19 17:12:33 2022
 @author: User
 """
 
+from doctest import DocFileSuite
 import streamlit as st
 import numpy as np
 import streamlit as st
@@ -20,38 +21,92 @@ from functions.volva_fct_data import *
 
 
 
-
-
-
-
 st.sidebar.image('./img/Les_Mousquetaires.png')
 st.sidebar.write("")
 
+if 'page' not in st.session_state:
+    st.session_state.page = 'Intro'
 
+
+
+m = st.markdown("""
+
+<style>
+div.stButton >
+    button:first-child {
+        background-color:transparent;
+        border-radius:6px;
+        cursor:pointer;        
+        font-family:Arial;
+        font-size:15px;
+        font-weight:bold;
+
+        margin-right: 0px;
+        height: 25px;
+        width: 250px
+
+    }
+</style>""", unsafe_allow_html=True)
 
 
 #menu selection du dataset
-
+Data=False
 
 st.sidebar.header('MENU')
 st.sidebar.markdown('analyse de données ITM SQF')
 
 
-menu = st.sidebar.radio(
-    "",
-    ("Intro", "Data", "visualisation", 'model', "prediction"),
-)
+button_intro = st.sidebar.button('Introduction')
+button_data = st.sidebar.button('Data')
+button_visu = st.sidebar.button('Visualisation')
+button_model = st.sidebar.button('Modèlisation')
+button_predict = st.sidebar.button('Prédictions')
 
-if menu == 'Intro':
-    set_home()  
-elif menu == 'Data':
+
+if button_intro:
+    st.session_state.page = 'Intro'
+    
+
+if button_data:
+    st.session_state.page = 'Data'
+
+    
+if button_visu:
+    st.session_state.page = 'Vizu'
+    
+
+if button_model:
+    st.session_state.page = 'Model'
+
+if button_predict:
+    st.session_state.page = 'Predict' 
+
+
+page = st.session_state.page 
+
+if page == 'Intro':
+    set_home() 
+
+if page == 'Data':
     set_data()
-elif menu == 'visualisation':
+
+if page == 'Vizu':
     set_visu()
-elif menu == 'model':
-    set_model()
-elif menu == 'prediction':
-    set_pred()
+
+if page == 'Model':
+    set_visu()
+
+if page == 'Predict':
+    set_visu()
+
+
+ 
+
+
+
+
+    
+ 
 
 
 
