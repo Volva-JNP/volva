@@ -22,6 +22,7 @@ from functions.volva_fct_model import *
 
 
 
+
 st.sidebar.image('./img/Les_Mousquetaires.png')
 st.sidebar.write("")
 
