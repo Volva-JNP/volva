@@ -169,7 +169,7 @@ def jour_ferié():
 
 
 def set_home():
-    st.image('itmsqf.jpg')
+    st.image('./img/itmsqf.jpg')
     st.write(intro, unsafe_allow_html=True)
     
     
