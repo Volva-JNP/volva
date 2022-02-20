@@ -15,3 +15,4 @@ services d’un site logistique pour en déduire des tendances et développer un
 Nous disposions des historiques de volumes de colis jour/jour sur la période 2020/2021, du nombre d’heures travaillées sur la même période et des notions de productivité par service (18 mois d’historique).
 ces données sont issues d'une requete Oracle realisé mensuellement.Nous avons donc dans un premier temps reuni l'ensemble des infos dans un seul dataset
 '''
+
