@@ -13,34 +13,19 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
 import plotly.figure_factory as ff
-from functions.volva_fct import *
-from texts.volva_text import *
-from functions.volva_fct_visu import *
-from functions.volva_fct_data import *
-import webbrowser
+import volva_text
+from volva_fct import *
 
 
-st.sidebar.image('./img/Les_Mousquetaires.png')
+
+
+
+
+
+st.sidebar.image('Les_Mousquetaires.png')
 st.sidebar.write("")
 
-m = st.markdown("""
 
-<style>
-div.stButton >
-    button:first-child {
-        background-color:transparent;
-        border-radius:6px;
-        cursor:pointer;        
-        font-family:Arial;
-        font-size:15px;
-        font-weight:bold;
-
-        margin-right: 0px;
-        height: 25px;
-        width: 250px
-
-    }
-</style>""", unsafe_allow_html=True)
 
 
 #menu selection du dataset
@@ -50,33 +35,21 @@ st.sidebar.header('MENU')
 st.sidebar.markdown('analyse de données ITM SQF')
 
 
+menu = st.sidebar.radio(
+    "",
+    ("Intro", "Data", "visualisation", 'model', "prediction"),
+)
 
-
-
-
-button_intro = st.sidebar.button('Introduction')
-button_data = st.sidebar.button('Data')
-button_visu = st.sidebar.button('Visualisation')
-button_model = st.sidebar.button('Modèlisation')
-button_predict = st.sidebar.button('Prédictions')
-
-
-if button_intro:
+if menu == 'Intro':
     set_home()  
-
-if button_data:
-    set_data() 
-
-if button_visu:
-    set_visu() 
-
-if button_model:
-    set_visu() 
-
-if button_predict:
-    set_visu() 
-
-
+elif menu == 'Data':
+    set_data()
+elif menu == 'visualisation':
+    set_visu()
+elif menu == 'model':
+    set_model()
+elif menu == 'prediction':
+    set_pred()
 
 
 
