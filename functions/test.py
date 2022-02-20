@@ -25,7 +25,7 @@ from plotly.subplots import make_subplots
 
 
 #@st.cache
-def load_csv(datas_paths.path):
+def load_csv(path):
     data = pd.read_csv(path, sep=',')
     return data
 
