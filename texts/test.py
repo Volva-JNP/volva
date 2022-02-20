@@ -20,7 +20,7 @@ import plotly.figure_factory as ff
 import plotly.graph_objs as go
 from plotly import tools
 from texts.volva_text import *
-from datas.datas_paths import *
+from datas.datas_paths import path
 from plotly.subplots import make_subplots
 
 
