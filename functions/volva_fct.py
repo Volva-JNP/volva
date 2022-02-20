@@ -23,6 +23,9 @@ from texts.volva_text import *
 # from datas import datas_paths
 from plotly.subplots import make_subplots
 
+path = '../datas/volva_datas_utlimate_one.csv'
+path_brut = '../datas/volumesMARS2021.csv'
+
 
 #@st.cache
 def load_csv(path):
