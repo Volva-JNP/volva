@@ -18,9 +18,6 @@ from texts.volva_text import *
 
 
 
-
-
-
 st.sidebar.image('./img/Les_Mousquetaires.png')
 st.sidebar.write("")
 
