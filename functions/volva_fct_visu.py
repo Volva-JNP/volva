@@ -27,6 +27,15 @@ path_brut = 'datas/volumesMARS2021.csv'
 def set_visu():
     link='[moyenne mobile](#moyenne-mobile-volume-par-secteur)'
     st.sidebar.markdown(link,unsafe_allow_html= True )
+    link2='[Distribution](#distribution)'
+    st.sidebar.markdown(link2,unsafe_allow_html= True )
+    link1='[violon](#volume-par-jour)'
+    st.sidebar.markdown(link1,unsafe_allow_html= True )
+    
+    link3='[jourf](#impact-jour-f-ri)'
+    st.sidebar.markdown(link2,unsafe_allow_html= True )
+    
+    
         
     
     dataset = load_csv(path)
@@ -73,10 +82,30 @@ def set_visu():
     fig1.add_traces(data)
     fig1.update_layout(width=1000,height=600)
     st.title('Moyenne Mobile Volume par Secteur')
-    st.write(mobile, unsafe_allow_html=True)
+    
+    
     st.write(fig1)
+    with st.expander('more information'):
+        st.write(mobile, unsafe_allow_html=True)
     
     
+    st.title('Distribution')
+    
+    x1 = df['REALISE_TOTAL_FRAIS']
+    x2 = df['REALISE_TOTAL_GEL']
+    x3 = df['REALISE_TOTAL_FFL']
+    
+    hist_data= [x1,x2,x3]
+    group_labels = ['Frais','GEL','FFL']
+
+    fig4 = go.Figure()
+    fig4.add_trace(go.Histogram(x=x1,name='FRAIS',nbinsx=20))
+    fig4.add_trace(go.Histogram(x=x2,name='GEL',nbinsx=20))
+    fig4.add_trace(go.Histogram(x=x3,name='FFL',nbinsx=20))
+    fig4.update_traces (opacity=0.7)
+    fig4.update_layout(barmode='overlay')
+    fig4.update_layout(width=1000,height=600)
+    st.write(fig4)
     
     
     
@@ -84,9 +113,9 @@ def set_visu():
     st.write(violo, unsafe_allow_html=True)
     menu = st.radio(
     "",
-    ("secteur frais", "secteur GEL", "secteur FFL"),
+    ("secteur FRAIS", "secteur GEL", "secteur FFL"),
 )
-    if menu =='secteur frais':
+    if menu =='secteur FRAIS':
         dataset = dataset.drop(['REALISE_TOTAL_GEL','REALISE_TOTAL_FFL'], axis = 1)
         y='REALISE_TOTAL_FRAIS'
         REALISE_TARGETED = 'REALISE_TOTAL_FRAIS'
@@ -261,4 +290,6 @@ def jour_ferié():
     if menu =='secteur FFL':
         fig2.update_yaxes(range = (-6000,10000))
     st.write(fig2)
+
+
 
