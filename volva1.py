@@ -24,7 +24,7 @@ from functions.volva_fct_data import *
 
 
 
-st.sidebar.image('Les_Mousquetaires.png')
+st.sidebar.image('./img/Les_Mousquetaires.png')
 st.sidebar.write("")
 
 
