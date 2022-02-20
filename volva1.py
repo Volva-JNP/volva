@@ -18,6 +18,7 @@ from functions.volva_fct import *
 from texts.volva_text import *
 from functions.volva_fct_visu import *
 from functions.volva_fct_data import *
+from functions.volva_fct_model import *
 
 
 
@@ -94,7 +95,7 @@ if page == 'Vizu':
     set_visu()
 
 if page == 'Model':
-    set_visu()
+    set_selection_datas()
 
 if page == 'Predict':
     set_visu()
