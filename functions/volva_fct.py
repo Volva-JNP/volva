@@ -18,7 +18,7 @@ import plotly.express as px
 import plotly.figure_factory as ff
 import plotly.graph_objs as go
 from plotly import tools
-from texts.volva_text import *
+from volva_text import *
 from plotly.subplots import make_subplots
 
 
@@ -124,8 +124,8 @@ def jour_ferié():
     print(REALISE_TARGETED)
     print("variation du CA à la proximité d'un prochain jour férié quand le jour de la semaine est :")
 
-    fig2 = make_subplots(rows=2,cols=3)
-    
+    fig2 = make_subplots(rows=2,cols=3,subplot_titles=('Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'))
+    fig2.update_layout(showlegend=False)
     for day_num_ecarts in list_ecart_per_day:
         
         y = day_num_ecarts
@@ -169,7 +169,7 @@ def jour_ferié():
 
 
 def set_home():
-    st.image('./img/itmsqf.jpg')
+    st.image('itmsqf.jpg')
     st.write(intro, unsafe_allow_html=True)
     
     
@@ -259,6 +259,7 @@ def set_visu():
 
     data= [total_2020,gel_2020,ffl_2020,frais_2020,total_2021,gel_2021,ffl_2021,frais_2021]
     fig1.add_traces(data)
+    
     st.title('Moyenne Mobile Volume par Secteur')
     st.write(fig1)
     st.title('Volume par Jour')
@@ -271,6 +272,7 @@ def set_visu():
         y='REALISE_TOTAL_FRAIS'
         REALISE_TARGETED = 'REALISE_TOTAL_FRAIS'
         fig = px.violin(dataset,x= x, y=y, color= x, box = True)
+        fig.update_layout(showlegend=False)
         st.write('Poids moyens des jours de la semaine')
         st.write(fig)
         
@@ -280,6 +282,7 @@ def set_visu():
         y='REALISE_TOTAL_GEL'
         REALISE_TARGETED = 'REALISE_TOTAL_GEL'
         fig = px.violin(dataset,x= x, y=y, color= x, box = True)
+        fig.update_layout(showlegend=False)
         st.write('Poids moyens des jours de la semaine')
         st.write(fig)
         
@@ -288,8 +291,10 @@ def set_visu():
         y='REALISE_TOTAL_FFL'
         REALISE_TARGETED = 'REALISE_TOTAL_FFL'
         fig = px.violin(dataset,x= x, y=y, color= x, box = True)
+        fig.update_layout(showlegend=False)
         st.write('Poids moyens des jours de la semaine')
         st.write(fig)
+        
     
     st.title('Impact Jour Férié')
         
