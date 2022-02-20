@@ -19,12 +19,12 @@ import plotly.figure_factory as ff
 import plotly.graph_objs as go
 from plotly import tools
 from texts.volva_text import *
-from datas.datas_paths import *
+from datas import datas_paths
 from plotly.subplots import make_subplots
 
 
 #@st.cache
-def load_csv(path):
+def load_csv(datas_paths.path):
     data = pd.read_csv(path, sep=',')
     return data
 
