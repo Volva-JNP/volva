@@ -18,6 +18,7 @@ from  sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 from math import *
 from sklearn.ensemble import GradientBoostingRegressor
+from stqdm import stqdm
 
 import seaborn as sns
 
@@ -140,7 +141,9 @@ def set_selection_datas():
 
     results = pd.DataFrame(columns=['Nom', 'Train_score', 'Test_score', 'Ecart'])
 
-    for nom_df, df in zip(list_nom_df,list_df) : 
+    for nom_df, df,i in zip(list_nom_df,list_df, stqdm(range(50))) : 
+
+        # st.progress(i)
 
         gridcv_GRB, X_train_scaled, X_test_scaled, y_train, y_test =  train_model(df,GBR,params_gbr)  
         Train_score = gridcv_GRB.score(X_train_scaled, y_train)
