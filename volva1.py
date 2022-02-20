@@ -14,7 +14,7 @@ import seaborn as sns
 import plotly.express as px
 import plotly.figure_factory as ff
 from texts.volva_text import *
-from functions.test import *
+from func.test import *
 
 
 
