@@ -18,7 +18,8 @@ import plotly.express as px
 import plotly.figure_factory as ff
 import plotly.graph_objs as go
 from plotly import tools
-from volva_text import *
+from texts.volva_text import *
+from datas.datas_path import *
 from plotly.subplots import make_subplots
 
 
