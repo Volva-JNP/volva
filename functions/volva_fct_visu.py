@@ -83,15 +83,33 @@ def set_visu():
     
     st.title('Moyenne Mobile Volume par Secteur')
     with st.expander('more information'):
-        st.write(mobile, unsafe_allow_html=True)
+        
         col1, col2 = st.columns(2)
         with col1:
-            st.write("")
+            st.write(mobile, unsafe_allow_html=True)
         with col2:
             st.image('img/mobile2.gif')
     fig1.update_yaxes( title='VOLUME')
     fig1.update_xaxes( title='DATE')
-    fig1.update_layout(title='Moyenne Mobile jour 2020/2021')
+    fig1.update_layout(title='Moyenne Mobile jour 2020/2021',template="simple_white")
+    fig1.add_vrect(x0="15", x1="54", 
+              annotation_text=" Période forte", annotation_position="top left",
+              fillcolor="green", opacity=0.20, line_width=0)
+    fig1.add_vrect(x0="55", x1="75", 
+              annotation_text=" Période creuse", annotation_position="top left",
+              fillcolor="red", opacity=0.20, line_width=0)
+    fig1.add_vrect(x0="115", x1="130", 
+              annotation_text=" Période creuse", annotation_position="top left",
+              fillcolor="red", opacity=0.20, line_width=0)
+    fig1.update_xaxes(ticklabelmode="period")
+    fig1.update_layout(
+    xaxis = dict(
+        tickmode = 'array',
+        tickvals = [1,  15,30,50,70,90,110,130,150,170],
+        ticktext = ['MARS',  'AVRIL', 'MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','DECEMBRE']
+    )
+)
+    
     st.write(fig1)
     
     
@@ -109,12 +127,12 @@ def set_visu():
     group_labels = ['Frais','GEL','FFL']
 
     fig4 = go.Figure()
-    fig4.add_trace(go.Histogram(x=x1,name='FRAIS',nbinsx=20))
+    fig4.add_trace(go.Histogram(x=x1,name='FRAIS',nbinsx=30))
     fig4.add_trace(go.Histogram(x=x2,name='GEL',nbinsx=20))
-    fig4.add_trace(go.Histogram(x=x3,name='FFL',nbinsx=30))
+    fig4.add_trace(go.Histogram(x=x3,name='FFL',nbinsx=20))
     fig4.add_trace(go.Histogram(x=x4,name='total site',nbinsx=30))
     fig4.update_traces (opacity=0.7)
-    fig4.update_layout(barmode='overlay')
+    fig4.update_layout(barmode='overlay',bargap=0.1,title='Distribution des volumes par secteur')
     fig4.update_layout(width=1400,height=600)
     fig4.update_xaxes( title='VOLUME')
     fig4.update_yaxes( title='FREQUENCE')
