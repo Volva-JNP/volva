@@ -17,7 +17,7 @@ from plotly import tools
 from texts.volva_text import *
 from plotly.subplots import make_subplots
 from functions.volva_fct import *
-
+from PIL import Image
 
 path = 'datas/volva_datas_utlimate_one.csv'
 path_brut = 'datas/volumesMARS2021.csv'
@@ -25,15 +25,14 @@ path_brut = 'datas/volumesMARS2021.csv'
 
 
 def set_visu():
-    link='[moyenne mobile](#moyenne-mobile-volume-par-secteur)'
+    link='[Moyenne Mobile 2020-21](#moyenne-mobile-volume-par-secteur)'
     st.sidebar.markdown(link,unsafe_allow_html= True )
-    link2='[Distribution](#distribution)'
+    link2='[Distribution par secteur](#distribution)'
     st.sidebar.markdown(link2,unsafe_allow_html= True )
-    link1='[violon](#volume-par-jour)'
+    link1='[volume moyen par jour](#volume-par-jour)'
     st.sidebar.markdown(link1,unsafe_allow_html= True )
-    
-    link3='[jourf](#impact-jour-f-ri)'
-    st.sidebar.markdown(link2,unsafe_allow_html= True )
+    link3='[Jour Férié](#impact-jour-f-ri)'
+    st.sidebar.markdown(link3,unsafe_allow_html= True )
     
     
         
@@ -81,15 +80,24 @@ def set_visu():
     data= [total_2020,gel_2020,ffl_2020,frais_2020,total_2021,gel_2021,ffl_2021,frais_2021]
     fig1.add_traces(data)
     fig1.update_layout(width=1000,height=600)
+    
     st.title('Moyenne Mobile Volume par Secteur')
-    
-    
-    st.write(fig1)
     with st.expander('more information'):
         st.write(mobile, unsafe_allow_html=True)
+        col1, col2 = st.columns(2)
+        with col1:
+            st.write("")
+        with col2:
+            st.image('img/mobile2.gif')
+    
+    st.write(fig1)
+    
     
     
     st.title('Distribution')
+    with st.expander('more information'):
+        st.write(distrib, unsafe_allow_html=True)
+        
     
     x1 = df['REALISE_TOTAL_FRAIS']
     x2 = df['REALISE_TOTAL_GEL']
@@ -110,7 +118,8 @@ def set_visu():
     
     
     st.title('Volume par Jour')
-    st.write(violo, unsafe_allow_html=True)
+    with st.expander('more information'):
+        st.write(violo,  unsafe_allow_html=True)
     menu = st.radio(
     "",
     ("secteur FRAIS", "secteur GEL", "secteur FFL"),
@@ -148,7 +157,8 @@ def set_visu():
         
     
     st.title('Impact Jour Férié')
-    st.write(impact, unsafe_allow_html=True)    
+    with st.expander('more information'):
+        st.write(impact, unsafe_allow_html=True)    
         
     jour_ferié()
     
