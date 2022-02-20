@@ -13,8 +13,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
 import plotly.figure_factory as ff
-from volva_text import *
-from volva_fct import *
+from texts.volva_text import *
+from functions.volva_fct import *
 
 
 
@@ -22,7 +22,7 @@ from volva_fct import *
 
 
 
-st.sidebar.image('Les_Mousquetaires.png')
+st.sidebar.image('/img/Les_Mousquetaires.png')
 st.sidebar.write("")
 
 
