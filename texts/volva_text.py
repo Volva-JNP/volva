@@ -21,7 +21,9 @@ mobile = '''
 Ci-dessous un graphique representant les volumes de l'entrepot par secteur ainsi que le volume total sur les années 2020 et 2021
 '''
 
-
+distrib = '''
+Ci_dessous la distribution des volumes par secteur
+'''
 
 violo = '''
 Représentation graphique des volumes journaliers avec distribution et ecart-type
