@@ -60,7 +60,9 @@ def build_page_model():
         df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df('REALISE_TOTAL_FRAIS')
         st.write("2")
         list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
+        st.write("3")
         df_datas_choice = build_df_datas_choice(list_nom_df, list_df, secteur)
+        st.write("4")
 
     
 
