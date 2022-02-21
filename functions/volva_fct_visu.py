@@ -109,7 +109,7 @@ def set_visu():
         ticktext = ['MARS',  'AVRIL', 'MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','DECEMBRE']
     )
 )
-    
+    fig1.update_layout(hovermode="x unified")
     st.write(fig1)
     
     
@@ -133,7 +133,7 @@ def set_visu():
     fig4.add_trace(go.Histogram(x=x4,name='total site',nbinsx=30))
     fig4.update_traces (opacity=0.7)
     fig4.update_layout(barmode='overlay',bargap=0.1,title='Distribution des volumes par secteur')
-    fig4.update_layout(width=1400,height=600)
+    fig4.update_layout(width=1400,height=600,hovermode='y')
     fig4.update_xaxes( title='VOLUME')
     fig4.update_yaxes( title='FREQUENCE')
     st.write(fig4)
@@ -327,7 +327,7 @@ def jour_ferié():
 
 
 def matricecorr():
-    datacorr = load_csv(path_brut)
+    datacorr = load_csv(path)
     st.title('Matrice de corrélation par secteur')
     
        # st.write(violo,  unsafe_allow_html=True)
@@ -347,7 +347,7 @@ def matricecorr():
        'TOTAL_EXPE_EXP', 'NB_HEURE_EXP', 'OBJECTIF_PROD_EXP', 'colIndex',]
         datacorr = datacorr.drop(suppr, axis =1)
         corr = datacorr.corr()
-        fig5 = plt.figure(figsize=(5,5))
+        fig5 = plt.figure(figsize=(50,50))
         sns.heatmap(corr, annot=True, cmap ='viridis')
         plt.style.use("dark_background")
         st.write(fig5)
@@ -364,9 +364,10 @@ def matricecorr():
         datacorr = datacorr.drop(suppr, axis =1)
         
         corr = datacorr.corr()
-        fig5 = plt.figure(figsize=(5,5))
+        fig5 = plt.figure(figsize=(50,50))
         sns.heatmap(corr, annot=True, cmap ='viridis')
         plt.style.use("dark_background")
+        
         st.write(fig5)
         
     if menu =='secteur fruits et légumes':
@@ -380,7 +381,7 @@ def matricecorr():
         datacorr = datacorr.drop(suppr, axis =1)
         
         corr = datacorr.corr()
-        fig5 = plt.figure(figsize=(5,5))
+        fig5 = plt.figure(figsize=(50,50))
         sns.heatmap(corr, annot=True, cmap ='viridis')
         plt.style.use("dark_background")
         st.write(fig5)
