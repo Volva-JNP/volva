@@ -49,7 +49,7 @@ def set_selection_datas():
 
     suppr=[
     #         'ANNEE',
-            'MOIS',
+            # 'MOIS',
             'SEMAINE',
             'JOUR',
             'DATE',
@@ -93,13 +93,13 @@ def set_selection_datas():
 
     df_clean = df.drop(suppr, axis = 1)
 
-    df_FPTV = pd.concat([df_clean.iloc[:, :42],df_clean.iloc[:, 46:]], axis=1)
-    df_min = pd.concat([df_clean.iloc[:, :3],df_clean.iloc[:, 38:42]], axis=1)
+    df_FPTV = pd.concat([df_clean.iloc[:, :45],df_clean.iloc[:, 47:]], axis=1)
+    df_min = pd.concat([df_clean.iloc[:, :4],df_clean.iloc[:, 39:45]], axis=1)
 
-    df_F = df_clean.iloc[:, 3:5]
-    df_P = df_clean.iloc[:, 5:38]
-    df_T = df_clean.iloc[:, 46:48]
-    df_V = df_clean.iloc[:, 48:63]
+    df_F = df_clean.iloc[:, 4:6]
+    df_P = df_clean.iloc[:, 6:39]
+    df_T = df_clean.iloc[:, 47:49]
+    df_V = df_clean.iloc[:, 49:]
 
     list_df = [ 
         df_min,
@@ -141,7 +141,7 @@ def set_selection_datas():
 
     results = pd.DataFrame(columns=['Nom', 'Train_score', 'Test_score', 'Ecart'])
 
-    for nom_df, df,i in zip(list_nom_df,list_df, stqdm(range(50))) : 
+    for nom_df, df,i in zip(list_nom_df,list_df, stqdm(range(15))) : 
     # for nom_df, df,i in zip(list_nom_df,list_df, range(50)) : 
 
         # st.progress(i)
