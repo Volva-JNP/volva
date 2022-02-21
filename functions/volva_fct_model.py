@@ -58,6 +58,7 @@ def build_page_model():
         secteur = 'REALISE_TOTAL_FRAIS'
         st.write('Analyse du secteur ', secteur, ' en cours ...')
         df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df('REALISE_TOTAL_FRAIS')
+        st.write("2")
         list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
         df_datas_choice = build_df_datas_choice(list_nom_df, list_df, secteur)
 
