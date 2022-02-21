@@ -22,8 +22,7 @@ from functions.volva_fct_model import *
 
 
 
-
-st.sidebar.image('./img/Les_Mousquetaires.png')
+st.sidebar.image('img/Les_Mousquetaires.png')
 st.sidebar.write("")
 
 if 'page' not in st.session_state:
@@ -96,7 +95,7 @@ if page == 'Vizu':
     set_visu()
 
 if page == 'Model':
-    set_selection_datas()
+    build_page_model()
 
 if page == 'Predict':
     set_visu()
