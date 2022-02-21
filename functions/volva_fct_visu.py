@@ -338,28 +338,49 @@ def matricecorr():
     
     
     if menu =='secteur MECA':
-        
+        suppr=['PREVISION_BUDGET_FRAIS',
+               'NB_HEURES_TOTAL_FRAIS', 'OBJECTIF_PROD_FRAIS',
+       'PREVISION_BUDGET_GEL', 'REALISE_TOTAL_GEL', 'NB_HEURES_TOTAL_GEL',
+       'OBJECTIF_PROD_GEL', 'PREVISION_BUDGET_FFL', 'REALISE_TOTAL_FFL',
+       'NB_HEURE_PREPARATION_FFL', 'OBJECTIF_PROD_FFL', 'REALISE_GEL_EXP',
+       'REALISE_FLF_EXP', 'REALISE_HGE_EXP', 'REALISE_MECA_EXP',
+       'TOTAL_EXPE_EXP', 'NB_HEURE_EXP', 'OBJECTIF_PROD_EXP', 'colIndex',]
+        datacorr = datacorr.drop(suppr, axis =1)
         corr = datacorr.corr()
-        fig5 = plt.figure(figsize=(40,40))
+        fig5 = plt.figure(figsize=(5,5))
         sns.heatmap(corr, annot=True, cmap ='viridis')
         plt.style.use("dark_background")
         st.write(fig5)
         
     
     if menu =='secteur -18°c':
-        
+        suppr=['PREVISION_BUDGET_FRAIS',
+               'NB_HEURES_TOTAL_FRAIS', 'OBJECTIF_PROD_FRAIS',
+       'PREVISION_BUDGET_GEL', 'REALISE_TOTAL_FRAIS', 'NB_HEURES_TOTAL_GEL',
+       'OBJECTIF_PROD_GEL', 'PREVISION_BUDGET_FFL', 'REALISE_TOTAL_FFL',
+       'NB_HEURE_PREPARATION_FFL', 'OBJECTIF_PROD_FFL', 'REALISE_GEL_EXP',
+       'REALISE_FLF_EXP', 'REALISE_HGE_EXP', 'REALISE_MECA_EXP',
+       'TOTAL_EXPE_EXP', 'NB_HEURE_EXP', 'OBJECTIF_PROD_EXP', 'colIndex',]
+        datacorr = datacorr.drop(suppr, axis =1)
         
         corr = datacorr.corr()
-        fig5 = plt.figure(figsize=(40,40))
+        fig5 = plt.figure(figsize=(5,5))
         sns.heatmap(corr, annot=True, cmap ='viridis')
         plt.style.use("dark_background")
         st.write(fig5)
         
     if menu =='secteur fruits et légumes':
-        
+        suppr=['PREVISION_BUDGET_FRAIS',
+               'NB_HEURES_TOTAL_FRAIS', 'OBJECTIF_PROD_FRAIS',
+       'PREVISION_BUDGET_GEL', 'REALISE_TOTAL_GEL', 'NB_HEURES_TOTAL_GEL',
+       'OBJECTIF_PROD_GEL', 'PREVISION_BUDGET_FFL', 'REALISE_TOTAL_FRAIS',
+       'NB_HEURE_PREPARATION_FFL', 'OBJECTIF_PROD_FFL', 'REALISE_GEL_EXP',
+       'REALISE_FLF_EXP', 'REALISE_HGE_EXP', 'REALISE_MECA_EXP',
+       'TOTAL_EXPE_EXP', 'NB_HEURE_EXP', 'OBJECTIF_PROD_EXP', 'colIndex',]
+        datacorr = datacorr.drop(suppr, axis =1)
         
         corr = datacorr.corr()
-        fig5 = plt.figure(figsize=(40,40))
+        fig5 = plt.figure(figsize=(5,5))
         sns.heatmap(corr, annot=True, cmap ='viridis')
         plt.style.use("dark_background")
         st.write(fig5)
