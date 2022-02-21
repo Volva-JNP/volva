@@ -141,7 +141,7 @@ def set_selection_datas():
 
     results = pd.DataFrame(columns=['Nom', 'Train_score', 'Test_score', 'Ecart'])
 
-    for nom_df, df,i in zip(list_nom_df,list_df, stqdm(range(15))) : 
+    for nom_df, df,i in zip(list_nom_df,list_df, stqdm(range(16))) : 
     # for nom_df, df,i in zip(list_nom_df,list_df, range(50)) : 
 
         # st.progress(i)
