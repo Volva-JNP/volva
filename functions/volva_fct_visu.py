@@ -4,7 +4,7 @@ Created on Sun Feb 20 13:48:44 2022
 
 @author: User
 """
-
+import seaborn as sns
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -20,7 +20,7 @@ from functions.volva_fct import *
 from PIL import Image
 
 path = 'datas/volva_datas_utlimate_one.csv'
-path_brut = 'datas/volumesMARS2021.csv'
+path_brut = 'datas/volva_datas.csv'
 
 
 
@@ -184,7 +184,7 @@ def set_visu():
         st.write(impact, unsafe_allow_html=True)    
         
     jour_ferié()
-    
+    matricecorr()
 
 
 
@@ -250,7 +250,7 @@ def jour_ferié():
     list_ecart_per_day_past = [[0] * 9 for i in range(6)]
     
     for i in range(1, 10) :
-        # Jour férié prochain
+# Jour férié prochain
         df_closed_holyday = df_short[df_short['prochain_jour_ferie']<=i]
         mean_real_df_closed_holyday = df_closed_holyday.groupby('weekday').agg({ REALISE_TARGETED : 'mean'})
         mean_real_df_closed_holyday.reset_index()
@@ -266,7 +266,7 @@ def jour_ferié():
                 meilleur_ecart_montant[j] = ecart
                 meilleur_ecart_jour[j] = i
 
-    # Jour férié passé   
+# Jour férié passé   
         df_closed_holyday_past = df_short[(np.abs(df_short['dernier_jour_ferie'])<=i)]
         mean_real_df_closed_holyday_past = df_closed_holyday_past.groupby('weekday').agg({ REALISE_TARGETED : 'mean'})
         mean_real_df_closed_holyday_past.reset_index()
@@ -326,3 +326,41 @@ def jour_ferié():
 
 
 
+def matricecorr():
+    datacorr = load_csv(path_brut)
+    st.title('Matrice de corrélation par secteur')
+    
+       # st.write(violo,  unsafe_allow_html=True)
+    menu = st.radio(
+    "",
+    ("secteur MECA", "secteur -18°c", "secteur fruits et légumes"))
+    
+    
+    
+    if menu =='secteur MECA':
+        
+        corr = datacorr.corr()
+        fig5 = plt.figure(figsize=(40,40))
+        sns.heatmap(corr, annot=True, cmap ='viridis')
+        plt.style.use("dark_background")
+        st.write(fig5)
+        
+    
+    if menu =='secteur -18°c':
+        
+        
+        corr = datacorr.corr()
+        fig5 = plt.figure(figsize=(40,40))
+        sns.heatmap(corr, annot=True, cmap ='viridis')
+        plt.style.use("dark_background")
+        st.write(fig5)
+        
+    if menu =='secteur fruits et légumes':
+        
+        
+        corr = datacorr.corr()
+        fig5 = plt.figure(figsize=(40,40))
+        sns.heatmap(corr, annot=True, cmap ='viridis')
+        plt.style.use("dark_background")
+        st.write(fig5)
+    
