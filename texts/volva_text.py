@@ -5,7 +5,7 @@ Created on Sat Feb 19 19:03:22 2022
 @author: jk
 """
 
-
+#home
 
 intro = '''
 # VOLVA PROJECT
@@ -21,6 +21,25 @@ Pour finir nous presenterons une prediction à partir de ses modeles.
 '''
 
 
+
+
+#DATA
+
+
+DATA = '''
+
+Les données d'origine du projet sont un ensemble de fichiers Excel qui regroupent les volumes et les performances par secteur.
+Chaque fichier représente un mois.
+
+'''
+
+
+
+
+
+
+
+#visualisation
 
 mobile = '''
 Ci-dessous un graphique representant les volumes de l'entrepot par secteur ainsi que le volume total sur les années 2020 et 2021.
@@ -48,3 +67,13 @@ impact = '''
 Les graphiques ci-dessous representent la variation des volumes la semaine precedant le jour ferié en fonction de la place du jour férié dans la semaine.
 nous pouvons constater que le jour ferié impact fortement l'activité et plus particulierement sur certains jours en fonction du secteur et de la place du jour férié dans la semaine'
 '''
+
+
+
+
+#modelisation
+
+
+
+
+#prediction
