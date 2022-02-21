@@ -58,11 +58,9 @@ def build_page_model():
         secteur = 'REALISE_TOTAL_FRAIS'
         st.write('Analyse du secteur ', secteur, ' en cours ...')
         df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df('REALISE_TOTAL_FRAIS')
-        st.write("2")
         list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
-        st.write("3")
         df_datas_choice = build_df_datas_choice(list_nom_df, list_df, secteur)
-        st.write("4")
+
 
     
 
@@ -191,15 +189,11 @@ def build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T):
 
     
 def build_df_datas_choice(list_nom_df, list_df, secteur):
-    st.write('3.1')
-    
     results = pd.DataFrame(columns=['Nom', 'Train_score', 'Test_score', 'Ecart'])
-    st.write('3.2')
-    for nom_df, df,i in zip(list_nom_df,list_df, stqdm(range(16))) : 
-    # for nom_df, df in zip(list_nom_df,list_df) :   
-        st.write('3.3')
+    # for nom_df, df,i in zip(list_nom_df,list_df, stqdm(range(16))) : 
+    for nom_df, df in zip(list_nom_df,list_df) :   
+
         gridcv_GRB, X_train_scaled, X_test_scaled, y_train, y_test =  train_model(df,GBR,params_gbr,secteur)  
-        st.write('3.4')
         Train_score = gridcv_GRB.score(X_train_scaled, y_train)
         Test_score = gridcv_GRB.score(X_test_scaled, y_test)
         results = results.append(
