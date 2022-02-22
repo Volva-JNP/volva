@@ -155,7 +155,7 @@ def build_page_model():
 
         except FileNotFoundError as fnfe:
             placeholder = st.empty()
-            placeholder.warning("Cette hypothèse n'a pas été encore testée. Veuillez patienter pendant son évaluation ...")
+            placeholder.warning("Cette hypothèse n'a pas encore été testée. Veuillez patienter pendant son évaluation ...")
             df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_FRAIS', data_selection)
             list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
             df_datas_choice = build_df_datas_choice(list_nom_df, list_df, secteur)
@@ -171,7 +171,7 @@ def build_page_model():
             df_datas_choice = pd.read_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
 
         except FileNotFoundError as fnfe:
-            st.warning("Cette hypothèse n'a pas été encore testée. Veuillez patienter pendant son évaluation ...")
+            st.warning("Cette hypothèse n'a pas encore été testée. Veuillez patienter pendant son évaluation ...")
             df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_GEL',data_selection)
             list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
             df_datas_choice = build_df_datas_choice(list_nom_df, list_df, secteur)
@@ -186,7 +186,7 @@ def build_page_model():
             df_datas_choice = pd.read_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
 
         except FileNotFoundError as fnfe:
-            st.warning("Cette hypothèse n'a pas été encore testée. Veuillez patienter pendant son évaluation ...") 
+            st.warning("Cette hypothèse n'a pas encore été testée. Veuillez patienter pendant son évaluation ...") 
             df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_FFL', data_selection)
             list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
             df_datas_choice = build_df_datas_choice(list_nom_df, list_df,secteur)
