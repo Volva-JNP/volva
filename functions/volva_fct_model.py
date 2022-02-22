@@ -1,3 +1,4 @@
+from this import d
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -26,68 +27,7 @@ from sklearn.model_selection import train_test_split
 
 path = 'datas/volva_datas_utlimate_one.csv'
 
-
-GBR = GradientBoostingRegressor() # Params pour GEL
-params_gbr = {    
-        'max_depth': [1], 
-#         'n_estimators': [i for i in np.arange(1100, 1500,100 )],
-#         'learning_rate': [i for i in np.arange(0.0095, 0.010,0.0001 )]
-        'n_estimators': [1400],
-        'learning_rate': [0.099]
-}
-
-
-
-
-def build_page_model():
-
-    st.title('Selection des données utiles par test de modèles')
-    st.write('Sélectionner un secteur:')
-    st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
-
-    if 'secteur' not in st.session_state:
-        st.session_state.secteur = 'REALISE_TOTAL_FRAIS'
-        
-    menu = st.radio(    
-    "",
-    ("secteur frais", "secteur Gel", "secteur FFL"),
-    )
-
-    if menu =='secteur frais':    
-
-        secteur = 'REALISE_TOTAL_FRAIS'
-        st.write('Analyse du secteur ', secteur, ' en cours ...')
-        df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df('REALISE_TOTAL_FRAIS')
-        list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
-        df_datas_choice = build_df_datas_choice(list_nom_df, list_df, secteur)
-
-
-    
-
-    if menu == 'secteur Gel':  
-
-        secteur = 'REALISE_TOTAL_GEL'
-        st.write('Analyse du secteur ', secteur, ' en cours ...')
-        df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df('REALISE_TOTAL_GEL')
-        list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
-        df_datas_choice = build_df_datas_choice(list_nom_df, list_df, secteur)
-
-        
-        
-    if menu == 'secteur FFL':  
-
-        secteur = 'REALISE_TOTAL_FFL'  
-        st.write('Analyse du secteur ', secteur, ' en cours ...')
-        df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df('REALISE_TOTAL_FFL')
-        list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
-        df_datas_choice = build_df_datas_choice(list_nom_df, list_df,secteur)
-
-
-    st.write(df_datas_choice)
-
-
-
-def build_df(secteur):
+def get_df():
     df= load_csv(path)
     suppr=[
             'MOIS',
@@ -119,9 +59,148 @@ def build_df(secteur):
             'prox_jour_ferie_nom',
             'Sem Juin',
             'Sem aout',
-            'Sem dec',      
+            'Sem dec',  
+                
         ]
 
+    df = df.drop(suppr, axis = 1)
+    df_minimum = pd.concat([df.iloc[:, :5],df.iloc[:, 40:48]], axis=1)
+
+    return df, df_minimum
+
+
+
+
+
+GBR = GradientBoostingRegressor() # Params pour GEL
+params_gbr = {    
+        'max_depth': [1], 
+#         'n_estimators': [i for i in np.arange(1100, 1500,100 )],
+#         'learning_rate': [i for i in np.arange(0.0095, 0.010,0.0001 )]
+        'n_estimators': [1400],
+        'learning_rate': [0.099]
+}
+
+
+def build_page_model():
+
+    df, df_minimum = get_df()
+
+    st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
+
+    with st.expander('more information'):    
+        col1, col2 = st.columns(2)
+        with col1:
+            st.write(mobile, unsafe_allow_html=True)
+        with col2:
+            st.image('img/mobile2.gif')
+
+    st.title('Selection des données utiles par test de modèles')
+    st.write("Sélectionner les données à laisser dans le dataset d'origine")
+
+    col3, col4, col5 = st.columns(3)
+    with col3:   
+        year_check= st.checkbox('Année', value=True)
+        month_period_check = st.checkbox('Période du mois', value=True)
+
+    with col4:
+        month_day_check = st.checkbox('Jour du Mois', value=True)
+        week_day_check = st.checkbox('Jour de la Semaine', value=True)
+
+    with col5:
+        month_check = st.checkbox('Mois', value=True)   
+        week_check = st.checkbox('Semaine', value=True)
+
+    data_selection=""
+    if year_check and "A_" not in data_selection:
+        data_selection = data_selection + "A_"
+    if month_period_check and "MP_" not in data_selection:
+        data_selection = data_selection + "MP_"
+    if month_day_check and "MD_" not in data_selection:
+        data_selection = data_selection + "MD_"
+    if week_day_check and "WD_" not in data_selection:
+        data_selection = data_selection + "WD_"
+    if month_check and "M_" not in data_selection:
+        data_selection = data_selection + "M_"
+    if week_check and "W_" not in data_selection:
+        data_selection = data_selection + "W_"
+
+    st.write("")
+    st.write("")
+    st.write("Sélectionner le secteur")
+
+    menu_secteur  = st.radio(    
+    "",
+    ("vide", "secteur frais", "secteur GEL", "secteur FFL"),
+
+    )
+  
+    st.markdown(
+    """ <style>
+            div[role="radiogroup"] >  :first-child{
+                display: none ;
+            }
+        </style>
+        """,
+    unsafe_allow_html=True
+    )
+  
+    
+    # st.write(menu_secteur)
+    if menu_secteur =='secteur frais':   
+
+        secteur = 'REALISE_TOTAL_FRAIS'
+        try:
+             df_datas_choice = pd.read_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
+
+        except FileNotFoundError as fnfe:
+            placeholder = st.empty()
+            placeholder.warning("Cette hypothèse n'a pas été encore testée. Veuillez patienter pendant son évaluation ...")
+            df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_FRAIS', data_selection)
+            list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
+            df_datas_choice = build_df_datas_choice(list_nom_df, list_df, secteur)
+            df_datas_choice.to_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
+            placeholder.empty()
+
+        
+
+    if menu_secteur == 'secteur GEL':  
+
+        secteur = 'REALISE_TOTAL_GEL'
+        try:
+            df_datas_choice = pd.read_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
+
+        except FileNotFoundError as fnfe:
+            st.warning("Cette hypothèse n'a pas été encore testée. Veuillez patienter pendant son évaluation ...")
+            df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_GEL',data_selection)
+            list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
+            df_datas_choice = build_df_datas_choice(list_nom_df, list_df, secteur)
+            df_datas_choice.to_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
+
+        
+        
+    if menu_secteur == 'secteur FFL':  
+
+        secteur = 'REALISE_TOTAL_FFL' 
+        try:
+            df_datas_choice = pd.read_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
+
+        except FileNotFoundError as fnfe:
+            st.warning("Cette hypothèse n'a pas été encore testée. Veuillez patienter pendant son évaluation ...") 
+            df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_FFL', data_selection)
+            list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
+            df_datas_choice = build_df_datas_choice(list_nom_df, list_df,secteur)
+            df_datas_choice.to_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
+            
+
+    if menu_secteur != 'vide':  
+        st.write(df_datas_choice)
+
+
+def build_df(df, secteur,drop_list):
+
+    # st.write(df.columns)
+    suppr=[]
     if secteur == 'REALISE_TOTAL_FRAIS':
         suppr.append('REALISE_TOTAL_GEL')
         suppr.append('REALISE_TOTAL_FFL')
@@ -132,17 +211,18 @@ def build_df(secteur):
         suppr.append('REALISE_TOTAL_FRAIS')
         suppr.append('REALISE_TOTAL_GEL')
 
+    # st.write(suppr)
+    df_FPTV = df.drop(suppr, axis = 1)
+    df_FPTV = drop_datas(df_FPTV,drop_list)
+
+    df_min = pd.concat([df.iloc[:, :5],df.iloc[:, 40:48]], axis=1).drop(suppr, axis = 1)
+    df_min = drop_datas(df_min,drop_list)
 
 
-    df_clean = df.drop(suppr, axis = 1)
-
-    df_FPTV = pd.concat([df_clean.iloc[:, :44],df_clean.iloc[:, 46:]], axis=1)
-    df_min = pd.concat([df_clean.iloc[:, :3],df_clean.iloc[:, 38:44]], axis=1)
-
-    df_F = df_clean.iloc[:, 3:5]
-    df_P = df_clean.iloc[:, 5:38]
-    df_T = df_clean.iloc[:, 46:48]
-    df_V = df_clean.iloc[:, 48:]
+    df_F = df.iloc[:, 5:7]
+    df_P = df.iloc[:, 7:40]
+    df_T = df.iloc[:, 48:50]
+    df_V = df.iloc[:, 50:]
 
     return df_FPTV, df_min, df_F, df_P, df_V, df_T
 
@@ -187,12 +267,31 @@ def build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T):
     ]
     return list_df, list_nom_df
 
+def drop_datas(df,drop_list):
+    if 'A_' not in  drop_list:
+        df=df.drop(['ANNEE'], axis=1)
+    if 'MP_' in  drop_list:
+        df=df.drop(['month_period'], axis=1)
 
-    
+    if 'MD_' not in  drop_list:
+        df=df.drop(['monthday_sin', 'monthday_cos'], axis=1)
+
+    if 'WD_' not in  drop_list:
+        df=df.drop(['weekday_sin','weekday_cos'], axis=1)
+
+    if 'M_' not in  drop_list:
+        df=df.drop(['mois_sin','mois_cos'], axis=1)
+
+    if 'W_' not in  drop_list:
+        df=df.drop(['semaine_cos','semaine_sin'], axis=1)
+        
+    return df
+
 def build_df_datas_choice(list_nom_df, list_df, secteur):
     results = pd.DataFrame(columns=['Nom', 'Train_score', 'Test_score', 'Ecart'])
     for nom_df, df,i in zip(list_nom_df,list_df, stqdm(range(16))) : 
-        
+        # st.write(nom_df)
+        # st.write(df.columns)
     # for nom_df, df in zip(list_nom_df,list_df) :   
 
         gridcv_GRB, X_train_scaled, X_test_scaled, y_train, y_test =  train_model(df,GBR,params_gbr,secteur)  
@@ -225,7 +324,7 @@ def concat_df_test (df_min,list_df):
 
 
 def train_model(df, model, param, secteur) : 
-    
+    # st.write(df)
     target = df[secteur]
     features = df.drop(secteur, axis=1)
     X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=22)
