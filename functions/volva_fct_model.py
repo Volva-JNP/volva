@@ -158,7 +158,7 @@ def build_page_model():
             df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_FRAIS', data_selection)
             list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
             df_datas_choice = build_df_datas_choice(list_nom_df, list_df, secteur)
-            df_datas_choice.to_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
+            df_datas_choice.to_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv',  index=False)
             placeholder.empty()
 
         
@@ -176,7 +176,7 @@ def build_page_model():
             df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_GEL',data_selection)
             list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
             df_datas_choice = build_df_datas_choice(list_nom_df, list_df, secteur)
-            df_datas_choice.to_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
+            df_datas_choice.to_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv', index=False)
             placeholder.empty()
         
         
@@ -193,12 +193,17 @@ def build_page_model():
             df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_FFL', data_selection)
             list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
             df_datas_choice = build_df_datas_choice(list_nom_df, list_df,secteur)
-            df_datas_choice.to_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
+            df_datas_choice.to_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv', index=False)
             placeholder.empty()
             
 
     if menu_secteur != 'vide':  
-        st.write(df_datas_choice)
+        st.write(df_datas_choice)        
+        score_test = df_datas_choice.iloc[0,2]
+        ecart = df_datas_choice.iloc[0,3]
+        added_datas = df_datas_choice.iloc[0,0]
+        store_best_datas(secteur, score_test, ecart, added_datas,data_selection)
+    
 
 
 def build_df(df, secteur,drop_list):
@@ -341,6 +346,33 @@ def train_model(df, model, param, secteur) :
     gridcv.fit(X_train_scaled, y_train)
     
     return gridcv, X_train_scaled, X_test_scaled, y_train, y_test
+
+
+def store_best_datas(secteur, score_test, ecart, added_datas, data_selection):
+    df = pd.read_csv('datas/df_secteur_best_datas.csv')
+    score_test_stored = df[df['secteur']==secteur]['score']
+    score_test_stored = float(score_test_stored)
+    ecart_stored = df[df['secteur']==secteur]['ecart']
+    ecart_stored = float(ecart_stored)
+    basis_data = df[df['secteur']==secteur]['basis_data']
+    basis_data = str(basis_data)
+
+    if (score_test > score_test_stored  and ecart < ecart_stored) or (score_test == score_test_stored  and ecart == ecart_stored and len(data_selection)< len(basis_data)): 
+        df.drop( df[ df['secteur'] == secteur ].index, inplace=True)
+        df = df.append({
+                    'secteur': secteur,
+                    'score': score_test,    
+                    'ecart': ecart, 
+                    'basis_data': data_selection,
+                    'added_datas': added_datas      
+        
+                    }, ignore_index=True)
+        df.to_csv('datas/df_secteur_best_datas.csv', index=False)
+    
+    st.write("Le meilleur paramètrage trouvé est : ")
+    st.write(df)
+     
+
 
 
 # def get_mae_per_day(y_test_df_merge, y_test_ri, y_pred_array) :
