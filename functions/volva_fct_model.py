@@ -58,8 +58,7 @@ def get_df():
             'prox_jour_ferie_nom',
             'Sem Juin',
             'Sem aout',
-            'Sem dec',  
-                
+            'Sem dec',                  
         ]
 
     df = df.drop(suppr, axis = 1)
