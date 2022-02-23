@@ -171,12 +171,13 @@ def build_page_model():
             df_datas_choice = pd.read_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
 
         except FileNotFoundError as fnfe:
-            st.warning("Cette hypothèse n'a pas encore été testée. Veuillez patienter pendant son évaluation ...")
+            placeholder = st.empty()
+            placeholder.warning("Cette hypothèse n'a pas encore été testée. Veuillez patienter pendant son évaluation ...")
             df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_GEL',data_selection)
             list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
             df_datas_choice = build_df_datas_choice(list_nom_df, list_df, secteur)
             df_datas_choice.to_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
-
+            placeholder.empty()
         
         
     if menu_secteur == 'secteur FFL':  
@@ -186,11 +187,13 @@ def build_page_model():
             df_datas_choice = pd.read_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
 
         except FileNotFoundError as fnfe:
-            st.warning("Cette hypothèse n'a pas encore été testée. Veuillez patienter pendant son évaluation ...") 
+            placeholder = st.empty()
+            placeholder.warning("Cette hypothèse n'a pas encore été testée. Veuillez patienter pendant son évaluation ...") 
             df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_FFL', data_selection)
             list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
             df_datas_choice = build_df_datas_choice(list_nom_df, list_df,secteur)
             df_datas_choice.to_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
+            placeholder.empty()
             
 
     if menu_secteur != 'vide':  
