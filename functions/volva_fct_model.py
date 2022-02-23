@@ -150,6 +150,7 @@ def build_page_model():
         secteur = 'REALISE_TOTAL_FRAIS'
         try:
              df_datas_choice = pd.read_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
+             df_datas_choice = df_datas_choice[["Nom","Train_score","Test_score","Ecart"]]
 
         except FileNotFoundError as fnfe:
             placeholder = st.empty()
@@ -167,6 +168,7 @@ def build_page_model():
         secteur = 'REALISE_TOTAL_GEL'
         try:
             df_datas_choice = pd.read_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
+            df_datas_choice = df_datas_choice[["Nom","Train_score","Test_score","Ecart"]]
 
         except FileNotFoundError as fnfe:
             placeholder = st.empty()
@@ -183,6 +185,7 @@ def build_page_model():
         secteur = 'REALISE_TOTAL_FFL' 
         try:
             df_datas_choice = pd.read_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
+            df_datas_choice = df_datas_choice[["Nom","Train_score","Test_score","Ecart"]]
 
         except FileNotFoundError as fnfe:
             placeholder = st.empty()
