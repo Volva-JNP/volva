@@ -10,7 +10,6 @@ from plotly import tools
 from texts.volva_text import *
 from plotly.subplots import make_subplots
 from functions.volva_fct import *
-
 from sklearn.preprocessing import StandardScaler 
 from sklearn.model_selection import GridSearchCV, train_test_split , cross_val_score, StratifiedKFold, cross_val_predict, cross_validate
 from sklearn.preprocessing import MinMaxScaler 
@@ -67,7 +66,6 @@ def get_df():
     df_minimum = pd.concat([df.iloc[:, :5],df.iloc[:, 40:48]], axis=1)
 
     return df, df_minimum
-
 
 
 
