@@ -70,7 +70,6 @@ def get_df():
 
 
 
-
 GBR = GradientBoostingRegressor() # Params pour GEL
 params_gbr = {    
         'max_depth': [1], 
