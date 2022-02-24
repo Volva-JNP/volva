@@ -25,14 +25,7 @@ path_brut = 'datas/volva_datas.csv'
 
 
 def set_visu():
-    link='[Moyenne Mobile 2020-21](#moyenne-mobile-volume-par-secteur)'
-    st.sidebar.markdown(link,unsafe_allow_html= True )
-    link2='[Distribution par secteur](#distribution)'
-    st.sidebar.markdown(link2,unsafe_allow_html= True )
-    link1='[volume moyen par jour](#volume-par-jour)'
-    st.sidebar.markdown(link1,unsafe_allow_html= True )
-    link3='[Jour Férié](#impact-jour-f-ri)'
-    st.sidebar.markdown(link3,unsafe_allow_html= True )
+
     
     
         
