@@ -20,7 +20,8 @@ from functions.volva_fct_visu import *
 from functions.volva_fct_data import *
 from functions.volva_fct_model import *
 
-
+with open('css/style.css') as f:
+    st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 st.sidebar.image('img/Les_Mousquetaires.png')
 st.sidebar.write("")
@@ -28,26 +29,6 @@ st.sidebar.write("")
 if 'page' not in st.session_state:
     st.session_state.page = 'Intro'
 
-
-
-m = st.markdown("""
-
-<style>
-div.stButton >
-    button:first-child {
-        background-color:transparent;
-        border-radius:6px;
-        cursor:pointer;        
-        font-family:Arial;
-        font-size:15px;
-        font-weight:bold;
-
-        margin-right: 0px;
-        height: 25px;
-        width: 250px
-
-    }
-</style>""", unsafe_allow_html=True)
 
 
 #menu selection du dataset
@@ -59,6 +40,9 @@ st.sidebar.markdown('analyse de données ITM SQF')
 
 button_intro = st.sidebar.button('Introduction')
 button_data = st.sidebar.button('Data')
+if button_data:
+    link='[Moyenne Mobile 2020-21](#moyenne-mobile-volume-par-secteur)'
+    st.sidebar.markdown(link,unsafe_allow_html= True )
 
 button_visu = st.sidebar.button('Visualisation')
 if button_visu:
