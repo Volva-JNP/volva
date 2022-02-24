@@ -84,7 +84,6 @@ if button_data:
     
 if button_visu:
     st.session_state.page = 'Vizu'
-
     
 
 if button_model:
@@ -92,6 +91,7 @@ if button_model:
 
 if button_predict:
     st.session_state.page = 'Predict' 
+    
 
 
 page = st.session_state.page 
