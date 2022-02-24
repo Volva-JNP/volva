@@ -39,10 +39,10 @@ st.sidebar.markdown('analyse de données ITM SQF')
 
 
 button_intro = st.sidebar.button('Introduction')
+# if button_intro:
+
 button_data = st.sidebar.button('Data')
-if button_data:
-    link='[Moyenne Mobile 2020-21](#moyenne-mobile-volume-par-secteur)'
-    st.sidebar.markdown(link,unsafe_allow_html= True )
+# if button_data:
 
 button_visu = st.sidebar.button('Visualisation')
 if button_visu:
@@ -54,8 +54,20 @@ if button_visu:
     st.sidebar.markdown(link1,unsafe_allow_html= True )
     link3='[Jour Férié](#impact-jour-f-ri)'
     st.sidebar.markdown(link3,unsafe_allow_html= True )
+
 button_model = st.sidebar.button('Modèlisation')
+if button_model:
+    link='[Données utiles par secteur](#selection-des-donn-es-utiles-par-test-de-mod-les)'
+    st.sidebar.markdown(link,unsafe_allow_html= True )
+
+    link='[Tests modèles de regression](#tests-des-mod-les-de-regression)'
+    st.sidebar.markdown(link,unsafe_allow_html= True )
+
+    
+
+
 button_predict = st.sidebar.button('Prédictions')
+    # if button_predict:
 
 
 if button_intro:

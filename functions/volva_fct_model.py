@@ -61,10 +61,11 @@ def get_df():
             'Sem dec',                  
         ]
 
+    df_total = df 
     df = df.drop(suppr, axis = 1)
-    df_minimum = pd.concat([df.iloc[:, :5],df.iloc[:, 40:48]], axis=1)
+    # df_minimum = pd.concat([df.iloc[:, :5],df.iloc[:, 40:48]], axis=1)
 
-    return df, df_minimum
+    return df, df_total
 
 
 
@@ -81,10 +82,13 @@ params_gbr = {
 
 def build_page_model():
 
-    df, df_minimum = get_df()
+    df, df_total = get_df()
 
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
+
+
+    st.title('Selection des données utiles par test de modèles')
     with st.expander('more information'):    
         col1, col2 = st.columns(2)
         with col1:
@@ -92,7 +96,7 @@ def build_page_model():
         with col2:
             st.image('img/mobile2.gif')
 
-    st.title('Selection des données utiles par test de modèles')
+
     st.write("Sélectionner les données à laisser dans le dataset d'origine")
 
     col3, col4, col5 = st.columns(3)
@@ -132,21 +136,11 @@ def build_page_model():
 
     )
   
-    st.markdown(
-    """ <style>
-            div[role="radiogroup"] >  :first-child{
-                display: none ;
-            }
-        </style>
-        """,
-    unsafe_allow_html=True
-    )
-  
-    
-    # st.write(menu_secteur)
+
     if menu_secteur =='secteur frais':   
 
         secteur = 'REALISE_TOTAL_FRAIS'
+        list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
         try:
              df_datas_choice = pd.read_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
              df_datas_choice = df_datas_choice[["Nom","Train_score","Test_score","Ecart"]]
@@ -154,7 +148,6 @@ def build_page_model():
         except FileNotFoundError as fnfe:
             placeholder = st.empty()
             placeholder.warning("Cette hypothèse n'a pas encore été testée. Veuillez patienter pendant son évaluation ...")
-            df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_FRAIS', data_selection)
             list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
             df_datas_choice = build_df_datas_choice(list_nom_df, list_df, secteur)
             df_datas_choice.to_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv',  index=False)
@@ -165,6 +158,7 @@ def build_page_model():
     if menu_secteur == 'secteur GEL':  
 
         secteur = 'REALISE_TOTAL_GEL'
+        list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
         try:
             df_datas_choice = pd.read_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
             df_datas_choice = df_datas_choice[["Nom","Train_score","Test_score","Ecart"]]
@@ -173,7 +167,6 @@ def build_page_model():
             placeholder = st.empty()
             placeholder.warning("Cette hypothèse n'a pas encore été testée. Veuillez patienter pendant son évaluation ...")
             df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_GEL',data_selection)
-            list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
             df_datas_choice = build_df_datas_choice(list_nom_df, list_df, secteur)
             df_datas_choice.to_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv', index=False)
             placeholder.empty()
@@ -182,14 +175,14 @@ def build_page_model():
     if menu_secteur == 'secteur FFL':  
 
         secteur = 'REALISE_TOTAL_FFL' 
+        df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_FFL', data_selection)
         try:
             df_datas_choice = pd.read_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
             df_datas_choice = df_datas_choice[["Nom","Train_score","Test_score","Ecart"]]
 
         except FileNotFoundError as fnfe:
             placeholder = st.empty()
-            placeholder.warning("Cette hypothèse n'a pas encore été testée. Veuillez patienter pendant son évaluation ...") 
-            df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_FFL', data_selection)
+            placeholder.warning("Cette hypothèse n'a pas encore été testée. Veuillez patienter pendant son évaluation ...")             
             list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
             df_datas_choice = build_df_datas_choice(list_nom_df, list_df,secteur)
             df_datas_choice.to_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv', index=False)
@@ -202,7 +195,49 @@ def build_page_model():
         ecart = df_datas_choice.iloc[0,3]
         added_datas = df_datas_choice.iloc[0,0]
         store_best_datas(secteur, score_test, ecart, added_datas,data_selection)
-    
+
+
+    st.title('Tests des modèles de regression')
+    with st.expander('more information'):    
+        col1, col2 = st.columns(2)
+        with col1:
+            st.write(mobile, unsafe_allow_html=True)
+        with col2:
+            st.image('img/mobile2.gif')
+
+       
+    if menu_secteur != 'vide':  
+        
+        df_kept = construc_best_dataset_secteur(secteur, df_min, df_F, df_P, df_V, df_T)
+        st.write(df_kept)
+
+        st.write("Test d'un modèle GradientBoostingRegressor")
+
+        button_visu = st.button('Test modèle')
+        if button_visu:
+            placeholder2 = st.empty()
+            placeholder2.warning("Veuillez patienter pendant l'évaluation du modèle ...")
+            gridcv_GRB, X_train_scaled, X_test_scaled, y_train, y_test =  train_model(df_kept,GBR,params_gbr,secteur)  
+            
+            st.write(gridcv_GRB.score(X_train_scaled, y_train))
+            st.write(gridcv_GRB.score(X_test_scaled, y_test))
+
+            y_test_ri = y_test.reset_index()
+            df_ri = df_total.reset_index()
+            y_test_df_merge = y_test_ri.merge(df_ri[['index', 'weekday']], how='left', on='index')
+            y_test_df_merge
+
+            pred_test_GBR = gridcv_GRB.predict(X_test_scaled)
+            plt.scatter(y_test, pred_test_GBR)
+            plt.plot([y_test.min(),y_test.max()],[y_test.min(),y_test.max()], c='r')
+            plt.show()
+
+            mae_per_day_GBR = get_mae_per_day(y_test_df_merge,y_test_ri,pred_test_GBR,secteur)
+            st.write(mae_per_day_GBR)
+
+            mse_per_day_GBR = np.sqrt(get_mse_per_day(y_test_df_merge,y_test_ri,pred_test_GBR,secteur))
+            st.write(mse_per_day_GBR)
+            placeholder2 = st.empty()
 
 
 def build_df(df, secteur,drop_list):
@@ -369,53 +404,72 @@ def store_best_datas(secteur, score_test, ecart, added_datas, data_selection):
     st.write("Le meilleur paramètrage trouvé est : ")
     st.write(df)
      
+def construc_best_dataset_secteur(secteur, df_min, df_F, df_P, df_V, df_T) :
+    df = pd.read_csv('datas/df_secteur_best_datas.csv')
+    secteur_serie = df[df['secteur']==secteur]
+    basis_data = secteur_serie.iloc[0,3]
+    added_datas = secteur_serie.iloc[0,4]
+    df_secteur = drop_datas(df_min,basis_data)
+
+    if 'F' in  added_datas:
+        df_secteur = pd.concat([df_secteur, df_F], axis=1)
+
+    if 'P' in  added_datas:
+        df_secteur = pd.concat([df_secteur, df_P], axis=1)
+
+    if 'T' in  added_datas:
+        df_secteur = pd.concat([df_secteur, df_T], axis=1)
+
+    if 'V' in  added_datas:
+        df_secteur = pd.concat([df_secteur, df_V], axis=1)
+
+    return df_secteur 
 
 
-
-# def get_mae_per_day(y_test_df_merge, y_test_ri, y_pred_array) :
-#     from sklearn.metrics import mean_absolute_error
-#     # retrouver les index des lignes y_test dans les pred 
-#     pred=[]
-#     for index, data in zip(y_test_ri['index'], y_pred_array):
-#         pred.append([index,data])
-#         pred_pd = pd.DataFrame(pred, columns=['index','y_pred'])
+def get_mae_per_day(y_test_df_merge, y_test_ri, y_pred_array, secteur) :
+    from sklearn.metrics import mean_absolute_error
+    # retrouver les index des lignes y_test dans les pred 
+    pred=[]
+    for index, data in zip(y_test_ri['index'], y_pred_array):
+        pred.append([index,data])
+        pred_pd = pd.DataFrame(pred, columns=['index','y_pred'])
      
     
-#     # réunir dans un même df les test et les pred
-#     y_test_pred_merge=pred_pd.merge(y_test_df_merge, how='left', on='index')
-# #     print(y_test_pred_merge)
-#     # En utilisant le rapprochement test / pred / weekday, calculer la mae par weekday
-#     mean_per_weekday=[0,0,0,0,0,0]        
-#     for i in range(6):
-#         y_test_pred_merge_i = y_test_pred_merge[y_test_pred_merge['weekday']==i]
-#         y_test_i = y_test_pred_merge_i[secteur]
-#         y_pred_i = y_test_pred_merge_i['y_pred']
-#         mean_per_weekday[i]=mean_absolute_error(y_test_i, y_pred_i)
+    # réunir dans un même df les test et les pred
+    y_test_pred_merge=pred_pd.merge(y_test_df_merge, how='left', on='index')
+#     print(y_test_pred_merge)
+    # En utilisant le rapprochement test / pred / weekday, calculer la mae par weekday
+    mean_per_weekday=[0,0,0,0,0,0]        
+    for i in range(6):
+        y_test_pred_merge_i = y_test_pred_merge[y_test_pred_merge['weekday']==i]
+        y_test_i = y_test_pred_merge_i[secteur]
+        y_pred_i = y_test_pred_merge_i['y_pred']
+        mean_per_weekday[i]=mean_absolute_error(y_test_i, y_pred_i)
         
-#     return mean_per_weekday 
+    return mean_per_weekday 
 
 
-# def get_mse_per_day(y_test_df_merge, y_test_ri, y_pred_array) :
-#     from sklearn.metrics import mean_squared_error
-#     # retrouver les index des lignes y_test dans les pred 
-#     pred=[]
-#     for index, data in zip(y_test_ri['index'], y_pred_array):
-#         pred.append([index,data])
-#         pred_pd = pd.DataFrame(pred, columns=['index','y_pred'])
+def get_mse_per_day(y_test_df_merge, y_test_ri, y_pred_array, secteur) :
+    from sklearn.metrics import mean_squared_error
+    # retrouver les index des lignes y_test dans les pred 
+    pred=[]
+    for index, data in zip(y_test_ri['index'], y_pred_array):
+        pred.append([index,data])
+        pred_pd = pd.DataFrame(pred, columns=['index','y_pred'])
      
     
-#     # réunir dans un même df les test et les pred
-#     y_test_pred_merge=pred_pd.merge(y_test_df_merge, how='left', on='index')
-# #     print(y_test_pred_merge)
-#     # En utilisant le rapprochement test / pred / weekday, calculer la mae par weekday
-#     mean_per_weekday=[0,0,0,0,0,0]        
-#     for i in range(6):
-#         y_test_pred_merge_i = y_test_pred_merge[y_test_pred_merge['weekday']==i]
-#         y_test_i = y_test_pred_merge_i[secteur]
-#         y_pred_i = y_test_pred_merge_i['y_pred']
-#         mean_per_weekday[i]=mean_squared_error(y_test_i, y_pred_i)
+    # réunir dans un même df les test et les pred
+    y_test_pred_merge=pred_pd.merge(y_test_df_merge, how='left', on='index')
+#     print(y_test_pred_merge)
+    # En utilisant le rapprochement test / pred / weekday, calculer la mae par weekday
+    mean_per_weekday=[0,0,0,0,0,0]        
+    for i in range(6):
+        y_test_pred_merge_i = y_test_pred_merge[y_test_pred_merge['weekday']==i]
+        y_test_i = y_test_pred_merge_i[secteur]
+        y_pred_i = y_test_pred_merge_i['y_pred']
+        mean_per_weekday[i]=mean_squared_error(y_test_i, y_pred_i)
         
-#     return mean_per_weekday 
+    return mean_per_weekday 
 
 
 

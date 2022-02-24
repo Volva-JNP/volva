@@ -22,3 +22,7 @@ a {
 .css-v37k9u a {
     color:whitesmoke;
 }
+
+div[role="radiogroup"] >  :first-child{
+    display: none ;
+}
