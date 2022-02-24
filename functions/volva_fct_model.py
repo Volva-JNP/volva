@@ -349,12 +349,10 @@ def train_model(df, model, param, secteur) :
 
 def store_best_datas(secteur, score_test, ecart, added_datas, data_selection):
     df = pd.read_csv('datas/df_secteur_best_datas.csv')
-    score_test_stored = df[df['secteur']==secteur]['score']
-    score_test_stored = float(score_test_stored)
-    ecart_stored = df[df['secteur']==secteur]['ecart']
-    ecart_stored = float(ecart_stored)
-    basis_data = df[df['secteur']==secteur]['basis_data']
-    basis_data = str(basis_data)
+    secteur_serie = df[df['secteur']==secteur]
+    score_test_stored = secteur_serie.iloc[0,1]
+    ecart_stored = secteur_serie.iloc[0,2]
+    basis_data = secteur_serie.iloc[0,3]
 
     if (score_test > score_test_stored  and ecart < ecart_stored) or (score_test == score_test_stored  and ecart == ecart_stored and len(data_selection)< len(basis_data)): 
         df.drop( df[ df['secteur'] == secteur ].index, inplace=True)
