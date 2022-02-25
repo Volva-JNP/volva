@@ -220,21 +220,21 @@ def build_page_model():
 
         with st.expander("GradientBoostingRegressor"):   
             st.subheader("Test d'un modèle GradientBoostingRegressor")
-            test_model(df_kept,GBR,params_gbr,secteur, "GBR")
+            test_model(df_kept,GBR,params_gbr,secteur, "GBR", df_total)
 
         with st.expander("BayesianRidge"):  
             from sklearn.linear_model import BayesianRidge
             BR = BayesianRidge()
             params_BR = { }
             st.subheader("Test d'un modèle BayesianRidge")
-            test_model(df_kept,BR,params_BR,secteur,"BR")
+            test_model(df_kept,BR,params_BR,secteur,"BR", df_total) 
 
         with st.expander("Lasso"):  
             from sklearn.linear_model import Lasso 
             lasso = Lasso()
             params_lasso = { }
             st.subheader("Test d'un modèle Lasso")
-            test_model(df_kept,lasso,params_lasso,secteur,"LASSO")     
+            test_model(df_kept,lasso,params_lasso,secteur,"LASSO", df_total)      
 
         with st.expander("RandomForestRegressor"):  
             from sklearn.ensemble import RandomForestRegressor
@@ -244,7 +244,7 @@ def build_page_model():
                         "n_estimators":[2000]
                             }
             st.subheader("Test d'un modèle RandomForestRegressor")
-            test_model(df_kept,rfr,params_rfr,secteur,"RFR")   
+            test_model(df_kept,rfr,params_rfr,secteur,"RFR", df_total)    
 
 
         with st.expander("KNeighborsRegressor"): 
@@ -254,7 +254,7 @@ def build_page_model():
                         "n_neighbors":[3,4,5,6,7] 
                         }
             st.subheader("Test d'un modèle KNeighborsRegressor")
-            test_model(df_kept,KNR,params_KNR,secteur,"KNR") 
+            test_model(df_kept,KNR,params_KNR,secteur,"KNR", df_total)  
 
         
         with st.expander("ElasticNetCV"): 
@@ -263,7 +263,7 @@ def build_page_model():
             params_EN= {
              }
             st.subheader("Test d'un modèle ElasticNetCV")
-            test_model(df_kept,EN,params_EN,secteur,"EN") 
+            test_model(df_kept,EN,params_EN,secteur,"EN", df_total)  
 
         with st.expander("DecisionTreeRegressor"): 
             from sklearn.tree import DecisionTreeRegressor
@@ -272,7 +272,7 @@ def build_page_model():
                             'max_depth':[4,5,6,7,8]
                         }
             st.subheader("Test d'un modèle DecisionTreeRegressor")
-            test_model(df_kept,DTR,params_DTR,secteur,"DTR") 
+            test_model(df_kept,DTR,params_DTR,secteur,"DTR", df_total) 
 
 
             # y_test_ri = y_test.reset_index()
@@ -293,7 +293,7 @@ def build_page_model():
             
 
 
-def test_model(df_kept,Model,params,secteur, nom_model):
+def test_model(df_kept,Model,params,secteur, nom_model, df_total):
     button_test_model = st.button('Test modèle ' + nom_model)
     if button_test_model:
         placeholder2 = st.empty()
@@ -304,9 +304,25 @@ def test_model(df_kept,Model,params,secteur, nom_model):
         with col1:
             st.metric("Score train",np.round(gridcv_model.score(X_train_scaled, y_train),4))
         with col2:
-            st.metric("Score test",np.round(gridcv_model.score(X_test_scaled, y_test),4))     
+            st.metric("Score test",np.round(gridcv_model.score(X_test_scaled, y_test),4))   
         
         placeholder2.empty()
+
+        pred_test = gridcv_model.predict(X_test_scaled) 
+
+        fig = go.Figure()
+
+        # Add traces
+        fig.add_trace(go.Scatter(x=y_test, y=pred_test,
+                            mode='markers',
+                            name='markers'))
+
+        fig.add_trace(go.Scatter(x=[y_test.min(),y_test.max()], y=[y_test.min(),y_test.max()],
+                            mode='lines',
+                            name='lines'))
+
+        st.write(fig)
+        
         # return  train_model(df_kept,Model,params,secteur)  
 
 def build_df(df, secteur,drop_list):
