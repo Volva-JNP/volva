@@ -87,7 +87,6 @@ def build_page_model():
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
 
-
     st.title('Selection des données utiles par test de modèles')
     with st.expander('Information'):    
         col1, col2 = st.columns(2)
