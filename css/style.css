@@ -26,3 +26,7 @@ a {
 div[role="radiogroup"] >  :first-child{
     display: none ;
 }
+
+.css-sixagc p {
+    text-decoration: underline;
+}

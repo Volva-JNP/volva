@@ -63,9 +63,9 @@ def get_df():
 
     df_total = df 
     df = df.drop(suppr, axis = 1)
-    # df_minimum = pd.concat([df.iloc[:, :5],df.iloc[:, 40:48]], axis=1)
+    df_minimum = pd.concat([df.iloc[:, :5],df.iloc[:, 40:48]], axis=1)
 
-    return df, df_total
+    return df, df_total, df_minimum
 
 
 
@@ -82,19 +82,19 @@ params_gbr = {
 
 def build_page_model():
 
-    df, df_total = get_df()
+    df, df_total, df_minimum = get_df()
 
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
 
 
     st.title('Selection des données utiles par test de modèles')
-    with st.expander('more information'):    
+    with st.expander('Information'):    
         col1, col2 = st.columns(2)
         with col1:
-            st.write(mobile, unsafe_allow_html=True)
+            st.write("A compléter")
         with col2:
-            st.image('img/mobile2.gif')
+            st.write("A compléter")
 
 
     st.write("Sélectionner les données à laisser dans le dataset d'origine")
@@ -140,7 +140,7 @@ def build_page_model():
     if menu_secteur =='secteur frais':   
 
         secteur = 'REALISE_TOTAL_FRAIS'
-        list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
+        df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_FRAIS', data_selection)    
         try:
              df_datas_choice = pd.read_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
              df_datas_choice = df_datas_choice[["Nom","Train_score","Test_score","Ecart"]]
@@ -158,7 +158,7 @@ def build_page_model():
     if menu_secteur == 'secteur GEL':  
 
         secteur = 'REALISE_TOTAL_GEL'
-        list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
+        df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_FFL', data_selection)        
         try:
             df_datas_choice = pd.read_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
             df_datas_choice = df_datas_choice[["Nom","Train_score","Test_score","Ecart"]]
@@ -166,7 +166,7 @@ def build_page_model():
         except FileNotFoundError as fnfe:
             placeholder = st.empty()
             placeholder.warning("Cette hypothèse n'a pas encore été testée. Veuillez patienter pendant son évaluation ...")
-            df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_GEL',data_selection)
+            list_df, list_nom_df = build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T)
             df_datas_choice = build_df_datas_choice(list_nom_df, list_df, secteur)
             df_datas_choice.to_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv', index=False)
             placeholder.empty()
@@ -190,7 +190,10 @@ def build_page_model():
             
 
     if menu_secteur != 'vide':  
-        st.write(df_datas_choice)        
+        st.caption("Meilleur résultat")
+        st.write(df_datas_choice.iloc[0:1])  
+        with st.expander('Voir tous les résultats'):
+            st.write(df_datas_choice)    
         score_test = df_datas_choice.iloc[0,2]
         ecart = df_datas_choice.iloc[0,3]
         added_datas = df_datas_choice.iloc[0,0]
@@ -198,47 +201,113 @@ def build_page_model():
 
 
     st.title('Tests des modèles de regression')
-    with st.expander('more information'):    
+    with st.expander('Information'):    
         col1, col2 = st.columns(2)
         with col1:
-            st.write(mobile, unsafe_allow_html=True)
+            st.write("A compléter")
         with col2:
-            st.image('img/mobile2.gif')
+            st.write("A compléter")
 
        
     if menu_secteur != 'vide':  
         
-        df_kept = construc_best_dataset_secteur(secteur, df_min, df_F, df_P, df_V, df_T)
-        st.write(df_kept)
+        df_kept = construc_best_dataset_secteur(secteur, df_minimum, df_F, df_P, df_V, df_T)
+        with st.expander('Voir le dataset'):   
+            st.write(df_kept)
+        
+        st.write("")
+        st.write("")
 
-        st.write("Test d'un modèle GradientBoostingRegressor")
+        with st.expander("GradientBoostingRegressor"):   
+            st.subheader("Test d'un modèle GradientBoostingRegressor")
+            test_model(df_kept,GBR,params_gbr,secteur, "GBR")
 
-        button_visu = st.button('Test modèle')
-        if button_visu:
-            placeholder2 = st.empty()
-            placeholder2.warning("Veuillez patienter pendant l'évaluation du modèle ...")
-            gridcv_GRB, X_train_scaled, X_test_scaled, y_train, y_test =  train_model(df_kept,GBR,params_gbr,secteur)  
+        with st.expander("BayesianRidge"):  
+            from sklearn.linear_model import BayesianRidge
+            BR = BayesianRidge()
+            params_BR = { }
+            st.subheader("Test d'un modèle BayesianRidge")
+            test_model(df_kept,BR,params_BR,secteur,"BR")
+
+        with st.expander("Lasso"):  
+            from sklearn.linear_model import Lasso 
+            lasso = Lasso()
+            params_lasso = { }
+            st.subheader("Test d'un modèle Lasso")
+            test_model(df_kept,lasso,params_lasso,secteur,"LASSO")     
+
+        with st.expander("RandomForestRegressor"):  
+            from sklearn.ensemble import RandomForestRegressor
+            rfr = RandomForestRegressor( )
+            params_rfr = {
+                        "max_depth":[9,10,11], 
+                        "n_estimators":[2000]
+                            }
+            st.subheader("Test d'un modèle RandomForestRegressor")
+            test_model(df_kept,rfr,params_rfr,secteur,"RFR")   
+
+
+        with st.expander("KNeighborsRegressor"): 
+            from sklearn.neighbors import KNeighborsRegressor
+            KNR= KNeighborsRegressor()
+            params_KNR = {
+                        "n_neighbors":[3,4,5,6,7] 
+                        }
+            st.subheader("Test d'un modèle KNeighborsRegressor")
+            test_model(df_kept,KNR,params_KNR,secteur,"KNR") 
+
+        
+        with st.expander("ElasticNetCV"): 
+            from sklearn.linear_model import ElasticNetCV 
+            EN = ElasticNetCV(l1_ratio=(0.1, 0.25, 0.5, 0.7, 0.75, 0.8, 0.85, 0.9, 0.99), alphas=(0.001, 0.01, 0.02, 0.025, 0.05, 0.1, 0.25, 0.5, 0.8, 1.0))
+            params_EN= {
+             }
+            st.subheader("Test d'un modèle ElasticNetCV")
+            test_model(df_kept,EN,params_EN,secteur,"EN") 
+
+        with st.expander("DecisionTreeRegressor"): 
+            from sklearn.tree import DecisionTreeRegressor
+            DTR = DecisionTreeRegressor()
+            params_DTR= {
+                            'max_depth':[4,5,6,7,8]
+                        }
+            st.subheader("Test d'un modèle DecisionTreeRegressor")
+            test_model(df_kept,DTR,params_DTR,secteur,"DTR") 
+
+
+            # y_test_ri = y_test.reset_index()
+            # df_ri = df_total.reset_index()
+            # y_test_df_merge = y_test_ri.merge(df_ri[['index', 'weekday']], how='left', on='index')
+            # y_test_df_merge
+
+            # pred_test_GBR = gridcv_GRB.predict(X_test_scaled)
+            # # plt.scatter(y_test, pred_test_GBR)
+            # # plt.plot([y_test.min(),y_test.max()],[y_test.min(),y_test.max()], c='r')
+            # # plt.show()
+
+            # mae_per_day_GBR = get_mae_per_day(y_test_df_merge,y_test_ri,pred_test_GBR,secteur)
+            # # st.write(mae_per_day_GBR)
+
+            # mse_per_day_GBR = np.sqrt(get_mse_per_day(y_test_df_merge,y_test_ri,pred_test_GBR,secteur))
+            # # st.write(mse_per_day_GBR)
             
-            st.write(gridcv_GRB.score(X_train_scaled, y_train))
-            st.write(gridcv_GRB.score(X_test_scaled, y_test))
 
-            y_test_ri = y_test.reset_index()
-            df_ri = df_total.reset_index()
-            y_test_df_merge = y_test_ri.merge(df_ri[['index', 'weekday']], how='left', on='index')
-            y_test_df_merge
 
-            pred_test_GBR = gridcv_GRB.predict(X_test_scaled)
-            plt.scatter(y_test, pred_test_GBR)
-            plt.plot([y_test.min(),y_test.max()],[y_test.min(),y_test.max()], c='r')
-            plt.show()
+def test_model(df_kept,Model,params,secteur, nom_model):
+    button_test_model = st.button('Test modèle ' + nom_model)
+    if button_test_model:
+        placeholder2 = st.empty()
+        placeholder2.warning("Veuillez patienter pendant l'évaluation du modèle ...")
+        gridcv_model, X_train_scaled, X_test_scaled, y_train, y_test = train_model(df_kept,Model,params,secteur)
 
-            mae_per_day_GBR = get_mae_per_day(y_test_df_merge,y_test_ri,pred_test_GBR,secteur)
-            st.write(mae_per_day_GBR)
-
-            mse_per_day_GBR = np.sqrt(get_mse_per_day(y_test_df_merge,y_test_ri,pred_test_GBR,secteur))
-            st.write(mse_per_day_GBR)
-            placeholder2 = st.empty()
-
+        col1, col2 = st.columns(2)
+        with col1:
+            st.metric("Score train",np.round(gridcv_model.score(X_train_scaled, y_train),4))
+        with col2:
+            st.metric("Score test",np.round(gridcv_model.score(X_test_scaled, y_test),4))     
+        
+        placeholder2.empty()
+        # return  train_model(df_kept,Model,params,secteur)  
 
 def build_df(df, secteur,drop_list):
 
@@ -313,7 +382,7 @@ def build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T):
 def drop_datas(df,drop_list):
     if 'A_' not in  drop_list:
         df=df.drop(['ANNEE'], axis=1)
-    if 'MP_' in  drop_list:
+    if 'MP_' not in  drop_list:
         df=df.drop(['month_period'], axis=1)
 
     if 'MD_' not in  drop_list:
@@ -400,16 +469,35 @@ def store_best_datas(secteur, score_test, ecart, added_datas, data_selection):
         
                     }, ignore_index=True)
         df.to_csv('datas/df_secteur_best_datas.csv', index=False)
-    
-    st.write("Le meilleur paramètrage trouvé est : ")
+
+    st.write("")
+    st.write("")
+    st.write("")
+    st.caption("Le meilleur paramètrage pour chaque secteur est : ")
     st.write(df)
      
+
+
+
 def construc_best_dataset_secteur(secteur, df_min, df_F, df_P, df_V, df_T) :
     df = pd.read_csv('datas/df_secteur_best_datas.csv')
     secteur_serie = df[df['secteur']==secteur]
     basis_data = secteur_serie.iloc[0,3]
     added_datas = secteur_serie.iloc[0,4]
     df_secteur = drop_datas(df_min,basis_data)
+
+    suppr=[]
+    if secteur == 'REALISE_TOTAL_FRAIS':
+        suppr.append('REALISE_TOTAL_GEL')
+        suppr.append('REALISE_TOTAL_FFL')
+    elif secteur == 'REALISE_TOTAL_GEL':
+        suppr.append('REALISE_TOTAL_FRAIS')
+        suppr.append('REALISE_TOTAL_FFL')
+    elif secteur == 'REALISE_TOTAL_FFL':
+        suppr.append('REALISE_TOTAL_FRAIS')
+        suppr.append('REALISE_TOTAL_GEL')
+
+    df_secteur = df_secteur.drop(suppr, axis = 1)
 
     if 'F' in  added_datas:
         df_secteur = pd.concat([df_secteur, df_F], axis=1)
