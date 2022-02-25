@@ -313,6 +313,7 @@ def test_model(df_kept,Model,params,secteur, nom_model, df_total):
 
         # Add traces
         fig.add_trace(go.Scatter(x=y_test, y=pred_test,
+                            marker_color = df_total['weekday'].astype('int'),
                             mode='markers',
                             name='markers'))
 
