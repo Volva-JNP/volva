@@ -189,14 +189,16 @@ def build_page_model():
             
 
     if menu_secteur != 'vide':  
-        st.caption("Meilleur résultat")
+        st.caption("Meilleur résultat pour le " + secteur)
         st.write(df_datas_choice.iloc[0:1])  
-        with st.expander('Voir tous les résultats'):
+        with st.expander('Voir le résultats de tous les tests'):
             st.write(df_datas_choice)    
         score_test = df_datas_choice.iloc[0,2]
         ecart = df_datas_choice.iloc[0,3]
         added_datas = df_datas_choice.iloc[0,0]
-        store_best_datas(secteur, score_test, ecart, added_datas,data_selection)
+        with st.expander("Voir le meilleur paramètrage pour chaque secteur"): 
+            df_best_results = store_best_datas(secteur, score_test, ecart, added_datas,data_selection)
+            st.write(df_best_results)
 
 
     st.title('Tests des modèles de regression')
@@ -486,11 +488,7 @@ def store_best_datas(secteur, score_test, ecart, added_datas, data_selection):
                     }, ignore_index=True)
         df.to_csv('datas/df_secteur_best_datas.csv', index=False)
 
-    st.write("")
-    st.write("")
-    st.write("")
-    st.caption("Le meilleur paramètrage pour chaque secteur est : ")
-    st.write(df)
+    return df
      
 
 
