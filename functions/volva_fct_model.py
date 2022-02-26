@@ -189,7 +189,7 @@ def build_page_model():
             
 
     if menu_secteur != 'vide':  
-        st.caption("Meilleur résultat pour le " + secteur)
+        st.caption("Meilleur résultat pour le " + menu_secteur)
         st.write(df_datas_choice.iloc[0:1])  
         with st.expander('Voir le résultats de tous les tests'):
             st.write(df_datas_choice)    
