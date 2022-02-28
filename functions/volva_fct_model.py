@@ -218,23 +218,29 @@ def build_page_model():
         st.write("")
         st.write("")
 
-        with st.expander("GradientBoostingRegressor"):   
+        with st.expander("GradientBoostingRegressor"):               
             st.subheader("Test d'un modèle GradientBoostingRegressor")
-            test_model(df_kept,GBR,params_gbr,secteur, "GBR", df_total)
+            model_GBR, y_test, pred_test_GBR = test_model(df_kept,GBR,params_gbr,secteur, "GBR")
+            if 'model_GBR' in st.session_state:            
+                display_test_pred_graph(y_test, pred_test_GBR , df_total)
 
         with st.expander("BayesianRidge"):  
             from sklearn.linear_model import BayesianRidge
             BR = BayesianRidge()
             params_BR = { }
             st.subheader("Test d'un modèle BayesianRidge")
-            test_model(df_kept,BR,params_BR,secteur,"BR", df_total) 
+            model_BR, y_test, pred_test_BR = test_model(df_kept,BR,params_BR,secteur,"BR") 
+            if 'model_BR' in st.session_state:              
+                display_test_pred_graph(y_test, pred_test_BR , df_total)
 
         with st.expander("Lasso"):  
             from sklearn.linear_model import Lasso 
             lasso = Lasso()
             params_lasso = { }
             st.subheader("Test d'un modèle Lasso")
-            test_model(df_kept,lasso,params_lasso,secteur,"LASSO", df_total)      
+            model_lasso, y_test, pred_test_lasso = test_model(df_kept,lasso,params_lasso,secteur,"LASSO") 
+            if 'model_LASSO' in st.session_state:              
+                display_test_pred_graph(y_test, pred_test_lasso , df_total)     
 
         with st.expander("RandomForestRegressor"):  
             from sklearn.ensemble import RandomForestRegressor
@@ -244,7 +250,9 @@ def build_page_model():
                         "n_estimators":[2000]
                             }
             st.subheader("Test d'un modèle RandomForestRegressor")
-            test_model(df_kept,rfr,params_rfr,secteur,"RFR", df_total)    
+            model_rfr, y_test, pred_test_rfr  = test_model(df_kept,rfr,params_rfr,secteur,"RFR") 
+            if 'model_RFR' in st.session_state:              
+                display_test_pred_graph(y_test, pred_test_rfr , df_total)   
 
 
         with st.expander("KNeighborsRegressor"): 
@@ -254,7 +262,9 @@ def build_page_model():
                         "n_neighbors":[3,4,5,6,7] 
                         }
             st.subheader("Test d'un modèle KNeighborsRegressor")
-            test_model(df_kept,KNR,params_KNR,secteur,"KNR", df_total)  
+            model_KNR,  y_test, pred_test_KNR = test_model(df_kept,KNR,params_KNR,secteur,"KNR")
+            if 'model_KNR' in st.session_state:              
+                display_test_pred_graph(y_test, pred_test_KNR , df_total)   
 
         
         with st.expander("ElasticNetCV"): 
@@ -263,7 +273,9 @@ def build_page_model():
             params_EN= {
              }
             st.subheader("Test d'un modèle ElasticNetCV")
-            test_model(df_kept,EN,params_EN,secteur,"EN", df_total)  
+            model_EN , y_test, pred_test_EN = test_model(df_kept,EN,params_EN,secteur,"EN")
+            if 'model_EN' in st.session_state:              
+                display_test_pred_graph(y_test, pred_test_EN , df_total)  
 
         with st.expander("DecisionTreeRegressor"): 
             from sklearn.tree import DecisionTreeRegressor
@@ -272,46 +284,63 @@ def build_page_model():
                             'max_depth':[4,5,6,7,8]
                         }
             st.subheader("Test d'un modèle DecisionTreeRegressor")
-            test_model(df_kept,DTR,params_DTR,secteur,"DTR", df_total) 
+            model_DTR,  y_test, pred_test_DTR = test_model(df_kept,DTR,params_DTR,secteur,"DTR") 
+            if 'model_DTR' in st.session_state:              
+                display_test_pred_graph(y_test, pred_test_DTR , df_total)
 
 
-            # y_test_ri = y_test.reset_index()
-            # df_ri = df_total.reset_index()
-            # y_test_df_merge = y_test_ri.merge(df_ri[['index', 'weekday']], how='left', on='index')
-            # y_test_df_merge
+def test_model(df_kept,Model,params,secteur, nom_model):
 
-            # pred_test_GBR = gridcv_GRB.predict(X_test_scaled)
-            # # plt.scatter(y_test, pred_test_GBR)
-            # # plt.plot([y_test.min(),y_test.max()],[y_test.min(),y_test.max()], c='r')
-            # # plt.show()
+    gridcv_model = 0
+    y_test = 0
+    pred_test = 0
 
-            # mae_per_day_GBR = get_mae_per_day(y_test_df_merge,y_test_ri,pred_test_GBR,secteur)
-            # # st.write(mae_per_day_GBR)
-
-            # mse_per_day_GBR = np.sqrt(get_mse_per_day(y_test_df_merge,y_test_ri,pred_test_GBR,secteur))
-            # # st.write(mse_per_day_GBR)
-            
-
-
-def test_model(df_kept,Model,params,secteur, nom_model, df_total):
-    button_test_model = st.button('Test modèle ' + nom_model)
-    if button_test_model:
-        placeholder2 = st.empty()
-        placeholder2.warning("Veuillez patienter pendant l'évaluation du modèle ...")
-        gridcv_model, X_train_scaled, X_test_scaled, y_train, y_test = train_model(df_kept,Model,params,secteur)
+    if 'y_test' in st.session_state and 'pred_test_' + nom_model in st.session_state:
+        gridcv_model = st.session_state['model_' + nom_model] 
+        y_test  = st.session_state['y_test'] 
+        pred_test  = st.session_state['pred_test_' + nom_model] 
+        score_test = st.session_state['score_test_' + nom_model]
+        score_train = st.session_state['score_train_' + nom_model]
 
         col1, col2 = st.columns(2)
         with col1:
-            st.metric("Score train",np.round(gridcv_model.score(X_train_scaled, y_train),4))
+            st.metric("Score train",score_train)
         with col2:
-            st.metric("Score test",np.round(gridcv_model.score(X_test_scaled, y_test),4))   
-        
-        placeholder2.empty()
+            st.metric("Score test",score_test)   
 
-        pred_test = gridcv_model.predict(X_test_scaled) 
+    else :
+        placeholder_button = st.empty()
+        button_test_model = placeholder_button.button('Test modèle ' + nom_model)
+        if button_test_model:
+            placeholder2 = st.empty()
+            placeholder2.warning("Veuillez patienter pendant l'évaluation du modèle ...")
+            gridcv_model, X_train_scaled, X_test_scaled, y_train, y_test = train_model(df_kept,Model,params,secteur)
+            score_train = np.round(gridcv_model.score(X_train_scaled, y_train),4)
+            score_test =  np.round(gridcv_model.score(X_test_scaled, y_test),4)
 
+            col1, col2 = st.columns(2)
+            with col1:
+                st.metric("Score train",score_train)
+            with col2:
+                st.metric("Score test",score_test)   
+            
+            placeholder2.empty()    
+            placeholder_button.empty()        
+
+            pred_test = gridcv_model.predict(X_test_scaled) 
+            # st.write(pd.DataFrame(pred_test))
+
+            st.session_state['score_test_' + nom_model] = score_test
+            st.session_state['score_train_' + nom_model] = score_train
+            st.session_state['model_' + nom_model] = y_test
+            st.session_state['y_test'] = y_test
+            st.session_state['pred_test_' + nom_model] = pred_test 
+
+    return gridcv_model, y_test, pred_test
+
+
+def display_test_pred_graph(y_test, pred_test, df_total):
         fig = go.Figure()
-
         # Add traces
         fig.add_trace(go.Scatter(x=y_test, y=pred_test,
                             marker_color = df_total['weekday'].astype('int'),
@@ -324,7 +353,7 @@ def test_model(df_kept,Model,params,secteur, nom_model, df_total):
 
         st.write(fig)
         
-        # return  train_model(df_kept,Model,params,secteur)  
+        
 
 def build_df(df, secteur,drop_list):
 
