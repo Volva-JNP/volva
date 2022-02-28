@@ -452,7 +452,7 @@ def display_model_comparaison(list_ecart, list_nom_model):
                             name='Model'))
 
 
-        fig = px.bar(df_ecart, x="jour", y="ecart", color='model')
+        fig = px.bar(df_ecart, x="jour", y="ecart", color='model',  barmode="group")
         st.write(fig)
 
 def display_test_pred_graph(y_test, pred_test, df_total):
