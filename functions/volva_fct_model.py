@@ -450,6 +450,9 @@ def display_model_comparaison(list_ecart, list_nom_model):
         fig.add_trace(go.Bar(x=df_ecart['jour'], y=df_ecart['ecart'],
                             # marker_color = df_ecart['model'],
                             name='Model'))
+
+
+        fig = px.bar(df_ecart, x="jour", y="ecart", color='model')
         st.write(fig)
 
 def display_test_pred_graph(y_test, pred_test, df_total):
