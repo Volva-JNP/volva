@@ -63,6 +63,10 @@ if button_model:
     link='[Tests modèles de regression](#tests-des-mod-les-de-regression)'
     st.sidebar.markdown(link,unsafe_allow_html= True )
 
+    link='[Comparaison des Modèles](#comparaison-des-mod-les)'
+    st.sidebar.markdown(link,unsafe_allow_html= True )
+
+
     
 
 

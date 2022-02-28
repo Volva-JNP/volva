@@ -26,6 +26,8 @@ from sklearn.model_selection import train_test_split
 
 path = 'datas/volva_datas_utlimate_one.csv'
 
+
+
 def get_df():
     df= load_csv(path)
     suppr=[
@@ -83,6 +85,8 @@ params_gbr = {
 def build_page_model():
 
     df, df_total, df_minimum = get_df()
+    st.session_state.list_ecart = []
+    st.session_state.list_nom_model = []
 
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
@@ -138,6 +142,9 @@ def build_page_model():
 
     if menu_secteur =='secteur frais':   
 
+        st.session_state.list_ecart = []
+        st.session_state.list_nom_model = []
+
         secteur = 'REALISE_TOTAL_FRAIS'
         df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_FRAIS', data_selection)    
         try:
@@ -156,6 +163,9 @@ def build_page_model():
 
     if menu_secteur == 'secteur GEL':  
 
+        st.session_state.list_ecart = []
+        st.session_state.list_nom_model = []
+
         secteur = 'REALISE_TOTAL_GEL'
         df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_FFL', data_selection)        
         try:
@@ -172,6 +182,9 @@ def build_page_model():
         
         
     if menu_secteur == 'secteur FFL':  
+
+        st.session_state.list_ecart = []
+        st.session_state.list_nom_model = []
 
         secteur = 'REALISE_TOTAL_FFL' 
         df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_FFL', data_selection)
@@ -222,8 +235,21 @@ def build_page_model():
         with st.expander("GradientBoostingRegressor"):               
             st.subheader("Test d'un modèle GradientBoostingRegressor")
             model_GBR, y_test, pred_test_GBR = test_model(df_kept,GBR,params_gbr,secteur, "GBR")
-            if 'model_GBR' in st.session_state:            
+            if 'model_GBR_'+ secteur in st.session_state:            
                 display_test_pred_graph(y_test, pred_test_GBR , df_total)
+                if 'y_test_df_merge' not in st.session_state:
+                    y_test_ri = y_test.reset_index()
+                    df_ri = df_total.reset_index()
+                    y_test_df_merge = y_test_ri.merge(df_ri[['index', 'weekday']], how='left', on='index')
+                else :
+                    y_test_df_merge = st.session_state.y_test_df_merge
+
+                mae_per_day_GBR = get_mae_per_day(y_test_df_merge,y_test_ri,pred_test_GBR,secteur)
+                mse_per_day_GBR = np.sqrt(get_mse_per_day(y_test_df_merge,y_test_ri,pred_test_GBR, secteur))
+
+                st.session_state.list_ecart.append(mae_per_day_GBR)
+                st.session_state.list_nom_model.append("GBR")
+
 
         with st.expander("BayesianRidge"):  
             from sklearn.linear_model import BayesianRidge
@@ -231,8 +257,20 @@ def build_page_model():
             params_BR = { }
             st.subheader("Test d'un modèle BayesianRidge")
             model_BR, y_test, pred_test_BR = test_model(df_kept,BR,params_BR,secteur,"BR") 
-            if 'model_BR' in st.session_state:              
+            if 'model_BR_'+ secteur in st.session_state:              
                 display_test_pred_graph(y_test, pred_test_BR , df_total)
+                if 'y_test_df_merge' not in st.session_state:
+                    y_test_ri = y_test.reset_index()
+                    df_ri = df_total.reset_index()
+                    y_test_df_merge = y_test_ri.merge(df_ri[['index', 'weekday']], how='left', on='index')
+                else :
+                    y_test_df_merge = st.session_state.y_test_df_merge
+                
+                mae_per_day_ADABR = get_mae_per_day(y_test_df_merge,y_test_ri,pred_test_BR, secteur)
+                mse_per_day_ADABR = np.sqrt(get_mse_per_day(y_test_df_merge,y_test_ri,pred_test_BR, secteur))
+
+                st.session_state.list_ecart.append(mae_per_day_ADABR)
+                st.session_state.list_nom_model.append("BR")
 
         with st.expander("Lasso"):  
             from sklearn.linear_model import Lasso 
@@ -240,8 +278,17 @@ def build_page_model():
             params_lasso = { }
             st.subheader("Test d'un modèle Lasso")
             model_lasso, y_test, pred_test_lasso = test_model(df_kept,lasso,params_lasso,secteur,"LASSO") 
-            if 'model_LASSO' in st.session_state:              
-                display_test_pred_graph(y_test, pred_test_lasso , df_total)     
+            if 'model_LASSO_'+ secteur in st.session_state:              
+                display_test_pred_graph(y_test, pred_test_lasso , df_total)
+                if 'y_test_df_merge' not in st.session_state:
+                    y_test_ri = y_test.reset_index()
+                    df_ri = df_total.reset_index()
+                    y_test_df_merge = y_test_ri.merge(df_ri[['index', 'weekday']], how='left', on='index')
+                else :
+                    y_test_df_merge = st.session_state.y_test_df_merge   
+
+                mae_per_day_lasso = get_mae_per_day(y_test_df_merge,y_test_ri,pred_test_lasso, secteur)
+                mse_per_day_lasso = np.sqrt(get_mse_per_day(y_test_df_merge,y_test_ri,pred_test_lasso, secteur))  
 
         with st.expander("RandomForestRegressor"):  
             from sklearn.ensemble import RandomForestRegressor
@@ -252,8 +299,17 @@ def build_page_model():
                             }
             st.subheader("Test d'un modèle RandomForestRegressor")
             model_rfr, y_test, pred_test_rfr  = test_model(df_kept,rfr,params_rfr,secteur,"RFR") 
-            if 'model_RFR' in st.session_state:              
-                display_test_pred_graph(y_test, pred_test_rfr , df_total)   
+            if 'model_RFR_'+ secteur in st.session_state:              
+                display_test_pred_graph(y_test, pred_test_rfr , df_total) 
+                if 'y_test_df_merge' not in st.session_state:
+                    y_test_ri = y_test.reset_index()
+                    df_ri = df_total.reset_index()
+                    y_test_df_merge = y_test_ri.merge(df_ri[['index', 'weekday']], how='left', on='index')
+                else :
+                    y_test_df_merge = st.session_state.y_test_df_merge  
+                
+                mae_per_day_rfr = get_mae_per_day(y_test_df_merge,y_test_ri,pred_test_rfr, secteur)
+                mse_per_day_rfr = np.sqrt(get_mse_per_day(y_test_df_merge,y_test_ri,pred_test_rfr, secteur))
 
 
         with st.expander("KNeighborsRegressor"): 
@@ -264,8 +320,17 @@ def build_page_model():
                         }
             st.subheader("Test d'un modèle KNeighborsRegressor")
             model_KNR,  y_test, pred_test_KNR = test_model(df_kept,KNR,params_KNR,secteur,"KNR")
-            if 'model_KNR' in st.session_state:              
-                display_test_pred_graph(y_test, pred_test_KNR , df_total)   
+            if 'model_KNR_'+ secteur in st.session_state:              
+                display_test_pred_graph(y_test, pred_test_KNR , df_total)
+                if 'y_test_df_merge' not in st.session_state:
+                    y_test_ri = y_test.reset_index()
+                    df_ri = df_total.reset_index()
+                    y_test_df_merge = y_test_ri.merge(df_ri[['index', 'weekday']], how='left', on='index')
+                else :
+                    y_test_df_merge = st.session_state.y_test_df_merge   
+
+                mae_per_day_KNR = get_mae_per_day(y_test_df_merge,y_test_ri,pred_test_KNR, secteur)
+                mse_per_day_KNR = np.sqrt(get_mse_per_day(y_test_df_merge,y_test_ri,pred_test_KNR, secteur))
 
         
         with st.expander("ElasticNetCV"): 
@@ -275,8 +340,17 @@ def build_page_model():
              }
             st.subheader("Test d'un modèle ElasticNetCV")
             model_EN , y_test, pred_test_EN = test_model(df_kept,EN,params_EN,secteur,"EN")
-            if 'model_EN' in st.session_state:              
-                display_test_pred_graph(y_test, pred_test_EN , df_total)  
+            if 'model_EN_'+ secteur in st.session_state:              
+                display_test_pred_graph(y_test, pred_test_EN , df_total)
+                if 'y_test_df_merge' not in st.session_state:
+                    y_test_ri = y_test.reset_index()
+                    df_ri = df_total.reset_index()
+                    y_test_df_merge = y_test_ri.merge(df_ri[['index', 'weekday']], how='left', on='index')
+                else :
+                    y_test_df_merge = st.session_state.y_test_df_merge  
+                
+                mae_per_day_EN = get_mae_per_day(y_test_df_merge,y_test_ri,pred_test_EN, secteur)
+                mse_per_day_EN = np.sqrt(get_mse_per_day(y_test_df_merge,y_test_ri,pred_test_EN, secteur))
 
         with st.expander("DecisionTreeRegressor"): 
             from sklearn.tree import DecisionTreeRegressor
@@ -286,8 +360,31 @@ def build_page_model():
                         }
             st.subheader("Test d'un modèle DecisionTreeRegressor")
             model_DTR,  y_test, pred_test_DTR = test_model(df_kept,DTR,params_DTR,secteur,"DTR") 
-            if 'model_DTR' in st.session_state:              
+            if 'model_DTR_'+ secteur in st.session_state:              
                 display_test_pred_graph(y_test, pred_test_DTR , df_total)
+                if 'y_test_df_merge' not in st.session_state:
+                    y_test_ri = y_test.reset_index()
+                    df_ri = df_total.reset_index()
+                    y_test_df_merge = y_test_ri.merge(df_ri[['index', 'weekday']], how='left', on='index')
+                else :
+                    y_test_df_merge = st.session_state.y_test_df_merge
+
+                mae_per_day_DTR = get_mae_per_day(y_test_df_merge,y_test_ri,pred_test_DTR, secteur)
+                mse_per_day_DTR = np.sqrt(get_mse_per_day(y_test_df_merge,y_test_ri,pred_test_DTR), secteur)
+
+
+    st.title('Comparaison des modèles')
+    with st.expander('Information'):    
+        col1, col2 = st.columns(2)
+        with col1:
+            st.write("A compléter")
+        with col2:
+            st.write("A compléter")
+    st.write(st.session_state.list_ecart)
+
+    if len(st.session_state.list_nom_model)>0:
+        display_model_comparaison(st.session_state.list_ecart, st.session_state.list_nom_model)
+
 
 
 def test_model(df_kept,Model,params,secteur, nom_model):
@@ -296,12 +393,12 @@ def test_model(df_kept,Model,params,secteur, nom_model):
     y_test = 0
     pred_test = 0
 
-    if 'y_test' in st.session_state and 'pred_test_' + nom_model in st.session_state:
-        gridcv_model = st.session_state['model_' + nom_model] 
-        y_test  = st.session_state['y_test'] 
-        pred_test  = st.session_state['pred_test_' + nom_model] 
-        score_test = st.session_state['score_test_' + nom_model]
-        score_train = st.session_state['score_train_' + nom_model]
+    if 'y_test' + "_" + secteur in st.session_state and 'pred_test_' + nom_model + "_" + secteur  in st.session_state:
+        gridcv_model = st.session_state['model_' + nom_model + "_" + secteur] 
+        y_test  = st.session_state['y_test' + "_" + secteur] 
+        pred_test  = st.session_state['pred_test_' + nom_model + "_" + secteur] 
+        score_test = st.session_state['score_test_' + nom_model + "_" + secteur]
+        score_train = st.session_state['score_train_' + nom_model + "_" + secteur]
 
         col1, col2 = st.columns(2)
         with col1:
@@ -331,14 +428,29 @@ def test_model(df_kept,Model,params,secteur, nom_model):
             pred_test = gridcv_model.predict(X_test_scaled) 
             # st.write(pd.DataFrame(pred_test))
 
-            st.session_state['score_test_' + nom_model] = score_test
-            st.session_state['score_train_' + nom_model] = score_train
-            st.session_state['model_' + nom_model] = y_test
-            st.session_state['y_test'] = y_test
-            st.session_state['pred_test_' + nom_model] = pred_test 
+            st.session_state['score_test_' + nom_model + "_" + secteur ] = score_test
+            st.session_state['score_train_' + nom_model + "_" + secteur] = score_train
+            st.session_state['model_' + nom_model + "_" + secteur] = gridcv_model
+            st.session_state['y_test' + "_" + secteur] = y_test
+            st.session_state['pred_test_' + nom_model + "_" + secteur ] = pred_test 
 
     return gridcv_model, y_test, pred_test
 
+def display_model_comparaison(list_ecart, list_nom_model):
+        fig = go.Figure()
+        df_ecart = pd.DataFrame(columns=['jour', 'mae', 'model'])
+        for mae_nom, mae_tab in zip(list_nom_model,list_ecart):
+            for jour, mae_value in zip(['Lun', 'Mar', 'Mer', 'jeu', 'Ven','Sam'],mae_tab):
+                df_ecart = df_ecart.append(
+                                {'jour' : jour,
+                                'ecart' : mae_value,
+                                'model' : mae_nom}
+                                , ignore_index=True)
+
+        fig.add_trace(go.Bar(x=df_ecart['jour'], y=df_ecart['ecart'],
+                            # marker_color = df_ecart['model'],
+                            name='Model'))
+        st.write(fig)
 
 def display_test_pred_graph(y_test, pred_test, df_total):
         fig = go.Figure()
@@ -346,7 +458,7 @@ def display_test_pred_graph(y_test, pred_test, df_total):
         fig.add_trace(go.Scatter(x=y_test, y=pred_test,
                             marker_color = df_total['weekday'].astype('int'),
                             mode='markers',
-                            name='markers'))
+                            name='Previsions'))
 
         fig.add_trace(go.Scatter(x=[y_test.min(),y_test.max()], y=[y_test.min(),y_test.max()],
                             mode='lines',
