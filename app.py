@@ -66,8 +66,7 @@ if button_model:
     link='[Comparaison des Modèles](#comparaison-des-mod-les)'
     st.sidebar.markdown(link,unsafe_allow_html= True )
 
-button_quezac = st.sidebar.button('Quezac')
-    
+   
 
 
 button_predict = st.sidebar.button('Prédictions')
