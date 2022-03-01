@@ -85,7 +85,8 @@ params_gbr = {
 def build_page_model():
 
     df, df_total, df_minimum = get_df()
-    st.session_state.list_ecart = []
+    st.session_state.list_ecart_mae = []
+    st.session_state.list_ecart_mse = []
     st.session_state.list_nom_model = []
 
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
@@ -142,8 +143,9 @@ def build_page_model():
 
     if menu_secteur =='secteur frais':   
 
-        st.session_state.list_ecart = []
+        st.session_state.list_ecart_mae = []
         st.session_state.list_nom_model = []
+        st.session_state.list_ecart_mse = []
 
         secteur = 'REALISE_TOTAL_FRAIS'
         df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_FRAIS', data_selection)    
@@ -163,8 +165,9 @@ def build_page_model():
 
     if menu_secteur == 'secteur GEL':  
 
-        st.session_state.list_ecart = []
+        st.session_state.list_ecart_mae = []
         st.session_state.list_nom_model = []
+        st.session_state.list_ecart_mse = []
 
         secteur = 'REALISE_TOTAL_GEL'
         df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_FFL', data_selection)        
@@ -183,8 +186,9 @@ def build_page_model():
         
     if menu_secteur == 'secteur FFL':  
 
-        st.session_state.list_ecart = []
+        st.session_state.list_ecart_mae = []
         st.session_state.list_nom_model = []
+        st.session_state.list_ecart_mse = []
 
         secteur = 'REALISE_TOTAL_FFL' 
         df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_FFL', data_selection)
@@ -247,7 +251,8 @@ def build_page_model():
                 mae_per_day_GBR = get_mae_per_day(y_test_df_merge,y_test_ri,pred_test_GBR,secteur)
                 mse_per_day_GBR = np.sqrt(get_mse_per_day(y_test_df_merge,y_test_ri,pred_test_GBR, secteur))
 
-                st.session_state.list_ecart.append(mae_per_day_GBR)
+                st.session_state.list_ecart_mae.append(mae_per_day_GBR)
+                st.session_state.list_ecart_mse.append(mse_per_day_GBR)
                 st.session_state.list_nom_model.append("GBR")
 
 
@@ -269,7 +274,8 @@ def build_page_model():
                 mae_per_day_ADABR = get_mae_per_day(y_test_df_merge,y_test_ri,pred_test_BR, secteur)
                 mse_per_day_ADABR = np.sqrt(get_mse_per_day(y_test_df_merge,y_test_ri,pred_test_BR, secteur))
 
-                st.session_state.list_ecart.append(mae_per_day_ADABR)
+                st.session_state.list_ecart_mae.append(mae_per_day_ADABR)
+                st.session_state.list_ecart_mse.append(mse_per_day_ADABR)
                 st.session_state.list_nom_model.append("BR")
 
         with st.expander("Lasso"):  
@@ -289,6 +295,10 @@ def build_page_model():
 
                 mae_per_day_lasso = get_mae_per_day(y_test_df_merge,y_test_ri,pred_test_lasso, secteur)
                 mse_per_day_lasso = np.sqrt(get_mse_per_day(y_test_df_merge,y_test_ri,pred_test_lasso, secteur))  
+
+                st.session_state.list_ecart_mae.append(mae_per_day_lasso)
+                st.session_state.list_ecart_mse.append(mse_per_day_lasso)
+                st.session_state.list_nom_model.append("LASSO")
 
         with st.expander("RandomForestRegressor"):  
             from sklearn.ensemble import RandomForestRegressor
@@ -311,6 +321,10 @@ def build_page_model():
                 mae_per_day_rfr = get_mae_per_day(y_test_df_merge,y_test_ri,pred_test_rfr, secteur)
                 mse_per_day_rfr = np.sqrt(get_mse_per_day(y_test_df_merge,y_test_ri,pred_test_rfr, secteur))
 
+                st.session_state.list_ecart_mae.append(mae_per_day_rfr)
+                st.session_state.list_ecart_mse.append(mse_per_day_rfr)
+                st.session_state.list_nom_model.append("RFR")
+
 
         with st.expander("KNeighborsRegressor"): 
             from sklearn.neighbors import KNeighborsRegressor
@@ -332,6 +346,10 @@ def build_page_model():
                 mae_per_day_KNR = get_mae_per_day(y_test_df_merge,y_test_ri,pred_test_KNR, secteur)
                 mse_per_day_KNR = np.sqrt(get_mse_per_day(y_test_df_merge,y_test_ri,pred_test_KNR, secteur))
 
+                st.session_state.list_ecart_mae.append(mae_per_day_KNR)
+                st.session_state.list_ecart_mse.append(mse_per_day_KNR)
+                st.session_state.list_nom_model.append("KNR")
+
         
         with st.expander("ElasticNetCV"): 
             from sklearn.linear_model import ElasticNetCV 
@@ -351,6 +369,10 @@ def build_page_model():
                 
                 mae_per_day_EN = get_mae_per_day(y_test_df_merge,y_test_ri,pred_test_EN, secteur)
                 mse_per_day_EN = np.sqrt(get_mse_per_day(y_test_df_merge,y_test_ri,pred_test_EN, secteur))
+
+                st.session_state.list_ecart_mae.append(mae_per_day_EN)
+                st.session_state.list_ecart_mse.append(mse_per_day_EN)
+                st.session_state.list_nom_model.append("EN")
 
         with st.expander("DecisionTreeRegressor"): 
             from sklearn.tree import DecisionTreeRegressor
@@ -372,6 +394,10 @@ def build_page_model():
                 mae_per_day_DTR = get_mae_per_day(y_test_df_merge,y_test_ri,pred_test_DTR, secteur)
                 mse_per_day_DTR = np.sqrt(get_mse_per_day(y_test_df_merge,y_test_ri,pred_test_DTR), secteur)
 
+                st.session_state.list_ecart_mae.append(mae_per_day_DTR)
+                st.session_state.list_ecart_mse.append(mse_per_day_DTR)
+                st.session_state.list_nom_model.append("DTR")
+
 
     st.title('Comparaison des modèles')
     with st.expander('Information'):    
@@ -380,11 +406,11 @@ def build_page_model():
             st.write("A compléter")
         with col2:
             st.write("A compléter")
-    st.write(st.session_state.list_ecart)
+    # st.write(st.session_state.list_ecart_mae)
 
     if len(st.session_state.list_nom_model)>0:
-        display_model_comparaison(st.session_state.list_ecart, st.session_state.list_nom_model)
-
+        display_model_comparaison(st.session_state.list_ecart_mae, st.session_state.list_nom_model, "MAE")
+        display_model_comparaison(st.session_state.list_ecart_mse, st.session_state.list_nom_model, "MSE")
 
 
 def test_model(df_kept,Model,params,secteur, nom_model):
@@ -436,23 +462,23 @@ def test_model(df_kept,Model,params,secteur, nom_model):
 
     return gridcv_model, y_test, pred_test
 
-def display_model_comparaison(list_ecart, list_nom_model):
+def display_model_comparaison(list_ecart, list_nom_model, type):
         fig = go.Figure()
-        df_ecart = pd.DataFrame(columns=['jour', 'mae', 'model'])
-        for mae_nom, mae_tab in zip(list_nom_model,list_ecart):
-            for jour, mae_value in zip(['Lun', 'Mar', 'Mer', 'jeu', 'Ven','Sam'],mae_tab):
+        df_ecart = pd.DataFrame(columns=['jour', 'ecart', 'model'])
+        if type == "MSE" :
+            Title = "Ecarts RMSE moyens par jour"
+        elif type == "MAE":
+            Title = "Ecarts MAE moyens par jour"
+
+        for ecart_nom, ecart_tab in zip(list_nom_model,list_ecart):
+            for jour, ecart_value in zip(['Lun', 'Mar', 'Mer', 'jeu', 'Ven','Sam'],ecart_tab):
                 df_ecart = df_ecart.append(
                                 {'jour' : jour,
-                                'ecart' : mae_value,
-                                'model' : mae_nom}
+                                'ecart' : ecart_value,
+                                'model' : ecart_nom}
                                 , ignore_index=True)
 
-        fig.add_trace(go.Bar(x=df_ecart['jour'], y=df_ecart['ecart'],
-                            # marker_color = df_ecart['model'],
-                            name='Model'))
-
-
-        fig = px.bar(df_ecart, x="jour", y="ecart", color='model',  barmode="group")
+        fig = px.bar(df_ecart, x="jour", y="ecart", color='model',  barmode="group", title=Title)
         st.write(fig)
 
 def display_test_pred_graph(y_test, pred_test, df_total):
