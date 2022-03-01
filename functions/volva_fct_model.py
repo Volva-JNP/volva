@@ -391,7 +391,7 @@ def build_page_model():
                     y_test_df_merge = st.session_state.y_test_df_merge
 
                 mae_per_day_DTR = get_mae_per_day(y_test_df_merge,y_test_ri,pred_test_DTR, secteur)
-                mse_per_day_DTR = np.sqrt(get_mse_per_day(y_test_df_merge,y_test_ri,pred_test_DTR), secteur)
+                mse_per_day_DTR = np.sqrt(get_mse_per_day(y_test_df_merge,y_test_ri,pred_test_DTR, secteur))
 
                 st.session_state.list_ecart_mae.append(mae_per_day_DTR)
                 st.session_state.list_ecart_mse.append(mse_per_day_DTR)
