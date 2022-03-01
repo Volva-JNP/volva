@@ -78,7 +78,7 @@ le secteur frais represente une forte proportion du volume totale donc impact fo
 distrib = '''
 Ci_dessous la distribution des volumes par secteur.
 Nous pouvons constater que les secteurs GEL et FFL ont une distribution assez compacte et centré sur la moyenne/mediane ce qui nous amene à penser que le volume ne varie pas beacoup
-Par contre la distribution du frais est plus etalée ce qui induit un plus grand ecart type et de fortes variations.
+Par contre la distribution du frais est plus etalée ce qui induit un plus grand ecart type et de fortes variations. 
 '''
 
 violo = '''
