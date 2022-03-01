@@ -27,7 +27,6 @@ from sklearn.model_selection import train_test_split
 path = 'datas/volva_datas_utlimate_one.csv'
 
 
-
 def get_df():
     df= load_csv(path)
     suppr=[
