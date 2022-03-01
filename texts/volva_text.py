@@ -31,6 +31,8 @@ DATA = '''
 Les données d'origine du projet sont un ensemble de fichiers Excel qui regroupent les volumes et les performances par secteur.
 Chaque fichier représente un mois.
 
+La vie est fait d'incertitudes et c'est cool
+
 '''
 
 
