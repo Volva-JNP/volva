@@ -35,21 +35,25 @@ Les données ont été nettoyées et adaptées à l'exploitation pour un analyse
 
 En fonction des hypothèses émises pour expliquer les variations de volume nous avons ajouté d'autres données externes à celles de départ:
 - jours fériés : Est-ce que la proximité d'un jour férié (passé ou à venir) impacte les commandes de supermarchés pour compenser le jour de fermeture ? 
-Nous avons identifé si le jour férié le plus proche est passé ou à venir.
+-> Nous avons identifé si le jour férié le plus proche est passé ou à venir.
+
 
 - vacances scolaire par zone : /Est-ce que le fait d'être en vacances impacte le volume de commande ?
-                               /Est-ce que la zone de vacances impacte le volume de commande?
-                               /Est-ce que la proximité (- de 7 jours) du début des vacances scolaires impacte le volume de commande.
-Nous avons intégré le calendrier scolaire français par zone et identifié les jours proches (- de 7 jours) du début des vacaces scolaires
+/Est-ce que la zone de vacances impacte le volume de commande?
+/Est-ce que la proximité (- de 7 jours) du début des vacances scolaires impacte le volume de commande.
+-> Nous avons intégré le calendrier scolaire français par zone et identifié les jours proches (- de 7 jours) du début des vacaces scolaires
+
 
 - températures moyennes saisonnières : Est-ce que les températures moyennes impactent le volume de commande?
-Nous avons intégré les températures moyennes par jour depuis 2016 dans les régions concernées par le site logistique.
+-> Nous avons intégré les températures moyennes par jour depuis 2016 dans les régions concernées par le site logistique.
+
 
 - les promotions : Est-ce que les promotions prévues impactent le volume de commande?
-Nous avons intégré tous les types de promotions en cours.
+-> Nous avons intégré tous les types de promotions en cours.
+
 
 - les semaines spéciales : Est-ce que les 2 premières semaines de juin et août ainsi que la dernière semaine de l'année impacte le volume de commande?
-Nous avons remarqué que certaines semaines dans l'année ont un volume de commande important ainsi que la dernière semaine de l'année nous les avons donc identifié.
+-> Nous avons remarqué que certaines semaines dans l'année ont un volume de commande important ainsi que la dernière semaine de l'année nous les avons donc identifié.
 '''
 
 
