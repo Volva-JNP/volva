@@ -33,7 +33,7 @@ Chaque fichier représente un mois.
 
 Les données ont été nettoyées et adaptées à l'exploitation pour un analyse, visualisation, modelisation et prédiction.
 
-En fonction des hypothèses émises pour expliquer les variations de volume nous avons ajoutés d'autres données externes à celles de départ:
+En fonction des hypothèses émises pour expliquer les variations de volume nous avons ajouté d'autres données externes à celles de départ:
 - jours fériés : Est-ce que la proximité d'un jour férié (passé ou à venir) impacte les commandes de supermarchés pour compenser le jour de fermeture ? 
 Nous avons identifé si le jour férié le plus proche est passé ou à venir.
 
