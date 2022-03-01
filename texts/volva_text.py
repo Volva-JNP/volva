@@ -38,9 +38,9 @@ En fonction des hypothèses émises pour expliquer les variations de volume nous
 -> Nous avons identifé si le jour férié le plus proche est passé ou à venir.
 
 
-- vacances scolaire par zone : /Est-ce que le fait d'être en vacances impacte le volume de commande ?
-/Est-ce que la zone de vacances impacte le volume de commande?
-/Est-ce que la proximité (- de 7 jours) du début des vacances scolaires impacte le volume de commande.
+- vacances scolaire par zone : /Est-ce que le fait d'être en vacances impacte le volume de commande ?\n
+/Est-ce que la zone de vacances impacte le volume de commande?\n
+/Est-ce que la proximité (- de 7 jours) du début des vacances scolaires impacte le volume de commande.\n
 -> Nous avons intégré le calendrier scolaire français par zone et identifié les jours proches (- de 7 jours) du début des vacaces scolaires
 
 
