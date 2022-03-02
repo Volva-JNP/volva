@@ -31,7 +31,7 @@ DATA = '''
 Les données d'origine du projet sont un ensemble de fichiers Excel qui regroupent les volumes et les performances par secteur.
 Chaque fichier représente un mois.
 
-Les données ont été nettoyées et adaptées à l'exploitation pour un analyse, visualisation, modelisation et prédiction.
+Les données ont été nettoyées et adaptées à l'exploitation pour analyse, visualisation, modelisation et prédiction.
 
 
 En fonction des hypothèses émises pour expliquer les variations de volume nous avons ajouté d'autres données externes à celles de départ:
