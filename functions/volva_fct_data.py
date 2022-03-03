@@ -17,7 +17,11 @@ from plotly import tools
 from texts.volva_text import *
 from plotly.subplots import make_subplots
 from functions.volva_fct import *
+<<<<<<< HEAD
 #from diagrams import Cluster, Diagram
+=======
+# from diagrams import Cluster, Diagram
+>>>>>>> 59d3d15745e7a3667b9c31aac8126669597ecff9
 # from diagrams.k8s.storage import PVC, PV
 # from diagrams.aws.database import Aurora
 # from diagrams.gcp.iot import IotCore
@@ -86,8 +90,13 @@ def set_data():
     st.write("Explications des données et rapport d'exploration")
     
     st.write(DATA, unsafe_allow_html=True)
+<<<<<<< HEAD
     #flowchart()
     st.image("img/flowchart.jpg",width=1400)
+=======
+#     flowchart()
+#     st.image("img/flowchart.jpg",width=1400)
+>>>>>>> 59d3d15745e7a3667b9c31aac8126669597ecff9
 
 
 def flowchart():
