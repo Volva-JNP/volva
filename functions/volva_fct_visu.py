@@ -126,7 +126,7 @@ def set_visu():
     fig4.add_trace(go.Histogram(x=x4,name='total site',nbinsx=30))
     fig4.update_traces (opacity=0.7)
     fig4.update_layout(barmode='overlay',bargap=0.1,title='Distribution des volumes par secteur')
-    fig4.update_layout(width=1400,height=600,hovermode='y')
+    fig4.update_layout(hovermode='y')
     fig4.update_xaxes( title='VOLUME')
     fig4.update_yaxes( title='FREQUENCE')
     st.write(fig4)
@@ -147,7 +147,7 @@ def set_visu():
         fig = px.violin(dataset,x= x, y=y, color= x, box = True)
         fig.update_layout(showlegend=True)
         
-        fig.update_layout(width=1400,height=600)
+        
         fig.update_yaxes( title='VOLUME')
         st.write(fig)
         
@@ -158,7 +158,7 @@ def set_visu():
         REALISE_TARGETED = 'REALISE_TOTAL_GEL'
         fig = px.violin(dataset,x= x, y=y, color= x, box = True)
         
-        fig.update_layout(width=1400,height=600)
+        
         fig.update_yaxes( title='VOLUME')
         st.write(fig)
         
@@ -168,7 +168,7 @@ def set_visu():
         REALISE_TARGETED = 'REALISE_TOTAL_FFL'
         fig = px.violin(dataset,x= x, y=y, color= x, box = True)
         fig.update_yaxes( title='VOLUME')
-        fig.update_layout(width=1400,height=600)
+        
         st.write(fig)
         
     
@@ -278,7 +278,7 @@ def jour_ferié():
 
     fig2 = make_subplots(rows=2,cols=3,subplot_titles=('Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'),x_title='nbre de jour avant le férié',y_title='delta vs moyenne du jour')
     fig2.update_layout(showlegend=False)
-    fig2.update_layout(width=1400,height=700)
+    
     for day_num_ecarts in list_ecart_per_day:
         
         y = day_num_ecarts
