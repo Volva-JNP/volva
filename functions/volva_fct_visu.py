@@ -138,7 +138,7 @@ def set_visu():
         st.write(violo,  unsafe_allow_html=True)
     menu = st.radio(
     "",
-    ("secteur FRAIS", "secteur GEL", "secteur FFL"),
+    ("vide","secteur FRAIS", "secteur GEL", "secteur FFL"),
 )
     if menu =='secteur FRAIS':
         dataset = dataset.drop(['REALISE_TOTAL_GEL','REALISE_TOTAL_FFL'], axis = 1)
