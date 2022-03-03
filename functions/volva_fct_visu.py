@@ -209,7 +209,7 @@ def jour_ferié():
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
     menu = st.radio(
     "",
-    ("secteur frais", "secteur Gel", "secteur FFL"),
+    ("vide","secteur frais", "secteur Gel", "secteur FFL"),
 )
     if menu =='secteur frais':
         
@@ -326,7 +326,7 @@ def matricecorr():
        # st.write(violo,  unsafe_allow_html=True)
     menu = st.radio(
     "",
-    ("secteur MECA", "secteur -18°c", "secteur fruits et légumes"))
+    ("vide","secteur MECA", "secteur -18°c", "secteur fruits et légumes"))
     
     
     
