@@ -280,12 +280,12 @@ def jour_ferié():
         fig2 = make_subplots(rows=2,cols=3,
         subplot_titles=('Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'),x_title='nbre de jour avant le férié',y_title='delta vs moyenne du jour'
         )
-        fig2.update_layout(xaxis=dict(tickmode='array',tickvals=[9,8,7,6,5,4,3,2,1],ticktext=['-9','-8','-7','-6','-5','-4','-3','-2','-1']))
-        fig2.update_layout(xaxis2=dict(tickmode='array',tickvals=[9,8,7,6,5,4,3,2,1],ticktext=['-9','-8','-7','-6','-5','-4','-3','-2','-1']))
-        fig2.update_layout(xaxis3=dict(tickmode='array',tickvals=[9,8,7,6,5,4,3,2,1],ticktext=['-9','-8','-7','-6','-5','-4','-3','-2','-1']))
-        fig2.update_layout(xaxis4=dict(tickmode='array',tickvals=[9,8,7,6,5,4,3,2,1],ticktext=['-9','-8','-7','-6','-5','-4','-3','-2','-1']))
-        fig2.update_layout(xaxis5=dict(tickmode='array',tickvals=[9,8,7,6,5,4,3,2,1],ticktext=['-9','-8','-7','-6','-5','-4','-3','-2','-1']))
-        fig2.update_layout(xaxis6=dict(tickmode='array',tickvals=[9,8,7,6,5,4,3,2,1],ticktext=['-9','-8','-7','-6','-5','-4','-3','-2','-1']))
+        fig2.update_layout(xaxis=dict(tickmode='array',tickvals=[9,8,7,6,5,4,3,2,1],ticktext=['jeu','ven','sam','lun','mar','mer','jeu','ven','sam']))
+        fig2.update_layout(xaxis2=dict(tickmode='array',tickvals=[9,8,7,6,5,4,3,2,1],ticktext=['ven','sam','lun','mar','mer','jeu','ven','sam','lun']))
+        fig2.update_layout(xaxis3=dict(tickmode='array',tickvals=[9,8,7,6,5,4,3,2,1],ticktext=['sam','lun','mar','mer','jeu','ven','sam','lun','mar']))
+        fig2.update_layout(xaxis4=dict(tickmode='array',tickvals=[9,8,7,6,5,4,3,2,1],ticktext=['lun','mar','mer','jeu','ven','sam','lun','mar','mer']))
+        fig2.update_layout(xaxis5=dict(tickmode='array',tickvals=[9,8,7,6,5,4,3,2,1],ticktext=['mar','mer','jeu','ven','sam','lun','mar','mer','jeu']))
+        fig2.update_layout(xaxis6=dict(tickmode='array',tickvals=[9,8,7,6,5,4,3,2,1],ticktext=['mer','jeu','ven','sam','lun','mar','mer','jeu','ven']))
 
 
 
