@@ -24,6 +24,7 @@ with open('css/style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 st.sidebar.image('img/volvaF1.png')
+st.sidebar.image('img/projet_volva.png')
 st.sidebar.write("")
 
 if 'page' not in st.session_state:
