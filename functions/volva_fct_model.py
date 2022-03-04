@@ -483,12 +483,15 @@ def display_test_pred_graph(y_test, pred_test, df_total):
         # Add traces
         fig.add_trace(go.Scatter(x=y_test, y=pred_test,
                             marker_color = df_total['weekday'].astype('int'),
-                            mode='markers',
-                            name='Previsions'))
+                            text=(df_total['JOUR']),
+                            mode="markers",
+                            name='Prévisions'         
+                            ))
+       
 
         fig.add_trace(go.Scatter(x=[y_test.min(),y_test.max()], y=[y_test.min(),y_test.max()],
                             mode='lines',
-                            name='lines'))
+                            name='prediction parfaite'))
 
         st.write(fig)
         
