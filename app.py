@@ -23,7 +23,7 @@ from functions.volva_fct_model import *
 with open('css/style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-st.sidebar.image('img/Les_Mousquetaires.png')
+st.sidebar.image('img/volvaF1.png')
 st.sidebar.write("")
 
 if 'page' not in st.session_state:
@@ -35,7 +35,6 @@ if 'page' not in st.session_state:
 Data=False
 
 st.sidebar.header('MENU')
-st.sidebar.markdown('analyse de données ITM SQF')
 
 
 button_intro = st.sidebar.button('Introduction')
