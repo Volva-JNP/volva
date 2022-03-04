@@ -52,7 +52,7 @@ def set_data():
             
         menu = st.radio(
         "",
-        ("secteur frais", "secteur Gel", "secteur FFL"),
+        ("vide","secteur frais", "secteur Gel", "secteur FFL"),
         )
         if menu =='secteur frais':
             df = df.drop(['REALISE_TOTAL_GEL','REALISE_TOTAL_FFL'], axis = 1)
