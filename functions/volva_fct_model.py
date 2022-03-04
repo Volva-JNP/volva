@@ -396,6 +396,8 @@ def build_page_model():
                 st.session_state.list_nom_model.append("DTR")
 
 
+
+
     st.title('Comparaison des modèles')
     with st.expander('Information'):    
         col1, col2 = st.columns(2)
@@ -406,8 +408,51 @@ def build_page_model():
     # st.write(st.session_state.list_ecart_mae)
 
     if len(st.session_state.list_nom_model)>0:
-        display_model_comparaison(st.session_state.list_ecart_mae, st.session_state.list_nom_model, "MAE")
-        display_model_comparaison(st.session_state.list_ecart_mse, st.session_state.list_nom_model, "MSE")
+        df_ecart_MAE = display_model_comparaison(st.session_state.list_ecart_mae, st.session_state.list_nom_model, "MAE")
+        df_ecart_RMSE = display_model_comparaison(st.session_state.list_ecart_mse, st.session_state.list_nom_model, "MSE")
+
+
+        df_ecart = pd.concat([df_ecart_MAE, df_ecart_RMSE])
+        df_ecart_mean = df_ecart.groupby(['jour','model']).agg({'ecart':'mean'})        
+        df_ecart_mean = df_ecart_mean.reset_index() 
+
+        lun_results =  df_ecart_mean[(df_ecart_mean['jour'] == 'Lun') ]
+        min_lun_results = lun_results['ecart'].idxmin()
+
+        mar_results =  df_ecart_mean[(df_ecart_mean['jour'] == 'Mar') ]
+        min_mar_results = mar_results['ecart'].idxmin()
+
+        mer_results =  df_ecart_mean[(df_ecart_mean['jour'] == 'Mer') ]
+        min_mer_results = mer_results['ecart'].idxmin()
+
+        jeu_results =  df_ecart_mean[(df_ecart_mean['jour'] == 'Jeu') ]
+        min_jeu_results = jeu_results['ecart'].idxmin()
+
+        ven_results =  df_ecart_mean[(df_ecart_mean['jour'] == 'Ven') ]
+        min_ven_results = ven_results['ecart'].idxmin()
+
+        sam_results =  df_ecart_mean[(df_ecart_mean['jour'] == 'Sam') ]
+        min_sam_results = sam_results['ecart'].idxmin()
+
+      
+        jours = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven','Sam']
+        best_models = [
+
+                lun_results.loc[min_lun_results,'model'],
+                mar_results.loc[min_mar_results,'model'],
+                mer_results.loc[min_mer_results,'model'],
+                jeu_results.loc[min_jeu_results,'model'],
+                ven_results.loc[min_ven_results,'model'],
+                sam_results.loc[min_sam_results,'model'],
+
+        ]
+ 
+        df_est_model_per_day = pd.DataFrame()
+        df_est_model_per_day['Jours'] = jours
+        df_est_model_per_day['Modèle'] = best_models
+
+        st.write(df_est_model_per_day)
+
 
 
 def test_model(df_kept,Model,params,secteur, nom_model):
@@ -468,7 +513,7 @@ def display_model_comparaison(list_ecart, list_nom_model, type):
             Title = "Ecarts MAE moyens par jour"
 
         for ecart_nom, ecart_tab in zip(list_nom_model,list_ecart):
-            for jour, ecart_value in zip(['Lun', 'Mar', 'Mer', 'jeu', 'Ven','Sam'],ecart_tab):
+            for jour, ecart_value in zip(['Lun', 'Mar', 'Mer', 'Jeu', 'Ven','Sam'],ecart_tab):
                 df_ecart = df_ecart.append(
                                 {'jour' : jour,
                                 'ecart' : ecart_value,
@@ -478,16 +523,16 @@ def display_model_comparaison(list_ecart, list_nom_model, type):
         fig = px.bar(df_ecart, x="jour", y="ecart", color='model',  barmode="group", title=Title)
         st.write(fig)
 
+        return df_ecart
+
 def display_test_pred_graph(y_test, pred_test, df_total):
         fig = go.Figure()
         # Add traces
         fig.add_trace(go.Scatter(x=y_test, y=pred_test,
                             marker_color = df_total['weekday'].astype('int'),
-                            text=(df_total['JOUR']),
-                            mode="markers",
-                            name='Prévisions'         
-                            ))
-       
+                            mode='markers',
+                            # legend = 'test',
+                            name='Previsions'))
 
         fig.add_trace(go.Scatter(x=[y_test.min(),y_test.max()], y=[y_test.min(),y_test.max()],
                             mode='lines',
