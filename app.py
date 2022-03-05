@@ -19,6 +19,7 @@ from texts.volva_text import *
 from functions.volva_fct_visu import *
 from functions.volva_fct_data import *
 from functions.volva_fct_model import *
+from functions.volva_fct_predict import *
 
 with open('css/style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
@@ -57,7 +58,7 @@ if button_visu:
 
 button_model = st.sidebar.button('Modèlisation')
 if button_model:
-    link='[Données utiles par secteur](#volva-project)'
+    link='[Données utiles par secteur](#selection-des-donn-es-utiles-par-test-de-mod-les)'
     st.sidebar.markdown(link,unsafe_allow_html= True )
 
     link='[Tests modèles de regression](#tests-des-mod-les-de-regression)'
@@ -66,11 +67,12 @@ if button_model:
     link='[Comparaison des Modèles](#comparaison-des-mod-les)'
     st.sidebar.markdown(link,unsafe_allow_html= True )
 
-   
-
+    link='[Modèle final](#construction-du-mod-le-final)'
+    st.sidebar.markdown(link,unsafe_allow_html= True )
 
 button_predict = st.sidebar.button('Prédictions')
     # if button_predict:
+        # button_model = st.sidebar.button('Modèlisation')
 
 
 
@@ -109,7 +111,7 @@ if page == 'Model':
     build_page_model()
 
 if page == 'Predict':
-    set_visu()
+    build_page_predict()
 
 
  

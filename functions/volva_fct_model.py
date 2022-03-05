@@ -411,6 +411,7 @@ def build_page_model():
         df_ecart_MAE = display_model_comparaison(st.session_state.list_ecart_mae, st.session_state.list_nom_model, "MAE")
         df_ecart_RMSE = display_model_comparaison(st.session_state.list_ecart_mse, st.session_state.list_nom_model, "MSE")
 
+        st.title('Construction du modèle final')
 
         df_ecart = pd.concat([df_ecart_MAE, df_ecart_RMSE])
         df_ecart_mean = df_ecart.groupby(['jour','model']).agg({'ecart':'mean'})        
@@ -450,6 +451,8 @@ def build_page_model():
         df_est_model_per_day = pd.DataFrame()
         df_est_model_per_day['Jours'] = jours
         df_est_model_per_day['Modèle'] = best_models
+
+
 
         st.write(df_est_model_per_day)
 
