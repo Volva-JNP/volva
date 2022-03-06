@@ -23,7 +23,6 @@ import seaborn as sns
 
 from sklearn.model_selection import train_test_split
 
-
 def build_page_predict():
 
     with st.expander('Information'):    
