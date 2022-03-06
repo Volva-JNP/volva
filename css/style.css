@@ -30,3 +30,7 @@ div[role="radiogroup"] >  :first-child{
 .css-sixagc p {
     text-decoration: underline;
 }
+
+h2 {
+    text-align: center;
+}

@@ -5,6 +5,7 @@ Created on Sat Feb 19 17:12:33 2022
 @author: User
 """
 
+
 from doctest import DocFileSuite
 import streamlit as st
 import numpy as np
@@ -21,10 +22,12 @@ from functions.volva_fct_data import *
 from functions.volva_fct_model import *
 from functions.volva_fct_predict import *
 
+st.set_page_config(page_title='Volva')
+
 with open('css/style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-# st.beta_set_page_config(page_title='Volva')
+
 
 st.sidebar.image('img/volvaF1.png')
 st.sidebar.image('img/projet_volva.png')
