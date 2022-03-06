@@ -56,7 +56,7 @@ if button_visu:
     st.sidebar.markdown(link,unsafe_allow_html= True )
     link2='[Distribution par secteur](#distribution-des-volumes-par-secteur)'
     st.sidebar.markdown(link2,unsafe_allow_html= True )
-    link1='[volume moyen par jour](#volume-par-jour)'
+    link1='[volume moyen par jour](#volume-moyen-jour-par-secteur)'
     st.sidebar.markdown(link1,unsafe_allow_html= True )
     link3='[Jour Férié](#impact-jour-f-ri)'
     st.sidebar.markdown(link3,unsafe_allow_html= True )
