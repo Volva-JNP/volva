@@ -22,7 +22,7 @@ from functions.volva_fct_data import *
 from functions.volva_fct_model import *
 from functions.volva_fct_predict import *
 
-st.set_page_config(page_title='Volva')
+st.set_page_config(page_title='Volva', page_icon='img/favicon/android-chrome-192x192.png')
 
 with open('css/style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
