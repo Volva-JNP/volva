@@ -33,4 +33,19 @@ def build_page_predict():
         with col2:
             st.write("A compléter")
 
+    st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
+    
+    menu_secteur  = st.radio(    
+    "",
+    ("vide", "secteur frais", "secteur GEL", "secteur FFL"),
+
+    )        
+
+    col_from, col_to = st.columns(2)
+    with col_from:
+        date_debut = st.date_input('Date de début')
+    with col_to:
+        date_fin = st.date_input('Date de fin')
+    
+
     

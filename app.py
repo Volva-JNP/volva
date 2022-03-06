@@ -24,6 +24,8 @@ from functions.volva_fct_predict import *
 with open('css/style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
+# st.beta_set_page_config(page_title='Volva')
+
 st.sidebar.image('img/volvaF1.png')
 st.sidebar.image('img/projet_volva.png')
 st.sidebar.write("")
