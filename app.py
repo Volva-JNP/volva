@@ -76,8 +76,9 @@ if button_model:
     st.sidebar.markdown(link,unsafe_allow_html= True )
 
 button_predict = st.sidebar.button('Prédictions')
-    # if button_predict:
-        # button_model = st.sidebar.button('Modèlisation')
+if button_predict:   
+    link='[Prédictions sur période](#pr-dictions-sur-une-p-riode)'
+    st.sidebar.markdown(link,unsafe_allow_html= True )
 
 
 
