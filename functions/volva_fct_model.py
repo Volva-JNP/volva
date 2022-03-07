@@ -1,25 +1,17 @@
 from this import d
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib import ticker
 import plotly.express as px
-import plotly.figure_factory as ff
 import plotly.graph_objs as go
-from plotly import tools
 from texts.volva_text import *
 from plotly.subplots import make_subplots
 from functions.volva_fct import *
 from sklearn.preprocessing import StandardScaler 
 from sklearn.model_selection import GridSearchCV, train_test_split , cross_val_score, StratifiedKFold, cross_val_predict, cross_validate
-from sklearn.preprocessing import MinMaxScaler 
-from  sklearn.linear_model import LogisticRegression 
-from  sklearn.ensemble import RandomForestClassifier 
-from sklearn.svm import SVC
 from math import *
 from sklearn.ensemble import GradientBoostingRegressor
 from stqdm import stqdm
-import seaborn as sns
+
 
 from sklearn.model_selection import train_test_split
 
@@ -448,13 +440,17 @@ def build_page_model():
 
         ]
  
-        df_est_model_per_day = pd.DataFrame()
-        df_est_model_per_day['Jours'] = jours
-        df_est_model_per_day['Modèle'] = best_models
+        df_best_model_per_day = pd.DataFrame()
+        df_best_model_per_day['Jours'] = jours
+        df_best_model_per_day['Modèle'] = best_models
 
+        
+        st.write(df_best_model_per_day)
 
+        button_keep_model = st.button("Enregistre le modèle")
 
-        st.write(df_est_model_per_day)
+        if button_keep_model:
+            df_best_model_per_day.to_csv('datas/' + 'df_best_model_per_day-' + secteur + '.csv', index=False)
 
 
 

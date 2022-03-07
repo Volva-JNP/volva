@@ -51,12 +51,92 @@ def build_page_predict():
     with col_to:
         date_fin = st.date_input('Date de fin')
 
-    df = add_time_datas(date_debut,date_fin)
-    df = add_holydays(df)
-    df = add_promotions(df)
-    df = add_temperatures_data(df)
+    if menu_secteur!="vide":
+        
+        if menu_secteur =='secteur frais': 
+            secteur="REALISE_TOTAL_FRAIS" 
 
-    st.write(df)
+        elif  menu_secteur =='secteur GEL':
+            secteur="REALISE_TOTAL_GEL"   
+
+        elif  menu_secteur =='secteur FFL':
+            secteur="REALISE_TOTAL_FFL" 
+
+        button_predict = st.button('Obtenir les prédictions')
+
+        if button_predict:
+
+            df = add_time_datas(date_debut,date_fin)
+            df = add_holydays(df)
+            df = add_promotions(df)
+            df = add_temperatures_data(df)
+
+            
+            df = selection_data(df,secteur)
+
+            st.write(df)
+           
+
+def selection_data(df,secteur):
+
+    file_name="df_secteur_best_datas.csv"
+    file = 'datas/' + file_name
+    df_secteur_best_datas = pd.read_csv(file, header=0)
+    df_secteur_best_datas = df_secteur_best_datas[df_secteur_best_datas['secteur']==secteur]
+    basis_data = df_secteur_best_datas.iloc[0,3]
+    added_data = df_secteur_best_datas.iloc[0,4]
+    df = drop_datas(df,basis_data)
+
+    if "F" not in added_data:
+        cols_to_drop = [
+            'prochain_jour_ferie' ,
+            'dernier_jour_ferie'
+        ]
+        df.drop(cols_to_drop, inplace=True, axis=1)
+
+    if "P" not in added_data:
+        df.drop(st.session_state.list_cols_promotions, inplace=True, axis=1)
+
+    if "T" not in added_data:
+        cols_to_drop = [
+            'Temp moy Auvergne' ,
+            'Temp moy Bourgogne'
+        ]        
+        df.drop(cols_to_drop, inplace=True, axis=1)
+    
+
+    cols_to_drop = [
+        'DATE',
+        'JOUR',
+        'MOIS',
+        'weekday',
+        'SEMAINE' ,
+        'index'
+    ]
+
+    df.drop(cols_to_drop, inplace=True, axis=1)
+    return df
+
+
+def drop_datas(df,drop_list):
+    if 'A_' not in  drop_list:
+        df=df.drop(['ANNEE'], axis=1)
+    if 'MP_' not in  drop_list:
+        df=df.drop(['month_period'], axis=1)
+
+    if 'MD_' not in  drop_list:
+        df=df.drop(['monthday_sin', 'monthday_cos'], axis=1)
+
+    if 'WD_' not in  drop_list:
+        df=df.drop(['weekday_sin','weekday_cos'], axis=1)
+
+    if 'M_' not in  drop_list:
+        df=df.drop(['mois_sin','mois_cos'], axis=1)
+
+    if 'W_' not in  drop_list:
+        df=df.drop(['semaine_cos','semaine_sin'], axis=1)
+        
+    return df
 
 
 
@@ -74,6 +154,7 @@ def add_time_datas(date_debut,date_fin):
     df['JOUR']=df['DATE'].apply(lambda date : date.day)
     df['weekday'] = df['DATE'].apply(lambda date : get_weekday(date))
     df['MOIS'] = df['DATE'].apply(lambda date : date.month)
+    df['month_period'] = df['DATE'].apply(lambda row : 1 if row.day<=5 else 2 if row.day>=26 else 0 )
     df['SEMAINE'] = df['DATE'].apply(lambda date : date.isocalendar()[1])
     df['ANNEE'] = df['DATE'].apply(lambda date : date.year)
     
@@ -92,13 +173,7 @@ def add_time_datas(date_debut,date_fin):
     df['semaine_sin'] = np.sin(df['SEMAINE'] * 2 * np.pi / 52)
     df['semaine_cos'] = np.cos(df['SEMAINE'] * 2 * np.pi / 52)
 
-    cols_to_drop = [
 
-        'weekday',
-        'SEMAINE'    
-    ]
-
-    df.drop(cols_to_drop, inplace=True, axis=1)
 
     return df
     
@@ -106,19 +181,8 @@ def add_time_datas(date_debut,date_fin):
 def add_holydays(df):
     df['DATE'] = pd.to_datetime(df['DATE'], dayfirst=True)  
     df['dernier_jour_ferie'] = df.apply(lambda row: -proximite_jour_ferie(row['DATE'], 'last')[0]  , axis = 1)
-    df['dernier_jour_ferie_nom'] = df.apply(lambda row: get_nom_jour_ferie(proximite_jour_ferie(row['DATE'], 'last')[1])  , axis = 1)
-
     df['prochain_jour_ferie'] = df.apply(lambda row: proximite_jour_ferie(row['DATE'], 'next')[0]  , axis = 1)
-    df['prochain_jour_ferie_nom'] = df.apply(lambda row: get_nom_jour_ferie(proximite_jour_ferie(row['DATE'], 'next')[1])  , axis = 1)
-
-
-    df['prox_jour_ferie'] = df.apply(lambda row: (row['dernier_jour_ferie']) \
-                                if -row['dernier_jour_ferie'] <= row['prochain_jour_ferie'] \
-                                else row['prochain_jour_ferie'] , axis = 1)
-            
-    df['prox_jour_ferie_nom'] = df.apply(lambda row: row['dernier_jour_ferie_nom'] \
-                                if -row['dernier_jour_ferie'] <= row['prochain_jour_ferie'] \
-                                else row['prochain_jour_ferie_nom'] , axis = 1)
+    
     return df
 
 
@@ -131,7 +195,7 @@ def add_promotions(df):
     promotions['vitesse'] = promotions['DLC'].fillna('no_speed') 
     promotions['Code_1'] = promotions['Code_1'].fillna('no_code') 
     promotions.info()
-
+    list_cols_promotions = []
 
     for i in df.index: 
         date_jour = df["DATE"][i]
@@ -153,23 +217,32 @@ def add_promotions(df):
                 
                 
                 if enseigne not in df.columns: 
-                    df[enseigne]=0                
+                    df[enseigne]=0  
+                    list_cols_promotions.append(enseigne)              
                 if secteur not in df.columns: 
                     df[secteur]=0
+                    list_cols_promotions.append(secteur)  
                 if DLC not in df.columns: 
                     df[DLC]=0
+                    list_cols_promotions.append(DLC)  
                 if vitesse not in df.columns: 
                     df[vitesse]=0
+                    list_cols_promotions.append(vitesse)  
                 if Code_1 not in df.columns: 
                     df[Code_1]=0
+                    list_cols_promotions.append(Code_1)  
                 if Code_2 not in df.columns: 
                     df[Code_2]=0
+                    list_cols_promotions.append(Code_2)  
                 if Code_3 not in df.columns: 
                     df[Code_3]=0
+                    list_cols_promotions.append(Code_3)  
                 if Pub not in df.columns: 
                     df[Pub]=0
+                    list_cols_promotions.append(Pub)  
                 if Type not in df.columns: 
                     df[Type]=0
+                    list_cols_promotions.append(Type)  
                     
                     
                 df[enseigne][i] = df[enseigne][i] + 1
@@ -181,6 +254,9 @@ def add_promotions(df):
                 df[Code_3][i] = df[Code_3][i] + 1  
                 df[Pub][i] = df[Pub][i] + 1  
                 df[Type][i] = df[Type][i] + 1 
+
+        st.session_state.list_cols_promotions = list_cols_promotions      
+
     return df
 
 
