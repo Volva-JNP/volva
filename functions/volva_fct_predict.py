@@ -13,7 +13,6 @@ import datetime
 from functions.utils.functions import proximite_jour_ferie
 from functions.utils.jours_feries import get_nom_jour_ferie
 
-
  
 def numOfDays(date1, date2):
     return (date2-date1).days
