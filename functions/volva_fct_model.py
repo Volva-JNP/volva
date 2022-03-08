@@ -595,11 +595,6 @@ def build_df(df, secteur,drop_list):
     df_T = df.iloc[:, 48:50]
     df_V = df.iloc[:, 50:]
 
- 
-    textfile = open('datas/df_P_cols_' + secteur + '.txt', "w")
-    for col in df_P.columns:
-        textfile.write(col + "\n")
-    textfile.close()    
 
     return df_FPTV, df_min, df_F, df_P, df_V, df_T
 
