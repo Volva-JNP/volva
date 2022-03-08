@@ -12,6 +12,10 @@ from datetime import date
 import datetime
 from functions.utils.functions import proximite_jour_ferie
 from functions.utils.jours_feries import get_nom_jour_ferie
+from sklearn.preprocessing import StandardScaler 
+from stqdm import stqdm
+
+from joblib import load
 
  
 def numOfDays(date1, date2):
@@ -47,6 +51,8 @@ def build_page_predict():
         date_debut = st.date_input('Date de début')
     with col_to:
         date_fin = st.date_input('Date de fin')
+    
+
 
     if menu_secteur!="vide":
         
@@ -66,12 +72,113 @@ def build_page_predict():
             df = add_time_datas(date_debut,date_fin)
             df = add_holydays(df)
             df = add_promotions(df)
-            df = add_temperatures_data(df)
+            df = add_temperatures_data(df)            
+            df = selection_data(df,secteur)
+            with st.expander('Voir le dataset'):   
+                st.write(df)
+
+            df_best_model_per_day = pd.read_csv('datas/' + 'df_best_model_per_day-' + secteur + '.csv')
+
+            dict_weekday_num = {
+
+                    'Lun' : 0,
+                    'Mar' : 1,                    
+                    'Mer' : 2,
+                    'Jeu' : 3,
+                    'Ven' : 4,
+                    'Sam' : 5
+
+            }
+            df_best_model_per_day= df_best_model_per_day.replace(dict_weekday_num)
+
+ 
+            df_predictions = pd.DataFrame();
+
+            for model_name in df_best_model_per_day['Modèle'].unique():
+                               
+                if model_name == "GBR" : 
+                    model_GBR = load('models/model_' + model_name +'_' + secteur + '.joblib')
+                    df_best_model_per_day_GBR = df_best_model_per_day[df_best_model_per_day['Modèle']=='GBR']
+
+                    for jour in df_best_model_per_day_GBR['Jours'].unique():
+                        df_jour = df[df['weekday'] == jour]
+                        
+                        if df_jour.shape[0] != 0 :
+                            df_jour_DATE_WeekDay = df_jour[['DATE', 'weekday']]
+                            df_jour = df_jour.drop(['DATE', 'weekday'], axis=1)
+                            scaler = StandardScaler().fit(df_jour)
+                            df_jour_scaled = scaler.transform(df_jour)
+                            predictions_GBR = model_GBR.predict(df_jour_scaled)
+                            df_predictions_GBR = df_jour_DATE_WeekDay['DATE'].reset_index()
+                            df_predictions_GBR = df_predictions_GBR.drop('index', axis=1)
+                            df_predictions_GBR  = pd.concat([df_predictions_GBR,pd.Series(predictions_GBR)], axis=1)
+                            df_predictions = pd.concat([df_predictions,df_predictions_GBR], axis=0)                           
+
+
+                # elif model_name == "BR":
+                #     model_BR = load('models/model_' + model_name +'_' + secteur + '.joblib')
+                #     df_best_model_per_day_BR = df_best_model_per_day[df_best_model_per_day['Modèle']=='BR']
+                # elif model_name == "LASSO":
+                #     model_LASSO = load('models/model_' + model_name +'_' + secteur + '.joblib')
+                #     df_best_model_per_day_LASSO = df_best_model_per_day[df_best_model_per_day['Modèle']=='LASSO']
+
+                elif model_name == "RFR":
+                    model_RFR = load('models/model_' + model_name +'_' + secteur + '.joblib')
+                    df_best_model_per_day_RFR = df_best_model_per_day[df_best_model_per_day['Modèle']=='RFR']
+                    for jour in df_best_model_per_day_RFR['Jours'].unique():
+                        df_jour = df[df['weekday'] == jour]
+                        if df_jour.shape[0] != 0 :
+                            df_jour_DATE_WeekDay = df_jour[['DATE', 'weekday']]
+                            df_jour = df_jour.drop(['DATE', 'weekday'], axis=1)
+                            scaler = StandardScaler().fit(df_jour)
+                            df_jour_scaled = scaler.transform(df_jour)
+                            predictions_RFR = model_RFR.predict(df_jour_scaled)
+                            df_predictions_RFR = df_jour_DATE_WeekDay['DATE'].reset_index()
+                            df_predictions_RFR = df_predictions_RFR.drop('index', axis=1)
+                            df_predictions_RFR  = pd.concat([df_predictions_RFR,pd.Series(predictions_RFR)], axis=1)
+                            df_predictions = pd.concat([df_predictions,df_predictions_RFR], axis=0)
+
+                # # elif model_name == "KNR":
+                # #     model_KNR = load('models/model_' + model_name +'_' + secteur + '.joblib')
+                # #     df_best_model_per_day_KNR = df_best_model_per_day[df_best_model_per_day['Modèle']=='KNR']
+                elif model_name == "EN":
+                    model_EN = load('models/model_' + model_name +'_' + secteur + '.joblib')
+                    df_best_model_per_day_EN = df_best_model_per_day[df_best_model_per_day['Modèle']=='EN']
+                    for jour in df_best_model_per_day_EN['Jours'].unique():
+                                df_jour = df[df['weekday'] == jour]
+                                if df_jour.shape[0] != 0 :
+                                    df_jour_DATE_WeekDay = df_jour[['DATE', 'weekday']]
+                                    df_jour = df_jour.drop(['DATE', 'weekday'], axis=1)
+                                    scaler = StandardScaler().fit(df_jour)
+                                    df_jour_scaled = scaler.transform(df_jour)
+                                    predictions_EN = model_EN.predict(df_jour_scaled)
+                                    df_predictions_EN = df_jour_DATE_WeekDay['DATE'].reset_index()
+                                    df_predictions_EN = df_predictions_DTR.drop('index', axis=1)
+                                    df_predictions_EN  = pd.concat([df_predictions_DTR,pd.Series(predictions_EN)], axis=1)
+                                    df_predictions = pd.concat([df_predictions,df_predictions_EN], axis=0)
+
+                elif model_name == "DTR":                
+                    model_DTR = load('models/model_' + model_name +'_' + secteur + '.joblib')
+                    df_best_model_per_day_DTR = df_best_model_per_day[df_best_model_per_day['Modèle']=='DTR']
+                    for jour in df_best_model_per_day_DTR['Jours'].unique():
+                            df_jour = df[df['weekday'] == jour]
+                            if df_jour.shape[0] != 0 :
+                                df_jour_DATE_WeekDay = df_jour[['DATE', 'weekday']]
+                                df_jour = df_jour.drop(['DATE', 'weekday'], axis=1)
+                                scaler = StandardScaler().fit(df_jour)
+                                df_jour_scaled = scaler.transform(df_jour)
+                                predictions_DTR = model_DTR.predict(df_jour_scaled)
+                                df_predictions_DTR = df_jour_DATE_WeekDay['DATE'].reset_index()
+                                df_predictions_DTR = df_predictions_DTR.drop('index', axis=1)
+                                df_predictions_DTR  = pd.concat([df_predictions_DTR,pd.Series(predictions_DTR)], axis=1)
+                                df_predictions = pd.concat([df_predictions,df_predictions_DTR], axis=0)
+            
+            df_predictions = df_predictions.sort_values(by=['DATE'])
+            st.write(df_predictions)
+
 
             
-            df = selection_data(df,secteur)
-
-            st.write(df)
+            
            
 
 def selection_data(df,secteur):
@@ -103,10 +210,10 @@ def selection_data(df,secteur):
     
 
     cols_to_drop = [
-        'DATE',
+        # 'DATE',
         'JOUR',
         'MOIS',
-        'weekday',
+        # 'weekday',
         'SEMAINE' ,
         'index'
     ]
@@ -192,7 +299,43 @@ def add_promotions(df):
     promotions['vitesse'] = promotions['DLC'].fillna('no_speed') 
     promotions['Code_1'] = promotions['Code_1'].fillna('no_code') 
     promotions.info()
-    list_cols_promotions = []
+    list_cols_promotions = [
+        "NETTO",
+        "GEL",
+        "no_dlc",
+        "no_code",
+        "AFG",
+        " 46-001",
+        "comp",
+        "OPE",
+        "INTER",
+        " 47-001",
+        "PUB",
+        "SEC",
+        "AFS",
+        " 41/52-001",
+        "FRAIS",
+        "TD",
+        "AFF",
+        " 43/45/67-001",
+        "MEA",
+        " 48-001",
+        "DLC Longue",
+        "TA",
+        " 43-002",
+        "DLC Courte",
+        " 49-004",
+        " 49-001",
+        " 43-007",
+        " 49-007",
+        " 49-002",
+        "REA",
+        " 40-001/41-018",
+        " 10-016/40-012/41-006",
+        " 41-011/43-019",
+        ]
+    for col in list_cols_promotions:
+        df[col]=0
 
     for i in df.index: 
         date_jour = df["DATE"][i]
@@ -213,33 +356,33 @@ def add_promotions(df):
                 Type = promotions["Type"][j]
                 
                 
-                if enseigne not in df.columns: 
-                    df[enseigne]=0  
-                    list_cols_promotions.append(enseigne)              
-                if secteur not in df.columns: 
-                    df[secteur]=0
-                    list_cols_promotions.append(secteur)  
-                if DLC not in df.columns: 
-                    df[DLC]=0
-                    list_cols_promotions.append(DLC)  
-                if vitesse not in df.columns: 
-                    df[vitesse]=0
-                    list_cols_promotions.append(vitesse)  
-                if Code_1 not in df.columns: 
-                    df[Code_1]=0
-                    list_cols_promotions.append(Code_1)  
-                if Code_2 not in df.columns: 
-                    df[Code_2]=0
-                    list_cols_promotions.append(Code_2)  
-                if Code_3 not in df.columns: 
-                    df[Code_3]=0
-                    list_cols_promotions.append(Code_3)  
-                if Pub not in df.columns: 
-                    df[Pub]=0
-                    list_cols_promotions.append(Pub)  
-                if Type not in df.columns: 
-                    df[Type]=0
-                    list_cols_promotions.append(Type)  
+                # if enseigne not in df.columns: 
+                #     df[enseigne]=0  
+                #     list_cols_promotions.append(enseigne)              
+                # if secteur not in df.columns: 
+                #     df[secteur]=0
+                #     list_cols_promotions.append(secteur)  
+                # if DLC not in df.columns: 
+                #     df[DLC]=0
+                #     list_cols_promotions.append(DLC)  
+                # if vitesse not in df.columns: 
+                #     df[vitesse]=0
+                #     list_cols_promotions.append(vitesse)  
+                # if Code_1 not in df.columns: 
+                #     df[Code_1]=0
+                #     list_cols_promotions.append(Code_1)  
+                # if Code_2 not in df.columns: 
+                #     df[Code_2]=0
+                #     list_cols_promotions.append(Code_2)  
+                # if Code_3 not in df.columns: 
+                #     df[Code_3]=0
+                #     list_cols_promotions.append(Code_3)  
+                # if Pub not in df.columns: 
+                #     df[Pub]=0
+                #     list_cols_promotions.append(Pub)  
+                # if Type not in df.columns: 
+                #     df[Type]=0
+                #     list_cols_promotions.append(Type)  
                     
                     
                 df[enseigne][i] = df[enseigne][i] + 1
@@ -252,7 +395,8 @@ def add_promotions(df):
                 df[Pub][i] = df[Pub][i] + 1  
                 df[Type][i] = df[Type][i] + 1 
 
-        st.session_state.list_cols_promotions = list_cols_promotions      
+        st.session_state.list_cols_promotions = list_cols_promotions     
+
 
     return df
 
