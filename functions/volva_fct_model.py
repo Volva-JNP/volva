@@ -11,6 +11,8 @@ from sklearn.model_selection import GridSearchCV, train_test_split , cross_val_s
 from math import *
 from sklearn.ensemble import GradientBoostingRegressor
 from stqdm import stqdm
+from joblib import dump
+# import simplejson
 
 
 from sklearn.model_selection import train_test_split
@@ -159,7 +161,7 @@ def build_page_model():
         st.session_state.list_ecart_mse = []
 
         secteur = 'REALISE_TOTAL_GEL'
-        df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_FFL', data_selection)        
+        df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_GEL', data_selection)        
         try:
             df_datas_choice = pd.read_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
             df_datas_choice = df_datas_choice[["Nom","Train_score","Test_score","Ecart"]]
@@ -245,6 +247,7 @@ def build_page_model():
                 st.session_state.list_nom_model.append("GBR")
 
 
+
         with st.expander("BayesianRidge"):  
             from sklearn.linear_model import BayesianRidge
             BR = BayesianRidge()
@@ -267,6 +270,7 @@ def build_page_model():
                 st.session_state.list_ecart_mse.append(mse_per_day_ADABR)
                 st.session_state.list_nom_model.append("BR")
 
+
         with st.expander("Lasso"):  
             from sklearn.linear_model import Lasso 
             lasso = Lasso()
@@ -288,6 +292,7 @@ def build_page_model():
                 st.session_state.list_ecart_mae.append(mae_per_day_lasso)
                 st.session_state.list_ecart_mse.append(mse_per_day_lasso)
                 st.session_state.list_nom_model.append("LASSO")
+
 
         with st.expander("RandomForestRegressor"):  
             from sklearn.ensemble import RandomForestRegressor
@@ -315,6 +320,7 @@ def build_page_model():
                 st.session_state.list_nom_model.append("RFR")
 
 
+
         with st.expander("KNeighborsRegressor"): 
             from sklearn.neighbors import KNeighborsRegressor
             KNR= KNeighborsRegressor()
@@ -339,6 +345,7 @@ def build_page_model():
                 st.session_state.list_ecart_mse.append(mse_per_day_KNR)
                 st.session_state.list_nom_model.append("KNR")
 
+
         
         with st.expander("ElasticNetCV"): 
             from sklearn.linear_model import ElasticNetCV 
@@ -362,6 +369,8 @@ def build_page_model():
                 st.session_state.list_ecart_mae.append(mae_per_day_EN)
                 st.session_state.list_ecart_mse.append(mse_per_day_EN)
                 st.session_state.list_nom_model.append("EN")
+
+
 
         with st.expander("DecisionTreeRegressor"): 
             from sklearn.tree import DecisionTreeRegressor
@@ -451,6 +460,24 @@ def build_page_model():
 
         if button_keep_model:
             df_best_model_per_day.to_csv('datas/' + 'df_best_model_per_day-' + secteur + '.csv', index=False)
+            for model_name in df_best_model_per_day['Modèle'].unique():
+                # st.write(model)
+                if model_name == "GBR":
+                    model = model_GBR
+                elif model_name == "BR":
+                    model = model_BR
+                elif model_name == "LASSO":
+                    model = model_lasso
+                elif model_name == "RFR":
+                    model = model_rfr
+                elif model_name == "KNR":
+                    model = model_KNR
+                elif model_name == "EN":
+                    model = model_EN
+                elif model_name == "DTR":
+                    model = model_DTR
+
+                dump(model, 'models/model_' + model_name +'_' + secteur + '.joblib')
 
 
 
@@ -568,6 +595,12 @@ def build_df(df, secteur,drop_list):
     df_T = df.iloc[:, 48:50]
     df_V = df.iloc[:, 50:]
 
+ 
+    textfile = open('datas/df_P_cols_' + secteur + '.txt', "w")
+    for col in df_P.columns:
+        textfile.write(col + "\n")
+    textfile.close()    
+
     return df_FPTV, df_min, df_F, df_P, df_V, df_T
 
 def build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T):
@@ -609,6 +642,9 @@ def build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T):
             "TV" ,
             "V" 
     ]
+
+
+
     return list_df, list_nom_df
 
 def drop_datas(df,drop_list):
@@ -634,9 +670,6 @@ def drop_datas(df,drop_list):
 def build_df_datas_choice(list_nom_df, list_df, secteur):
     results = pd.DataFrame(columns=['Nom', 'Train_score', 'Test_score', 'Ecart'])
     for nom_df, df,i in zip(list_nom_df,list_df, stqdm(range(16))) : 
-        # st.write(nom_df)
-        # st.write(df.columns)
-    # for nom_df, df in zip(list_nom_df,list_df) :   
 
         gridcv_GRB, X_train_scaled, X_test_scaled, y_train, y_test =  train_model(df,GBR,params_gbr,secteur)  
         Train_score = gridcv_GRB.score(X_train_scaled, y_train)
