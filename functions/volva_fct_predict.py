@@ -17,7 +17,6 @@ from stqdm import stqdm
 
 from joblib import load
 
-
  
 def numOfDays(date1, date2):
     return (date2-date1).days
