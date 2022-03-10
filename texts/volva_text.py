@@ -183,3 +183,11 @@ nous selectionnerons le meilleur modèle pour chaque jour.
 
 
 #prediction
+
+periode = '''
+Choisir :  
+-le secteur d'activité  
+-une date de début  
+-une date de fin  
+ afin d'afficher la prédiction et le besoin en opérateur logistique sur la période.
+'''

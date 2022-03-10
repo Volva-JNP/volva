@@ -34,9 +34,11 @@ def build_page_predict():
     with st.expander('Information'):    
         col1, col2 = st.columns(2)
         with col1:
-            st.write("A compléter")
+            st.write("")
+            st.write("")
+            st.write(periode)
         with col2:
-            st.write("A compléter")
+            st.image("img/delivery.gif")
 
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
     
@@ -236,7 +238,7 @@ def build_page_predict():
                     st.write("")
                     st.write(df_predictions)
                 with col2:
-                    fig9=px.line(data_frame=df_predictions,x='DATE',y='Prévisions ETP',text='Prévisions ETP',markers=False)
+                    fig9=px.line(data_frame=df_predictions,x='DATE',y='Prévisions ETP',text='Prévisions ETP',markers=False)                
                     fig9.update_yaxes(dtick=1)
                     fig9.update_traces(textposition='top center')
                     fig9.update_layout(title_text="Besoin (en nombre d'opérateurs)")
