@@ -102,23 +102,20 @@ def set_data():
     with st.expander("1/ Données d'origine"):
         st.write(data1, unsafe_allow_html=True)
 
-            
-
     with st.expander('2/ Nettoyage des données'):
         st.write(data2, unsafe_allow_html=True)
         
-
-        
-
     with st.expander('3/ Hypothèses et recherche de nouvelles données'):
         st.write(data3, unsafe_allow_html=True)
         
+    with st.expander('4/ Intégration des nouvelles données issues des hypothèses'):
+        st.write(data4, unsafe_allow_html=True)
 
+    with st.expander('5/ DS finalisé'):
+        st.write(data5, unsafe_allow_html=True)
+    
 
-
-    st.write(data4, unsafe_allow_html=True)
-
-    st.write(data5, unsafe_allow_html=True)
+    
 
     
 
