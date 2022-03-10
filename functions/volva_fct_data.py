@@ -113,7 +113,7 @@ def set_data():
         with col6:
             st.write(data2, unsafe_allow_html=True)
         with col7:
-            st.image('img\datacleaning.gif')
+            st.image('img\datacleaning.png')
 
     with st.expander('3/ Hypothèses et recherche de nouvelles données'):
         
