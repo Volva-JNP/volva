@@ -228,12 +228,20 @@ def build_page_predict():
                 df_predictions = df_predictions.reset_index()
                 df_predictions.drop([0, 'index'], axis=1, inplace=True)
                 df_predictions['DATE'] = df_predictions['DATE'].dt.strftime('%d-%m-%Y')
-                st.write(df_predictions)
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.write("")
+                    st.write("")
+                    st.write("")
+                    st.write("")
+                    st.write(df_predictions)
+                with col2:
+                    fig9=px.line(data_frame=df_predictions,x='DATE',y='Prévisions ETP',text='Prévisions ETP',markers= True)
+                    fig9.update_yaxes(dtick=1)
+                    fig9.update_traces(textposition='top center')
+                    fig9.update_layout(title_text="Besoin (en nombre d'opérateurs)")
 
-                fig9=px.line(data_frame=df_predictions,x='DATE',y='Prévisions ETP',text='Prévisions ETP')
-                fig9.update_yaxes(dtick=1)
-
-                st.write(fig9)
+                    st.write(fig9)
 
     
         
