@@ -554,7 +554,7 @@ def display_test_pred_graph(y_test, pred_test, df_total):
         fig.add_trace(go.Scatter(x=y_test, y=pred_test,
                             marker_color = df_total['weekday'].astype('int'),
                             mode='markers',
-                            # legend = 'test',
+                            text=df_total['weekday'],
                             name='Previsions'))
 
         fig.add_trace(go.Scatter(x=[y_test.min(),y_test.max()], y=[y_test.min(),y_test.max()],
