@@ -38,6 +38,11 @@ path_brut = 'datas/volumesMARS2021.csv'
 def set_data():
     df = load_csv(path)
     st.title('Data')
+    with st.expander('Informations sur la construction du DF'):
+        
+        col1 = st.columns(1)
+        with col1:
+            st.write(data, unsafe_allow_html=True)
     
     
     col1, col2 = st.columns(2)
@@ -86,79 +91,9 @@ def set_data():
     st.write("Explications des données et rapport d'exploration")
     
     st.write(DATA, unsafe_allow_html=True)
-<<<<<<< HEAD
-    flowchart()
-    st.image("img/flowchart.jpg",width=1400)
 
-
-def flowchart():
-  with Diagram("Construction du dataset final", outformat="jpg", filename="img/flowchart"):
-    
-    with Cluster("DataSet Original"):
-        with Cluster("Concatenation des mois"):
-            dsoriginal_group = [PVC("mois 1"),
-                                PVC("mois 2"),
-                                PVC("mois 3"),
-                                PVC("mois...")]
-        dsconcat = BigTable("DataSet Concaténé")
-        with Cluster("Nettoyage des données"):
-            dscleaning = [IotCore("Sélection des variables"),
-                          IotCore("Traitement des NA"),
-                          IotCore("Traitement des outliers"),
-                          IotCore("Recherche des données manquantes")]
-        dsfullclean = Aurora("DataSet nettoyé")
-        
-        
-    with Cluster("Intégration de données supplémentaires"):
-        inthyp = Dataflow("Intégration des hypothèses")
-#         with Cluster("Espace temps"):
-#             flow >> Functions("La position du jour influe-t-elle sur les volumes ?") >> Redshift("Variables jours/semaines dans espace temps")
-#         with Cluster("Jours fériés"):
-#             flow >> Functions("La proximité d'un jour férié (passé ou à venir) influe-t-elle sur les volumes ?") >> Redshift("Variables prox jour férié")
-#         with Cluster("Vacances scolaires"):
-#             flow >> Functions("Les vacances scolaires (par zone) influecent-elles les volumes ?") >> Redshift("Variables vacances")
-#         with Cluster("Températures moyennes saisonnières"):
-#             flow >> Functions("Les températures des régions de livraison influencent-elles les volumes ?") >> Redshift("Variables températures")
-#         with Cluster("Promotions"):
-#             flow >> Functions("Les promotions influencent-elles les volumes ?") >> Redshift("Variables promotions")
-#         with Cluster("Semaines spéciales"):
-#             flow >> Functions("Les semaines spéciales influencent-elles les volumes ?") >> Redshift("Variables semaines spéciales")
-        with Cluster("Espace temps"):
-            esptemp = inthyp >> Functions() >> Redshift()
-        with Cluster("Jours fériés"):
-            jferies = inthyp >> Functions() >> Redshift()
-        with Cluster("Vacances scolaires"):
-            vac = inthyp >> Functions() >> Redshift()
-        with Cluster("Températures moyennes saisonnières"):
-            temp = inthyp >> Functions() >> Redshift()
-        with Cluster("Promotions"):
-            prom = inthyp >> Functions() >> Redshift()
-        with Cluster("Semaines spéciales"):
-            sem = inthyp >> Functions() >> Redshift()
-
-        
-    dsfinal = ElastiCache("DS final")
-    
-    dsanalyses = Redshift("Visualisation et analyses")
-    
-    dsoriginal_group >> dsconcat >> dscleaning >> dsfullclean >> inthyp 
-    esptemp >> dsfinal
-    jferies >> dsfinal
-    vac >> dsfinal
-    temp >> dsfinal
-    prom >> dsfinal
-    sem >> dsfinal
-    
-    
-    dsfinal >> dsanalyses
-
-
-    
-=======
-
-    st.image("img/flowchart.jpg",width=1400)
+    st.image('img\construction_du_dataset_final.png',width=800)
 
 
 
    
->>>>>>> 293f8c134fba5ea9772c4d917e26d4af9e522ec4
