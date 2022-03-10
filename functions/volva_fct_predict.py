@@ -236,7 +236,7 @@ def build_page_predict():
                     st.write("")
                     st.write(df_predictions)
                 with col2:
-                    fig9=px.line(data_frame=df_predictions,x='DATE',y='Prévisions ETP',text='Prévisions ETP',markers= True)
+                    fig9=px.line(data_frame=df_predictions,x='DATE',y='Prévisions ETP',text='Prévisions ETP',markers=False)
                     fig9.update_yaxes(dtick=1)
                     fig9.update_traces(textposition='top center')
                     fig9.update_layout(title_text="Besoin (en nombre d'opérateurs)")
