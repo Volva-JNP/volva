@@ -5,6 +5,8 @@ Created on Sat Feb 19 17:12:33 2022
 @author: User
 """
 
+
+
 from doctest import DocFileSuite
 import streamlit as st
 import numpy as np
@@ -19,11 +21,17 @@ from texts.volva_text import *
 from functions.volva_fct_visu import *
 from functions.volva_fct_data import *
 from functions.volva_fct_model import *
+from functions.volva_fct_predict import *
+
+st.set_page_config(page_title='Volva', page_icon='img/favicon/android-chrome-192x192.png')
 
 with open('css/style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-st.sidebar.image('img/Les_Mousquetaires.png')
+
+
+st.sidebar.image('img/volvaF1.png')
+st.sidebar.image('img/projet_volva.png')
 st.sidebar.write("")
 
 if 'page' not in st.session_state:
@@ -35,7 +43,6 @@ if 'page' not in st.session_state:
 Data=False
 
 st.sidebar.header('MENU')
-st.sidebar.markdown('analyse de données ITM SQF')
 
 
 button_intro = st.sidebar.button('Introduction')
@@ -50,14 +57,14 @@ if button_visu:
     st.sidebar.markdown(link,unsafe_allow_html= True )
     link2='[Distribution par secteur](#distribution-des-volumes-par-secteur)'
     st.sidebar.markdown(link2,unsafe_allow_html= True )
-    link1='[volume moyen par jour](#volume-par-jour)'
+    link1='[volume moyen par jour](#volume-moyen-jour-par-secteur)'
     st.sidebar.markdown(link1,unsafe_allow_html= True )
     link3='[Jour Férié](#impact-jour-f-ri)'
     st.sidebar.markdown(link3,unsafe_allow_html= True )
 
 button_model = st.sidebar.button('Modèlisation')
 if button_model:
-    link='[Données utiles par secteur](#volva-project)'
+    link='[Données utiles par secteur](#selection-des-donn-es-utiles-par-test-de-mod-les)'
     st.sidebar.markdown(link,unsafe_allow_html= True )
 
     link='[Tests modèles de regression](#tests-des-mod-les-de-regression)'
@@ -66,11 +73,13 @@ if button_model:
     link='[Comparaison des Modèles](#comparaison-des-mod-les)'
     st.sidebar.markdown(link,unsafe_allow_html= True )
 
-   
+    link='[Modèle final](#construction-du-mod-le-final)'
+    st.sidebar.markdown(link,unsafe_allow_html= True )
 
-
-button_predict = st.sidebar.button('Prédictions')
-    # if button_predict:
+button_predict = st.sidebar.button('Prévisions')
+if button_predict:   
+    link='[Prédictions sur période](#pr-dictions-sur-une-p-riode)'
+    st.sidebar.markdown(link,unsafe_allow_html= True )
 
 
 
@@ -109,7 +118,7 @@ if page == 'Model':
     build_page_model()
 
 if page == 'Predict':
-    set_visu()
+    build_page_predict()
 
 
  

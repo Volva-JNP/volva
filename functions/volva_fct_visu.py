@@ -126,7 +126,7 @@ def set_visu():
     fig4.add_trace(go.Histogram(x=x4,name='total site',nbinsx=30))
     fig4.update_traces (opacity=0.7)
     fig4.update_layout(barmode='overlay',bargap=0.1,title='Distribution des volumes par secteur')
-    fig4.update_layout(width=1400,height=600,hovermode='y')
+    fig4.update_layout(hovermode='y')
     fig4.update_xaxes( title='VOLUME')
     fig4.update_yaxes( title='FREQUENCE')
     st.write(fig4)
@@ -138,7 +138,7 @@ def set_visu():
         st.write(violo,  unsafe_allow_html=True)
     menu = st.radio(
     "",
-    ("secteur FRAIS", "secteur GEL", "secteur FFL"),
+    ("vide","secteur FRAIS", "secteur GEL", "secteur FFL"),
 )
     if menu =='secteur FRAIS':
         dataset = dataset.drop(['REALISE_TOTAL_GEL','REALISE_TOTAL_FFL'], axis = 1)
@@ -147,7 +147,7 @@ def set_visu():
         fig = px.violin(dataset,x= x, y=y, color= x, box = True)
         fig.update_layout(showlegend=True)
         
-        fig.update_layout(width=1400,height=600)
+        
         fig.update_yaxes( title='VOLUME')
         st.write(fig)
         
@@ -158,7 +158,7 @@ def set_visu():
         REALISE_TARGETED = 'REALISE_TOTAL_GEL'
         fig = px.violin(dataset,x= x, y=y, color= x, box = True)
         
-        fig.update_layout(width=1400,height=600)
+        
         fig.update_yaxes( title='VOLUME')
         st.write(fig)
         
@@ -168,7 +168,7 @@ def set_visu():
         REALISE_TARGETED = 'REALISE_TOTAL_FFL'
         fig = px.violin(dataset,x= x, y=y, color= x, box = True)
         fig.update_yaxes( title='VOLUME')
-        fig.update_layout(width=1400,height=600)
+        
         st.write(fig)
         
     
@@ -209,7 +209,7 @@ def jour_ferié():
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
     menu = st.radio(
     "",
-    ("secteur frais", "secteur Gel", "secteur FFL"),
+    ("vide","secteur frais", "secteur Gel", "secteur FFL"),
 )
     if menu =='secteur frais':
         
@@ -227,95 +227,115 @@ def jour_ferié():
         REALISE_TARGETED = 'REALISE_TOTAL_FFL'
         
     
-
-    df_short= df[cols_to_keep]
-    
-    
-    mean_real = df_short[(np.abs(df_short['prox_jour_ferie']) > 8)]
-
-    mean_real = mean_real.groupby('weekday').agg({ REALISE_TARGETED : 'mean'})
-
-    mean_real = mean_real.reset_index()
-    meilleur_ecart_montant = [0 for i in range(0, 6)]
-    meilleur_ecart_jour = [0 for i in range(0, 6)]
-    percent_ecart_list = [0 for i in range(0, 6)]
-    list_ecart_per_day = [[0] * 9 for i in range(6)]
-    list_ecart_per_day_past = [[0] * 9 for i in range(6)]
-    
-    for i in range(1, 10) :
-# Jour férié prochain
-        df_closed_holyday = df_short[df_short['prochain_jour_ferie']<=i]
-        mean_real_df_closed_holyday = df_closed_holyday.groupby('weekday').agg({ REALISE_TARGETED : 'mean'})
-        mean_real_df_closed_holyday.reset_index()
-        ecart_df = mean_real_df_closed_holyday - mean_real
-    
-        for j in range(0, 6):
-            #         print(i)
-            ecart = ecart_df.iloc[j][REALISE_TARGETED]
-            list_ecart_per_day[j][i-1] = ecart
-            #         print(ecart_df)
-            #         print(meilleur_ecart[j])
-            if (ecart >  meilleur_ecart_montant[j]) :
-                meilleur_ecart_montant[j] = ecart
-                meilleur_ecart_jour[j] = i
-
-# Jour férié passé   
-        df_closed_holyday_past = df_short[(np.abs(df_short['dernier_jour_ferie'])<=i)]
-        mean_real_df_closed_holyday_past = df_closed_holyday_past.groupby('weekday').agg({ REALISE_TARGETED : 'mean'})
-        mean_real_df_closed_holyday_past.reset_index()
-        ecart_df_past = mean_real_df_closed_holyday_past - mean_real
-    
-        for j in range(0, 6):
-            ecart_past = ecart_df_past.iloc[j][REALISE_TARGETED]
-            list_ecart_per_day_past[j][i-1] = ecart_past
-
-
-    x = [i for i in range(1, 10)]
-    i = 1
-
-    print(REALISE_TARGETED)
-    print("variation du CA à la proximité d'un prochain jour férié quand le jour de la semaine est :")
-
-    fig2 = make_subplots(rows=2,cols=3,subplot_titles=('Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'),x_title='nbre de jour avant le férié',y_title='delta vs moyenne du jour')
-    fig2.update_layout(showlegend=False)
-    fig2.update_layout(width=1400,height=700)
-    for day_num_ecarts in list_ecart_per_day:
+    if menu != "vide":
         
-        y = day_num_ecarts
+        df_short= df[cols_to_keep]
         
         
-    
-    
-        if i==1:  
-            plt.title("Lundi")
-            fig2.add_trace(go.Bar(x=x,y=y ,name='lundi'),row=1 ,col=1 )
-        if i==2:  
-            plt.title("Mardi")
-            fig2.add_trace(go.Bar(x=x,y=y ,name='mardi'),row=1 ,col=2)
-        if i==3:  
-            plt.title("Mercredi")
-            fig2.add_trace(go.Bar(x=x,y=y ,name='mercredi'),row=1 ,col=3)
-        if i==4:  
-            plt.title("Jeudi")
-            fig2.add_trace(go.Bar(x=x,y=y ,name='jeudi' ),row=2 ,col=1)
-        if i==5:  
-            plt.title("Vendredi")
-            fig2.add_trace(go.Bar(x=x,y=y ,name='vendredi'),row=2 ,col=2)
-        if i==6:  
-            plt.title("Samedi")
-            fig2.add_trace(go.Bar(x=x,y=y ,name='samedi' ),row=2 ,col=3)
-        i += 1
+        mean_real = df_short[(np.abs(df_short['prox_jour_ferie']) > 8)]
 
-    
-    x = [i for i in range(1, 10)]
-    i = 1
-    if menu =='secteur frais':
-        fig2.update_yaxes(range = (-500,25000))
-    if menu =='secteur Gel':
-        fig2.update_yaxes(range = (-1000,4200))
-    if menu =='secteur FFL':
-        fig2.update_yaxes(range = (-6000,10000))
-    st.write(fig2)
+        mean_real = mean_real.groupby('weekday').agg({ REALISE_TARGETED : 'mean'})
+
+        mean_real = mean_real.reset_index()
+        meilleur_ecart_montant = [0 for i in range(0, 6)]
+        meilleur_ecart_jour = [0 for i in range(0, 6)]
+        percent_ecart_list = [0 for i in range(0, 6)]
+        list_ecart_per_day = [[0] * 9 for i in range(6)]
+        list_ecart_per_day_past = [[0] * 9 for i in range(6)]
+        
+        for i in range(1, 10) :
+    # Jour férié prochain
+            df_closed_holyday = df_short[df_short['prochain_jour_ferie']<=i]
+            mean_real_df_closed_holyday = df_closed_holyday.groupby('weekday').agg({ REALISE_TARGETED : 'mean'})
+            mean_real_df_closed_holyday.reset_index()
+            ecart_df = mean_real_df_closed_holyday - mean_real
+        
+            for j in range(0, 6):
+                #         print(i)
+                ecart = ecart_df.iloc[j][REALISE_TARGETED]
+                list_ecart_per_day[j][i-1] = ecart
+                #         print(ecart_df)
+                #         print(meilleur_ecart[j])
+                if (ecart >  meilleur_ecart_montant[j]) :
+                    meilleur_ecart_montant[j] = ecart
+                    meilleur_ecart_jour[j] = i
+
+    # Jour férié passé   
+            df_closed_holyday_past = df_short[(np.abs(df_short['dernier_jour_ferie'])<=i)]
+            mean_real_df_closed_holyday_past = df_closed_holyday_past.groupby('weekday').agg({ REALISE_TARGETED : 'mean'})
+            mean_real_df_closed_holyday_past.reset_index()
+            ecart_df_past = mean_real_df_closed_holyday_past - mean_real
+        
+            for j in range(0, 6):
+                ecart_past = ecart_df_past.iloc[j][REALISE_TARGETED]
+                list_ecart_per_day_past[j][i-1] = ecart_past
+
+
+        x = [i for i in range(1, 10)]
+        i = 1
+
+        # print(REALISE_TARGETED)
+        # print("variation du CA à la proximité d'un prochain jour férié quand le jour de la semaine est :")
+        
+        fig2 = make_subplots(rows=2,cols=3,
+        subplot_titles=('Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'),x_title='nbre de jour avant le férié',y_title='delta vs moyenne du jour'
+        )
+        fig2.update_layout(xaxis=dict(tickmode='array',tickvals=[9,8,7,6,5,4,3,2,1],ticktext=['jeu','ven','sam','lun','mar','mer','jeu','ven','sam']))
+        fig2.update_layout(xaxis2=dict(tickmode='array',tickvals=[9,8,7,6,5,4,3,2,1],ticktext=['ven','sam','lun','mar','mer','jeu','ven','sam','lun']))
+        fig2.update_layout(xaxis3=dict(tickmode='array',tickvals=[9,8,7,6,5,4,3,2,1],ticktext=['sam','lun','mar','mer','jeu','ven','sam','lun','mar']))
+        fig2.update_layout(xaxis4=dict(tickmode='array',tickvals=[9,8,7,6,5,4,3,2,1],ticktext=['lun','mar','mer','jeu','ven','sam','lun','mar','mer']))
+        fig2.update_layout(xaxis5=dict(tickmode='array',tickvals=[9,8,7,6,5,4,3,2,1],ticktext=['mar','mer','jeu','ven','sam','lun','mar','mer','jeu']))
+        fig2.update_layout(xaxis6=dict(tickmode='array',tickvals=[9,8,7,6,5,4,3,2,1],ticktext=['mer','jeu','ven','sam','lun','mar','mer','jeu','ven']))
+
+
+
+        fig2.update_layout(showlegend=False)
+        fig2.update_yaxes(side="right")
+        fig2.update_xaxes(autorange="reversed")
+        
+        
+       
+        for day_num_ecarts in list_ecart_per_day:
+            
+            y = day_num_ecarts
+            
+            
+        
+        
+            if i==1:  
+                plt.title("Lundi")
+                fig2.add_trace(go.Bar(x=x,y=y ,name='lundi'),row=1 ,col=1)
+            if i==2:  
+                plt.title("Mardi")
+                fig2.add_trace(go.Bar(x=x,y=y ,name='mardi'),row=1 ,col=2)
+            if i==3:  
+                plt.title("Mercredi")
+                fig2.add_trace(go.Bar(x=x,y=y ,name='mercredi'),row=1 ,col=3)
+            if i==4:  
+                plt.title("Jeudi")
+                fig2.add_trace(go.Bar(x=x,y=y ,name='jeudi' ),row=2 ,col=1)
+            if i==5:  
+                plt.title("Vendredi")
+                fig2.add_trace(go.Bar(x=x,y=y ,name='vendredi'),row=2 ,col=2)
+            if i==6:  
+                plt.title("Samedi")
+                fig2.add_trace(go.Bar(x=x,y=y ,name='samedi' ),row=2 ,col=3)
+                
+            i += 1
+
+        
+        x = [i for i in range(1, 10)]
+        i = 1
+        if menu =='secteur frais':
+            fig2.update_yaxes(range = (-500,25000))
+            
+
+        if menu =='secteur Gel':
+            fig2.update_yaxes(range = (-1000,4200))
+        if menu =='secteur FFL':
+            fig2.update_yaxes(range = (-6000,10000))
+        
+        st.write(fig2)
 
 
 
@@ -326,7 +346,7 @@ def matricecorr():
        # st.write(violo,  unsafe_allow_html=True)
     menu = st.radio(
     "",
-    ("secteur MECA", "secteur -18°c", "secteur fruits et légumes"))
+    ("vide","secteur MECA", "secteur -18°c", "secteur fruits et légumes"))
     
     
     

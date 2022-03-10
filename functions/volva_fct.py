@@ -42,7 +42,7 @@ def load_csv(path):
 
 
 def set_home():
-    st.image('img/itmsqf.jpg')
+    st.image('img/siteSQF.png')
     st.write(intro, unsafe_allow_html=True)
     
     

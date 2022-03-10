@@ -1,25 +1,19 @@
 from this import d
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib import ticker
 import plotly.express as px
-import plotly.figure_factory as ff
 import plotly.graph_objs as go
-from plotly import tools
 from texts.volva_text import *
 from plotly.subplots import make_subplots
 from functions.volva_fct import *
 from sklearn.preprocessing import StandardScaler 
 from sklearn.model_selection import GridSearchCV, train_test_split , cross_val_score, StratifiedKFold, cross_val_predict, cross_validate
-from sklearn.preprocessing import MinMaxScaler 
-from  sklearn.linear_model import LogisticRegression 
-from  sklearn.ensemble import RandomForestClassifier 
-from sklearn.svm import SVC
 from math import *
 from sklearn.ensemble import GradientBoostingRegressor
 from stqdm import stqdm
-import seaborn as sns
+from joblib import dump
+# import simplejson
+
 
 from sklearn.model_selection import train_test_split
 
@@ -167,7 +161,7 @@ def build_page_model():
         st.session_state.list_ecart_mse = []
 
         secteur = 'REALISE_TOTAL_GEL'
-        df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_FFL', data_selection)        
+        df_FPTV, df_min, df_F, df_P, df_V, df_T = build_df(df,'REALISE_TOTAL_GEL', data_selection)        
         try:
             df_datas_choice = pd.read_csv('datas/df_datas_choice_' + data_selection + secteur + '.csv')
             df_datas_choice = df_datas_choice[["Nom","Train_score","Test_score","Ecart"]]
@@ -253,6 +247,7 @@ def build_page_model():
                 st.session_state.list_nom_model.append("GBR")
 
 
+
         with st.expander("BayesianRidge"):  
             from sklearn.linear_model import BayesianRidge
             BR = BayesianRidge()
@@ -275,6 +270,7 @@ def build_page_model():
                 st.session_state.list_ecart_mse.append(mse_per_day_ADABR)
                 st.session_state.list_nom_model.append("BR")
 
+
         with st.expander("Lasso"):  
             from sklearn.linear_model import Lasso 
             lasso = Lasso()
@@ -296,6 +292,7 @@ def build_page_model():
                 st.session_state.list_ecart_mae.append(mae_per_day_lasso)
                 st.session_state.list_ecart_mse.append(mse_per_day_lasso)
                 st.session_state.list_nom_model.append("LASSO")
+
 
         with st.expander("RandomForestRegressor"):  
             from sklearn.ensemble import RandomForestRegressor
@@ -323,6 +320,7 @@ def build_page_model():
                 st.session_state.list_nom_model.append("RFR")
 
 
+
         with st.expander("KNeighborsRegressor"): 
             from sklearn.neighbors import KNeighborsRegressor
             KNR= KNeighborsRegressor()
@@ -347,6 +345,7 @@ def build_page_model():
                 st.session_state.list_ecart_mse.append(mse_per_day_KNR)
                 st.session_state.list_nom_model.append("KNR")
 
+
         
         with st.expander("ElasticNetCV"): 
             from sklearn.linear_model import ElasticNetCV 
@@ -370,6 +369,8 @@ def build_page_model():
                 st.session_state.list_ecart_mae.append(mae_per_day_EN)
                 st.session_state.list_ecart_mse.append(mse_per_day_EN)
                 st.session_state.list_nom_model.append("EN")
+
+
 
         with st.expander("DecisionTreeRegressor"): 
             from sklearn.tree import DecisionTreeRegressor
@@ -396,6 +397,8 @@ def build_page_model():
                 st.session_state.list_nom_model.append("DTR")
 
 
+
+
     st.title('Comparaison des modèles')
     with st.expander('Information'):    
         col1, col2 = st.columns(2)
@@ -406,8 +409,76 @@ def build_page_model():
     # st.write(st.session_state.list_ecart_mae)
 
     if len(st.session_state.list_nom_model)>0:
-        display_model_comparaison(st.session_state.list_ecart_mae, st.session_state.list_nom_model, "MAE")
-        display_model_comparaison(st.session_state.list_ecart_mse, st.session_state.list_nom_model, "MSE")
+        df_ecart_MAE = display_model_comparaison(st.session_state.list_ecart_mae, st.session_state.list_nom_model, "MAE")
+        df_ecart_RMSE = display_model_comparaison(st.session_state.list_ecart_mse, st.session_state.list_nom_model, "MSE")
+
+        st.title('Construction du modèle final')
+
+        df_ecart = pd.concat([df_ecart_MAE, df_ecart_RMSE])
+        df_ecart_mean = df_ecart.groupby(['jour','model']).agg({'ecart':'mean'})        
+        df_ecart_mean = df_ecart_mean.reset_index() 
+
+        lun_results =  df_ecart_mean[(df_ecart_mean['jour'] == 'Lun') ]
+        min_lun_results = lun_results['ecart'].idxmin()
+
+        mar_results =  df_ecart_mean[(df_ecart_mean['jour'] == 'Mar') ]
+        min_mar_results = mar_results['ecart'].idxmin()
+
+        mer_results =  df_ecart_mean[(df_ecart_mean['jour'] == 'Mer') ]
+        min_mer_results = mer_results['ecart'].idxmin()
+
+        jeu_results =  df_ecart_mean[(df_ecart_mean['jour'] == 'Jeu') ]
+        min_jeu_results = jeu_results['ecart'].idxmin()
+
+        ven_results =  df_ecart_mean[(df_ecart_mean['jour'] == 'Ven') ]
+        min_ven_results = ven_results['ecart'].idxmin()
+
+        sam_results =  df_ecart_mean[(df_ecart_mean['jour'] == 'Sam') ]
+        min_sam_results = sam_results['ecart'].idxmin()
+
+      
+        jours = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven','Sam']
+        best_models = [
+
+                lun_results.loc[min_lun_results,'model'],
+                mar_results.loc[min_mar_results,'model'],
+                mer_results.loc[min_mer_results,'model'],
+                jeu_results.loc[min_jeu_results,'model'],
+                ven_results.loc[min_ven_results,'model'],
+                sam_results.loc[min_sam_results,'model'],
+
+        ]
+ 
+        df_best_model_per_day = pd.DataFrame()
+        df_best_model_per_day['Jours'] = jours
+        df_best_model_per_day['Modèle'] = best_models
+
+        
+        st.write(df_best_model_per_day)
+
+        button_keep_model = st.button("Enregistre le modèle")
+
+        if button_keep_model:
+            df_best_model_per_day.to_csv('datas/' + 'df_best_model_per_day-' + secteur + '.csv', index=False)
+            for model_name in df_best_model_per_day['Modèle'].unique():
+                # st.write(model)
+                if model_name == "GBR":
+                    model = model_GBR
+                elif model_name == "BR":
+                    model = model_BR
+                elif model_name == "LASSO":
+                    model = model_lasso
+                elif model_name == "RFR":
+                    model = model_rfr
+                elif model_name == "KNR":
+                    model = model_KNR
+                elif model_name == "EN":
+                    model = model_EN
+                elif model_name == "DTR":
+                    model = model_DTR
+
+                dump(model, 'models/model_' + model_name +'_' + secteur + '.joblib')
+
 
 
 def test_model(df_kept,Model,params,secteur, nom_model):
@@ -468,7 +539,7 @@ def display_model_comparaison(list_ecart, list_nom_model, type):
             Title = "Ecarts MAE moyens par jour"
 
         for ecart_nom, ecart_tab in zip(list_nom_model,list_ecart):
-            for jour, ecart_value in zip(['Lun', 'Mar', 'Mer', 'jeu', 'Ven','Sam'],ecart_tab):
+            for jour, ecart_value in zip(['Lun', 'Mar', 'Mer', 'Jeu', 'Ven','Sam'],ecart_tab):
                 df_ecart = df_ecart.append(
                                 {'jour' : jour,
                                 'ecart' : ecart_value,
@@ -478,17 +549,20 @@ def display_model_comparaison(list_ecart, list_nom_model, type):
         fig = px.bar(df_ecart, x="jour", y="ecart", color='model',  barmode="group", title=Title)
         st.write(fig)
 
+        return df_ecart
+
 def display_test_pred_graph(y_test, pred_test, df_total):
         fig = go.Figure()
         # Add traces
         fig.add_trace(go.Scatter(x=y_test, y=pred_test,
                             marker_color = df_total['weekday'].astype('int'),
                             mode='markers',
+                            # legend = 'test',
                             name='Previsions'))
 
         fig.add_trace(go.Scatter(x=[y_test.min(),y_test.max()], y=[y_test.min(),y_test.max()],
                             mode='lines',
-                            name='lines'))
+                            name='prediction parfaite'))
 
         st.write(fig)
         
@@ -520,6 +594,7 @@ def build_df(df, secteur,drop_list):
     df_P = df.iloc[:, 7:40]
     df_T = df.iloc[:, 48:50]
     df_V = df.iloc[:, 50:]
+
 
     return df_FPTV, df_min, df_F, df_P, df_V, df_T
 
@@ -562,6 +637,9 @@ def build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T):
             "TV" ,
             "V" 
     ]
+
+
+
     return list_df, list_nom_df
 
 def drop_datas(df,drop_list):
@@ -587,9 +665,6 @@ def drop_datas(df,drop_list):
 def build_df_datas_choice(list_nom_df, list_df, secteur):
     results = pd.DataFrame(columns=['Nom', 'Train_score', 'Test_score', 'Ecart'])
     for nom_df, df,i in zip(list_nom_df,list_df, stqdm(range(16))) : 
-        # st.write(nom_df)
-        # st.write(df.columns)
-    # for nom_df, df in zip(list_nom_df,list_df) :   
 
         gridcv_GRB, X_train_scaled, X_test_scaled, y_train, y_test =  train_model(df,GBR,params_gbr,secteur)  
         Train_score = gridcv_GRB.score(X_train_scaled, y_train)

@@ -60,7 +60,7 @@ def set_data():
             
         menu = st.radio(
         "",
-        ("secteur frais", "secteur Gel", "secteur FFL"),
+        ("vide","secteur frais", "secteur Gel", "secteur FFL"),
         )
         if menu =='secteur frais':
             df = df.drop(['REALISE_TOTAL_GEL','REALISE_TOTAL_FFL'], axis = 1)
@@ -86,6 +86,7 @@ def set_data():
     st.write("Explications des données et rapport d'exploration")
     
     st.write(DATA, unsafe_allow_html=True)
+<<<<<<< HEAD
     flowchart()
     st.image("img/flowchart.jpg",width=1400)
 
@@ -153,3 +154,11 @@ def flowchart():
 
 
     
+=======
+
+    st.image("img/flowchart.jpg",width=1400)
+
+
+
+   
+>>>>>>> 293f8c134fba5ea9772c4d917e26d4af9e522ec4
