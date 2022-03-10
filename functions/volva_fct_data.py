@@ -88,16 +88,11 @@ def set_data():
     #explication des données
     
     st.title("Construction des données")
-    col1, col2, col3 = st.columns([1,6,1])
+    
+    
+    st.image('img/construction_du_dataset_final.png',width=800)       
 
-    with col1:
-        st.write("")
-
-    with col2:
-        st.image('img/construction_du_dataset_final.png',width=800)       
-
-    with col3:
-        st.write("")
+   
     
     with st.expander("1/ Données d'origine"):
         st.write(data1, unsafe_allow_html=True)
