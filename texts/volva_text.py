@@ -30,7 +30,24 @@ data = '''1/ Les données d'origine du projet sont un ensemble de fichiers Excel
 Chaque fichier représente un mois. Grâce à un code Python les mois sont concaténés.
 
 2/ Les données sont ensuite nettoyées à travers :
- - une selection des variables  
+ - une selection des variables intéressantes pour les analyses et prévisions
+ - un traitement aucas par cas des erreurs
+ - une analyse des outliers
+ - une recherche des données manquantes
+
+ 3/ Reflexion des hypothèses impactant le volume te intégration des données permettant de valider ces hypothèses
+ - position du jour dans l'espace temporel : Est-ce que la position du jour ou semaine dans le mois ou année impact le volume de commande?
+ - jours fériés : Est-ce que la proximité d'un jour férié (passé ou à venir) impacte les commandes de supermarchés pour compenser le jour de fermeture ?
+ - vacances scolaire par zone : /Est-ce que le fait d'être en vacances impacte le volume de commande ?\n
+ /Est-ce que la zone de vacances impacte le volume de commande?\n
+ /Est-ce que la proximité (- de 7 jours) du début des vacances scolaires impacte le volume de commande.\n
+ - températures moyennes saisonnières : Est-ce que les températures moyennes impactent le volume de commande?
+ - les promotions : Est-ce que les promotions prévues impactent le volume de commande?
+ - les semaines spéciales : Est-ce que les 2 premières semaines de juin et août ainsi que la dernière semaine de l'année impacte le volume de commande?
+
+ 4/ Intégration des données dans le DS final
+
+ 5/ Visualisation et Analyse du DS pour modélisation et prédictions
 # '''
 
 # Les données d'origine du projet sont un ensemble de fichiers Excel qui regroupent les volumes et les performances par secteur.
