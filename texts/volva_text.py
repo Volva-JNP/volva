@@ -176,9 +176,9 @@ Decision Tree Regressor
 '''
 
 comparaison = '''
-comparaison des différents modèles de régression sur chaque jour de la semaine.  
+Comparaison des différents modèles de régression sur chaque jour de la semaine.  
 
-nous selectionnerons le meilleur modèle pour chaque jour.
+Nous selectionnerons le meilleur modèle pour chaque jour.
 '''
 
 
