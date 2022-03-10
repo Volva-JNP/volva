@@ -38,7 +38,7 @@ path_brut = 'datas/volumesMARS2021.csv'
 def set_data():
     df = load_csv(path)
     st.title('Data')
-     # with st.expander('Informations sur la construction du DF'):
+    # with st.expander('Informations sur la construction du DF'):
         
     #     col3 = st.columns(1)
     #     with col3:
@@ -85,14 +85,44 @@ def set_data():
     
     st.write('<style>div.column-widget.stRadio > div{flex-direction:column;justify-content: center;} </style>', unsafe_allow_html=True)
     
-    
     #explication des données
     
-    st.write("Explications des données et rapport d'exploration")
-    
-    st.write(data, unsafe_allow_html=True)
+    st.title("Construction des données")
+    col1, col2, col3 = st.columns([1,6,1])
 
-    st.image('img/construction_du_dataset_final.png')
+    with col1:
+        st.write("")
+
+    with col2:
+        st.image('img/construction_du_dataset_final.png',width=800)       
+
+    with col3:
+        st.write("")
+    
+    with st.expander("1/ Données d'origine"):
+        st.write(data1, unsafe_allow_html=True)
+
+    with st.expander('2/ Nettoyage des données'):
+        st.write(data2, unsafe_allow_html=True)
+        
+    with st.expander('3/ Hypothèses et recherche de nouvelles données'):
+        st.write(data3, unsafe_allow_html=True)
+        
+    with st.expander('4/ Intégration des nouvelles données issues des hypothèses'):
+        st.write(data4, unsafe_allow_html=True)
+
+    with st.expander('5/ DS finalisé'):
+        st.write(data5, unsafe_allow_html=True)
+    
+
+    
+
+    
+
+
+
+   
+
 
 
 
