@@ -100,25 +100,19 @@ def set_data():
         st.write("")
     
     with st.expander("1/ Données d'origine"):
-        
-        col1 = st.columns(1)
-        with col4:
-            st.write(data1, unsafe_allow_html=True)
+        st.write(data1, unsafe_allow_html=True)
 
             
 
     with st.expander('2/ Nettoyage des données'):
+        st.write(data2, unsafe_allow_html=True)
         
-        col6 = st.columns(1)
-        with col6:
-            st.write(data2, unsafe_allow_html=True)
+
         
 
     with st.expander('3/ Hypothèses et recherche de nouvelles données'):
+        st.write(data3, unsafe_allow_html=True)
         
-        col1, col2 = st.columns(1)
-        with col1:
-            st.write(data3, unsafe_allow_html=True)
 
 
 
