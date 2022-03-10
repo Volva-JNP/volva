@@ -72,7 +72,7 @@ def set_visu():
 
     data= [total_2020,gel_2020,ffl_2020,frais_2020,total_2021,gel_2021,ffl_2021,frais_2021]
     fig1.add_traces(data)
-    fig1.update_layout(width=1400,height=600)
+    
     
     st.title('Moyenne Mobile Volume par Secteur')
     with st.expander('more information'):
