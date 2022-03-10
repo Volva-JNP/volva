@@ -85,14 +85,55 @@ def set_data():
     
     st.write('<style>div.column-widget.stRadio > div{flex-direction:column;justify-content: center;} </style>', unsafe_allow_html=True)
     
-    
     #explication des données
     
-    st.write("Explications des données et rapport d'exploration")
-    
-    st.write(data, unsafe_allow_html=True)
+    st.title("Construction des données")
+    col1, col2, col3 = st.columns([1,6,1])
 
-    st.image('img/construction_du_dataset_final.png',width=800)
+    with col1:
+        st.write("")
+
+    with col2:
+        st.image('img/construction_du_dataset_final.png',width=800)       
+
+    with col3:
+        st.write("")
+    
+    with st.expander("1/ Données d'origine"):
+        
+        col4, col5 = st.columns(2)
+        with col4:
+            st.write(data1, unsafe_allow_html=True)
+        with col5:
+            st.image('img\datacollection.gif')
+
+    with st.expander('2/ Nettoyage des données'):
+        
+        col6, col7 = st.columns(2)
+        with col6:
+            st.write(data2, unsafe_allow_html=True)
+        with col7:
+            st.image('img\datacleaning.gif')
+
+    with st.expander('3/ Hypothèses et recherche de nouvelles données'):
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            st.write(data3, unsafe_allow_html=True)
+        with col2:
+            st.image('img\datacollection.gif')
+
+
+    st.write(data4, unsafe_allow_html=True)
+
+    st.write(data5, unsafe_allow_html=True)
+
+    
+
+
+
+   
+
 
 
 
