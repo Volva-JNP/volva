@@ -230,6 +230,11 @@ def build_page_predict():
                 df_predictions['DATE'] = df_predictions['DATE'].dt.strftime('%d-%m-%Y')
                 st.write(df_predictions)
 
+                fig9=px.line(data_frame=df_predictions,x='DATE',y='Prévisions ETP',text='Prévisions ETP')
+                fig9.update_yaxes(dtick=1)
+
+                st.write(fig9)
+
     
         
 
@@ -488,3 +493,7 @@ def add_temperatures_data(df):
 
 def get_weekday(date) :
     return date.weekday()
+
+
+
+    

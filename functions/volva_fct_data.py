@@ -92,7 +92,7 @@ def set_data():
     
     st.write(data, unsafe_allow_html=True)
 
-    st.image('img/construction_du_dataset_final.png',width=800)
+    st.image('img/construction_du_dataset_final.png')
 
 
 

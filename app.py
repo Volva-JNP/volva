@@ -62,7 +62,7 @@ if button_visu:
     link3='[Jour Férié](#impact-jour-f-ri)'
     st.sidebar.markdown(link3,unsafe_allow_html= True )
 
-button_model = st.sidebar.button('Modèlisation')
+button_model = st.sidebar.button('Modélisation')
 if button_model:
     link='[Données utiles par secteur](#selection-des-donn-es-utiles-par-test-de-mod-les)'
     st.sidebar.markdown(link,unsafe_allow_html= True )
