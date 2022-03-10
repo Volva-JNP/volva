@@ -26,40 +26,45 @@ Pour finir nous presenterons une prédiction à partir de ces modèles.
 #DATA
 
 
-DATA = '''
+data = '''1/ Les données d'origine du projet sont un ensemble de fichiers Excel qui regroupent les volumes et les performances par secteur.
+Chaque fichier représente un mois. Grâce à un code Python les mois sont concaténés.
 
-Les données d'origine du projet sont un ensemble de fichiers Excel qui regroupent les volumes et les performances par secteur.
-Chaque fichier représente un mois.
+2/ Les données sont ensuite nettoyées à travers :
+ - une selection des variables  
+# '''
 
-Les données ont été nettoyées et adaptées à l'exploitation pour analyse, visualisation, modelisation et prédiction.
+# Les données d'origine du projet sont un ensemble de fichiers Excel qui regroupent les volumes et les performances par secteur.
+# Chaque fichier représente un mois.
 
-
-En fonction des hypothèses émises pour expliquer les variations de volume nous avons ajouté d'autres données externes à celles de départ:
-- position du jour dans l'espace temporel : Est-ce que la position du jour ou semaine dans le mois ou année impact le volume de commande?\n
--> Nous avons donc intégré la position du jour dans la semaine, dans le mois et dans l'année ainsi que la position de la semaine dans le mois et dans l'année.
-
-
-- jours fériés : Est-ce que la proximité d'un jour férié (passé ou à venir) impacte les commandes de supermarchés pour compenser le jour de fermeture ? 
--> Nous avons identifé si le jour férié le plus proche est passé ou à venir.
+# Les données ont été nettoyées et adaptées à l'exploitation pour analyse, visualisation, modelisation et prédiction.
 
 
-- vacances scolaire par zone : /Est-ce que le fait d'être en vacances impacte le volume de commande ?\n
-/Est-ce que la zone de vacances impacte le volume de commande?\n
-/Est-ce que la proximité (- de 7 jours) du début des vacances scolaires impacte le volume de commande.\n
--> Nous avons intégré le calendrier scolaire français par zone et identifié les jours proches (- de 7 jours) du début des vacaces scolaires
+# En fonction des hypothèses émises pour expliquer les variations de volume nous avons ajouté d'autres données externes à celles de départ:
+# - position du jour dans l'espace temporel : Est-ce que la position du jour ou semaine dans le mois ou année impact le volume de commande?\n
+# -> Nous avons donc intégré la position du jour dans la semaine, dans le mois et dans l'année ainsi que la position de la semaine dans le mois et dans l'année.
 
 
-- températures moyennes saisonnières : Est-ce que les températures moyennes impactent le volume de commande?
--> Nous avons intégré les températures moyennes par jour depuis 2016 dans les régions concernées par le site logistique.
+# - jours fériés : Est-ce que la proximité d'un jour férié (passé ou à venir) impacte les commandes de supermarchés pour compenser le jour de fermeture ? 
+# -> Nous avons identifé si le jour férié le plus proche est passé ou à venir.
 
 
-- les promotions : Est-ce que les promotions prévues impactent le volume de commande?
--> Nous avons intégré tous les types de promotions en cours.
+# - vacances scolaire par zone : /Est-ce que le fait d'être en vacances impacte le volume de commande ?\n
+# /Est-ce que la zone de vacances impacte le volume de commande?\n
+# /Est-ce que la proximité (- de 7 jours) du début des vacances scolaires impacte le volume de commande.\n
+# -> Nous avons intégré le calendrier scolaire français par zone et identifié les jours proches (- de 7 jours) du début des vacaces scolaires
 
 
-- les semaines spéciales : Est-ce que les 2 premières semaines de juin et août ainsi que la dernière semaine de l'année impacte le volume de commande?
--> Nous avons remarqué que certaines semaines dans l'année ont un volume de commande important ainsi que la dernière semaine de l'année nous les avons donc identifié.
-'''
+# - températures moyennes saisonnières : Est-ce que les températures moyennes impactent le volume de commande?
+# -> Nous avons intégré les températures moyennes par jour depuis 2016 dans les régions concernées par le site logistique.
+
+
+# - les promotions : Est-ce que les promotions prévues impactent le volume de commande?
+# -> Nous avons intégré tous les types de promotions en cours.
+
+
+# - les semaines spéciales : Est-ce que les 2 premières semaines de juin et août ainsi que la dernière semaine de l'année impacte le volume de commande?
+# -> Nous avons remarqué que certaines semaines dans l'année ont un volume de commande important ainsi que la dernière semaine de l'année nous les avons donc identifié.
+# '''
 
 
 

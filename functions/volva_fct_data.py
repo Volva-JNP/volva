@@ -38,11 +38,11 @@ path_brut = 'datas/volumesMARS2021.csv'
 def set_data():
     df = load_csv(path)
     st.title('Data')
-    with st.expander('Informations sur la construction du DF'):
+    # with st.expander('Informations sur la construction du DF'):
         
-        col1 = st.columns(1)
-        with col1:
-            st.write(data, unsafe_allow_html=True)
+    #     col3 = st.columns(1)
+    #     with col3:
+    #         st.write(data, unsafe_allow_html=True)
     
     
     col1, col2 = st.columns(2)
@@ -90,7 +90,7 @@ def set_data():
     
     st.write("Explications des données et rapport d'exploration")
     
-    st.write(DATA, unsafe_allow_html=True)
+    st.write(data, unsafe_allow_html=True)
 
     st.image('img\construction_du_dataset_final.png',width=800)
 
