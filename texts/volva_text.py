@@ -15,7 +15,7 @@ Nicolas Francois
 Julien Khenniche
 
 and  
-Paul Déchorgnat as the Mentor
+Paul Datascientest as the Mentor
 '''
 
 
