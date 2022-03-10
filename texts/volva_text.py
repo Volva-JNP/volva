@@ -39,6 +39,8 @@ Pour finir nous presenterons une prédiction à partir de ces modèles.
 '''
 
 definition = '''
+VOLVA  
+
 Le mot « völva » viendrait de vǫlr, quenouille. Ce mot est à rapprocher du proto-germanique walwōn, qui donnera wand en anglais. La völva serait donc, comme les Nornes, une porteuse de quenouille.
 Les völur, entre autres disciplines ésotériques traditionnelles, pratiquaient le seydr (enchantement), le spá (prophétie) et le galdr (magie runique, chamanisme).
 Selon la mythologie et les récits historiques, les völur étaient censées posséder des pouvoirs tels qu'Odin lui-même, le père des dieux, faisait appel à leurs services pour connaître l'avenir des dieux :
@@ -147,7 +149,28 @@ nous pouvons constater que le jour ferié impact fortement l'activité et plus p
 
 #modelisation
 
+dataselect = '''
+Utilisation d'un modèle de Machine Learning (Régression) pour sélectionner les variables explicatives.
 
+'''
+
+modelregression = '''
+modèles de regressions en test:  
+
+GradientBoostRegressor  
+Bayesian Ridge  
+Lasso   
+Random Forest Regressor  
+KNeighbors Regressor  
+ElasticNetCV  
+Decision Tree Regressor  
+'''
+
+comparaison = '''
+comparaison des différents modèles de régression sur chaque jour de la semaine.  
+
+nous selectionnerons le meilleur modèle pour chaque jour.
+'''
 
 
 #prediction

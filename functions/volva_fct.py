@@ -50,6 +50,9 @@ def set_home():
         with col1:
             st.write(definition, unsafe_allow_html=True)
         with col2:
+            st.write("")
+            st.write("")
+            st.write("")
             st.image('img/volvaeyesv1.gif')
     
     

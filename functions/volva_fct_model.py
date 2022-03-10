@@ -85,12 +85,8 @@ def build_page_model():
 
     st.title('Selection des données utiles par test de modèles')
     with st.expander('Information'):    
-        col1, col2 = st.columns(2)
-        with col1:
-            st.write("A compléter")
-        with col2:
-            st.write("A compléter")
-
+        st.write(dataselect)
+        
 
     st.write("Sélectionner les données à laisser dans le dataset d'origine")
 
@@ -213,9 +209,10 @@ def build_page_model():
     with st.expander('Information'):    
         col1, col2 = st.columns(2)
         with col1:
-            st.write("A compléter")
+            st.write(modelregression)
         with col2:
-            st.write("A compléter")
+            st.write("")
+            st.image("img/MLregression.jpg")
 
        
     if menu_secteur != 'vide':  
@@ -403,9 +400,9 @@ def build_page_model():
     with st.expander('Information'):    
         col1, col2 = st.columns(2)
         with col1:
-            st.write("A compléter")
+            st.write(comparaison)
         with col2:
-            st.write("A compléter")
+            st.image("img/machine_learning_modele_.png")
     # st.write(st.session_state.list_ecart_mae)
 
     if len(st.session_state.list_nom_model)>0:
