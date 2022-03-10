@@ -5,6 +5,24 @@ Created on Sat Feb 19 19:03:22 2022
 @author: jk
 """
 
+#sidebar
+
+creator = '''
+réalisé par :  
+Volva Team  
+Phil Arrive  
+Nicolas Francois  
+Julien Khenniche
+
+and  
+Paul Déchorgnat as the Mentor
+'''
+
+
+
+
+
+
 #home
 
 intro = '''
@@ -20,7 +38,14 @@ Nous avons dû devellopper des métriques spécifiques au projet afin de mesurer
 Pour finir nous presenterons une prédiction à partir de ces modèles.
 '''
 
+definition = '''
+Le mot « völva » viendrait de vǫlr, quenouille. Ce mot est à rapprocher du proto-germanique walwōn, qui donnera wand en anglais. La völva serait donc, comme les Nornes, une porteuse de quenouille.
+Les völur, entre autres disciplines ésotériques traditionnelles, pratiquaient le seydr (enchantement), le spá (prophétie) et le galdr (magie runique, chamanisme).
+Ce mot viendrait du proto-germanique spah- et une racine proto-indo-européenn (s)peḱ (regarder, observer, voir) et par conséquent lié au latin specio (« (je) vois ») et au sanskrit spáçati et páçyati.
+Selon la mythologie et les récits historiques, les völur étaient censées posséder des pouvoirs tels qu'Odin lui-même, le père des dieux, faisait appel à leurs services pour connaître l'avenir des dieux :
+ c'est notamment ce que rapporte la Völuspá, dont le titre lui-même, « völv-s-spá », se traduit par « chant de la prophétesse ».
 
+'''
 
 
 #DATA

@@ -121,7 +121,8 @@ if page == 'Predict':
     build_page_predict()
 
 
- 
+st.sidebar.write("")
+st.sidebar.write(creator)
 
 
 
