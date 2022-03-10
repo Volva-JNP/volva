@@ -101,27 +101,25 @@ def set_data():
     
     with st.expander("1/ Données d'origine"):
         
-        col4, col5 = st.columns(2)
+        col4 = st.columns(2)
         with col4:
             st.write(data1, unsafe_allow_html=True)
-        with col5:
-            st.image('img\datacollection.gif')
+
+            
 
     with st.expander('2/ Nettoyage des données'):
         
-        col6, col7 = st.columns(2)
+        col6 = st.columns(2)
         with col6:
             st.write(data2, unsafe_allow_html=True)
-        with col7:
-            st.image('img\datacleaning.png')
+        
 
     with st.expander('3/ Hypothèses et recherche de nouvelles données'):
         
         col1, col2 = st.columns(2)
         with col1:
             st.write(data3, unsafe_allow_html=True)
-        with col2:
-            st.image('img\datacollection.gif')
+
 
 
     st.write(data4, unsafe_allow_html=True)
