@@ -17,14 +17,14 @@ from plotly import tools
 from texts.volva_text import *
 from plotly.subplots import make_subplots
 from functions.volva_fct import *
-from diagrams import Cluster, Diagram
-from diagrams.k8s.storage import PVC, PV
-from diagrams.aws.database import Aurora
-from diagrams.gcp.iot import IotCore
-from diagrams.gcp.analytics import BigQuery, Dataflow, PubSub
-from diagrams.gcp.database import BigTable
-from diagrams.gcp.compute import AppEngine, Functions
-from diagrams.aws.database import Redshift, ElastiCache
+# from diagrams import Cluster, Diagram
+# from diagrams.k8s.storage import PVC, PV
+# from diagrams.aws.database import Aurora
+# from diagrams.gcp.iot import IotCore
+# from diagrams.gcp.analytics import BigQuery, Dataflow, PubSub
+# from diagrams.gcp.database import BigTable
+# from diagrams.gcp.compute import AppEngine, Functions
+# from diagrams.aws.database import Redshift, ElastiCache
 
 
 path = 'datas/volva_datas_utlimate_one.csv'
