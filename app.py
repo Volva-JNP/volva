@@ -32,7 +32,7 @@ with open('css/style.css') as f:
 
 st.sidebar.image('img/volvaF1.png')
 st.sidebar.image('img/projet_volva.png')
-st.sidebar.write("")
+
 
 if 'page' not in st.session_state:
     st.session_state.page = 'Intro'
