@@ -17,6 +17,7 @@ from stqdm import stqdm
 
 from joblib import load
 
+ulti = 'datas/volva_datas_utlimate_one.csv'
  
 def numOfDays(date1, date2):
     return (date2-date1).days
@@ -233,15 +234,16 @@ def build_page_predict():
                 col1, col2 = st.columns(2)
                 with col1:
                     st.write("")
-                    st.write("")
+                    st.write("Tableau de prévisions")
                     st.write("")
                     st.write("")
                     st.write(df_predictions)
                 with col2:
-                    fig9=px.line(data_frame=df_predictions,x='DATE',y='Prévisions ETP',text='Prévisions ETP',markers=False)                
+                    
+                    fig9=px.line(data_frame=df_predictions,x='DATE',y='Prévisions ETP',text='Prévisions ETP',markers=False)           
                     fig9.update_yaxes(dtick=1)
                     fig9.update_traces(textposition='top center')
-                    fig9.update_layout(title_text="Besoin (en nombre d'opérateurs)")
+                    fig9.update_layout(title_text="Graphique des prévisions (en nombre d'opérateurs)")
 
                     st.write(fig9)
 
