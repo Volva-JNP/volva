@@ -47,41 +47,44 @@ def set_data():
     
     col1, col2 = st.columns(2)
     with col1:
-        st.write("Exemple d'un fichier mensuel")
-        st.write("")
-        st.write("")
-        st.write("")
-        st.write("")
-        st.write("")
-        st.write("")
-        st.image('img/dataori.jpg')
+        with st.expander("Exemple d'un fichier mensuel"):
+            st.write("")
+            st.write("")
+            st.write("")
+            st.image("img/logo_excel.png")
+            st.write("")
+            st.write("")
+            st.write("")
+            
+            st.image('img/dataori.jpg')
+            st.write("")
+            st.write("")
+            
             
             
     with col2:
-        st.write('select dataframe:')
-            
-            
-        st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
-            
-        menu = st.radio(
-        "",
-        ("vide","secteur frais", "secteur Gel", "secteur FFL"),
-        )
-        if menu =='secteur frais':
-            df = df.drop(['REALISE_TOTAL_GEL','REALISE_TOTAL_FFL'], axis = 1)
-            secteur = 'REALISE_TOTAL_FRAIS'
-            st.write(df[['DATE',secteur]])    
-            
-        if menu == 'secteur Gel':
-            df = df.drop(['REALISE_TOTAL_FRAIS','REALISE_TOTAL_FFL'], axis = 1)
-            secteur = 'REALISE_TOTAL_GEL'
-            st.write(df[['DATE',secteur]])    
+        with st.expander("exemple de variable cible"):   
+            st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
                 
-        if menu == 'secteur FFL':
-            df = df.drop(['REALISE_TOTAL_GEL','REALISE_TOTAL_FRAIS'], axis = 1)
-            secteur = 'REALISE_TOTAL_FFL'
-    
-            st.write(df[['DATE',secteur]])
+            menu = st.radio(
+            "",
+            ("vide","secteur frais", "secteur Gel", "secteur FFL"),
+            )
+            if menu =='secteur frais':
+                df = df.drop(['REALISE_TOTAL_GEL','REALISE_TOTAL_FFL'], axis = 1)
+                secteur = 'REALISE_TOTAL_FRAIS'
+                st.write(df[['DATE',secteur]])    
+                
+            if menu == 'secteur Gel':
+                df = df.drop(['REALISE_TOTAL_FRAIS','REALISE_TOTAL_FFL'], axis = 1)
+                secteur = 'REALISE_TOTAL_GEL'
+                st.write(df[['DATE',secteur]])    
+                    
+            if menu == 'secteur FFL':
+                df = df.drop(['REALISE_TOTAL_GEL','REALISE_TOTAL_FRAIS'], axis = 1)
+                secteur = 'REALISE_TOTAL_FFL'
+        
+                st.write(df[['DATE',secteur]])
     
     st.write('<style>div.column-widget.stRadio > div{flex-direction:column;justify-content: center;} </style>', unsafe_allow_html=True)
     
@@ -89,24 +92,24 @@ def set_data():
     
     st.title("Construction des données")
     
-    
-    st.image('img/construction_du_dataset_final.png',width=800)       
+    with st.expander("Logigramme"):
+        st.image('img/construction_du_dataset.jpg')       
 
    
     
-    with st.expander("1/ Données d'origine"):
+    with st.expander("1. Données d'origine"):
         st.write(data1, unsafe_allow_html=True)
 
-    with st.expander('2/ Nettoyage des données'):
+    with st.expander('2. Nettoyage des données'):
         st.write(data2, unsafe_allow_html=True)
         
-    with st.expander('3/ Hypothèses et recherche de nouvelles données'):
+    with st.expander('3. Hypothèses et recherche de nouvelles données'):
         st.write(data3, unsafe_allow_html=True)
         
-    with st.expander('4/ Intégration des nouvelles données issues des hypothèses'):
+    with st.expander('4. Intégration des nouvelles données issues des hypothèses'):
         st.write(data4, unsafe_allow_html=True)
 
-    with st.expander('5/ DS finalisé'):
+    with st.expander('5. DataSet finalisé'):
         st.write(data5, unsafe_allow_html=True)
     
 

@@ -43,7 +43,8 @@ def load_csv(path):
 
 def set_home():
     st.image('img/siteSQF.png')
-    st.write(intro, unsafe_allow_html=True)
+    with st.expander('Objectif'):
+        st.write(intro, unsafe_allow_html=True)
     with st.expander('Définition et Origine'):
         
         col1, col2 = st.columns(2)
