@@ -38,13 +38,7 @@ path_brut = 'datas/volumesMARS2021.csv'
 def set_data():
     df = load_csv(path)
     st.title('Data')
-    # with st.expander('Informations sur la construction du DF'):
-        
-    #     col3 = st.columns(1)
-    #     with col3:
-    #         st.write(data, unsafe_allow_html=True)
-    
-    
+    st.write(datainit)
     col1, col2 = st.columns(2)
     with col1:
         with st.expander("Exemple d'un fichier mensuel"):
@@ -53,9 +47,7 @@ def set_data():
             st.write("")
             st.image("img/logo_excel.png")
             st.write("")
-            st.write("")
-            st.write("")
-            
+            st.write("")  
             st.image('img/dataori.jpg')
             st.write("")
             st.write("")
@@ -68,19 +60,19 @@ def set_data():
                 
             menu = st.radio(
             "",
-            ("vide","secteur frais", "secteur Gel", "secteur FFL"),
+            ("vide","frais", "Gel", "FFL"),
             )
-            if menu =='secteur frais':
+            if menu =='frais':
                 df = df.drop(['REALISE_TOTAL_GEL','REALISE_TOTAL_FFL'], axis = 1)
                 secteur = 'REALISE_TOTAL_FRAIS'
-                st.write(df[['DATE',secteur]])    
+                st.write(df[['DATE',secteur]])
                 
-            if menu == 'secteur Gel':
+            if menu == 'Gel':
                 df = df.drop(['REALISE_TOTAL_FRAIS','REALISE_TOTAL_FFL'], axis = 1)
                 secteur = 'REALISE_TOTAL_GEL'
                 st.write(df[['DATE',secteur]])    
                     
-            if menu == 'secteur FFL':
+            if menu == 'FFL':
                 df = df.drop(['REALISE_TOTAL_GEL','REALISE_TOTAL_FRAIS'], axis = 1)
                 secteur = 'REALISE_TOTAL_FFL'
         

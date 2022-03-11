@@ -81,6 +81,8 @@ def set_visu():
         with col1:
             st.write(mobile, unsafe_allow_html=True)
         with col2:
+            st.write("")
+            st.write("")
             st.image('img/mobile2.gif')
     fig1.update_yaxes( title='VOLUME')
     fig1.update_xaxes( title='DATE')
@@ -177,7 +179,7 @@ def set_visu():
         st.write(impact, unsafe_allow_html=True)    
         
     jour_ferié()
-    matricecorr()
+    
 
 
 

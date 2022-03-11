@@ -43,6 +43,11 @@ def load_csv(path):
 
 def set_home():
     st.image('img/siteSQF.png')
+    with st.expander('Site logisitique'):
+        st.write(site)
+        st.write("")
+        st.image("img/image001.png")
+    
     with st.expander('Objectif'):
         st.write(intro, unsafe_allow_html=True)
     with st.expander('Définition et Origine'):
@@ -55,7 +60,6 @@ def set_home():
             st.write("")
             st.write("")
             st.image('img/volvaeyesv1.gif')
-    
     
     
     

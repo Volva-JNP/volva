@@ -52,12 +52,24 @@ Selon la mythologie et les récits historiques, les völur étaient censées pos
 
 '''
 
+site= '''
+le site logisitque est composé de plusieurs secteurs d'activités:  
+
+- les Fruits et Legumes  
+- le Frais  
+- le Gel  
+- le Sec  
+
+  '''
 
 #DATA
 
 
 #DATA
-
+datainit= '''
+Data disponible au début du projet :  
+  - Reporting à destination de la direction synthetisant les volumes et performances sous forme de fichier excel mensuel.
+  '''
 
 data1 = '''Les données d'origine du projet sont un ensemble de fichiers Excel qui regroupent les volumes et les performances par secteur.
 Chaque fichier représente un mois. Grâce à un code Python les mois sont concaténés.
@@ -132,19 +144,20 @@ data5 = '''
 #visualisation
 
 mobile = '''
-Ci-dessous un graphique representant les volumes de l'entrepot par secteur ainsi que le volume total sur les années 2020 et 2021.
-Nous pouvons constater que les grandes variations du volumes sont cyclique.Nous retrouvons des periodes similaire d'une année sur l'autre.
-le secteur frais represente une forte proportion du volume totale donc impact fortement les variations du volume total
+Ci-dessous un graphique représentant les volumes de l'entrepôt par secteur ainsi que le volume total sur les années 2020 et 2021.  
+Nous pouvons constater que les grandes variations du volumes sont cycliques.  
+Nous retrouvons des périodes similaires d'une année sur l'autre.
+Le secteur frais représente 80% du volume total donc impact fortement les variations du site.
 '''
 
 distrib = '''
-Ci_dessous la distribution des volumes par secteur.
-Nous pouvons constater que les secteurs GEL et FFL ont une distribution assez compacte et centré sur la moyenne/mediane ce qui nous amene à penser que le volume ne varie pas beacoup
-Par contre la distribution du frais est plus etalée ce qui induit un plus grand ecart type et de fortes variations. 
+Ci-dessous la distribution des volumes par secteur.
+Nous pouvons constater que les secteurs GEL et FFL ont une distribution assez compacte et centré sur la moyenne/mediane ce qui nous amène à penser que le volume ne varie pas beaucoup
+Par contre la distribution du frais est plus étalée ce qui induit un plus grand écart type et de fortes variations. 
 '''
 
 violo = '''
-Représentation graphique des volumes journaliers avec distribution et ecart-type.
+Représentation graphique des volumes journaliers avec distribution et écart-type.
 les volumes journaliers nous montre que :
     -le secteur GEL est très homogene dans ses journées (sauf le samedi)
     -le secteur FFL a deux jours forts (jeudi et vendredi)
