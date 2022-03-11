@@ -38,7 +38,11 @@ path_brut = 'datas/volumesMARS2021.csv'
 def set_data():
     df = load_csv(path)
     st.title('Data')
-    st.write(datainit)
+    col1 , col2 = st.columns(2)
+    with col1:
+        st.write(datainit)
+    with col2:
+        st.image("img/datap.gif")
     col1, col2 = st.columns(2)
     with col1:
         with st.expander("Exemple d'un fichier mensuel"):

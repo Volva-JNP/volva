@@ -68,7 +68,11 @@ le site logisitque est composé de plusieurs secteurs d'activités:
 #DATA
 datainit= '''
 Data disponible au début du projet :  
-  - Reporting à destination de la direction synthetisant les volumes et performances sous forme de fichier excel mensuel.
+  - Reporting à destination de la direction synthetisant les volumes et performances sous forme de fichier excel mensuel.  
+Ce fichier regroupe par secteur :
+  - le volume par jour
+  - le nombre d'heures effectuées
+  - la productivité
   '''
 
 data1 = '''Les données d'origine du projet sont un ensemble de fichiers Excel qui regroupent les volumes et les performances par secteur.
