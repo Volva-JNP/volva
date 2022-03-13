@@ -12,6 +12,7 @@ from math import *
 from sklearn.ensemble import GradientBoostingRegressor
 from stqdm import stqdm
 from joblib import dump
+import os
 # import simplejson
 
 
@@ -82,11 +83,22 @@ def build_page_model():
 
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
+    with st.expander('Ajouter des données'):
+        uploaded_file = st.file_uploader("Choisissez un fichier")
+        if uploaded_file is not None:
+            uploaded = pd.read_csv(uploaded_file, header=0)
+            if len(uploaded.columns) >4 : 
+                st.warning("Le format de fichier ne correspond pas à celui attendu.  \n" \
+                            " Il doit contenir 4 colonnes :  \n"\
+                            "- DATE  \n"\
+                            "- REALISE_TOTAL_FRAIS  \n"\
+                            "- REALISE_TOTAL_GEL  \n"\
+                            "- REALISE_TOTAL_FFL  \n"\
+                )
 
-    st.title('Selection des données utiles par test de modèles')
-    with st.expander('Information'):    
-        st.write(dataselect)
-        
+            else:
+                st.write(uploaded)
+    
 
     st.write("Sélectionner les données à laisser dans le dataset d'origine")
 
@@ -813,5 +825,3 @@ def get_mse_per_day(y_test_df_merge, y_test_ri, y_pred_array, secteur) :
     return mean_per_weekday 
 
 
-
-    
