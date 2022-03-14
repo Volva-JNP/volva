@@ -86,18 +86,21 @@ def build_page_model():
         uploaded_file = st.file_uploader("Choisissez un fichier")
         if uploaded_file is not None:
             uploaded = pd.read_excel(uploaded_file, header=0)
-            uploaded_year = uploaded.loc[0,'DATE'].year
-            uploaded_month = uploaded.loc[0,'DATE'].month
-            num_days = monthrange(uploaded_year, uploaded_month)[1]
+
 
             if len(uploaded.columns) == 4 and \
                 "DATE" in uploaded.columns  and \
                 "REALISE_TOTAL_FRAIS" in uploaded.columns  and \
                 "REALISE_TOTAL_GEL" in uploaded.columns  and \
-                "REALISE_TOTAL_FFL" in uploaded.columns  and \
-                uploaded.shape[0] == num_days  :
+                "REALISE_TOTAL_FFL" in uploaded.columns  :
 
-                st.write(uploaded)
+                uploaded_year = uploaded.loc[0,'DATE'].year
+                uploaded_month = uploaded.loc[0,'DATE'].month
+                num_days = monthrange(uploaded_year, uploaded_month)[1]
+                if   uploaded.shape[0] != num_days  :
+                    st.warning("Le nombre de lignes ne correspond pas au nombre de jours dans le mois.")  
+                else : 
+                    st.write(uploaded)
 
             else:
                 
