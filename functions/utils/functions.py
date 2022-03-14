@@ -9,6 +9,26 @@ from calendar import monthrange
 from functions.utils import jours_feries
 from datetime import datetime 
 from datetime import timedelta
+import plotly.express as px
+import plotly.graph_objs as go
+from texts.volva_text import *
+from plotly.subplots import make_subplots
+from functions.volva_fct import *
+from sklearn.preprocessing import StandardScaler 
+from sklearn.model_selection import GridSearchCV, train_test_split , cross_val_score, StratifiedKFold, cross_val_predict, cross_validate
+from math import *
+from sklearn.ensemble import GradientBoostingRegressor
+from stqdm import stqdm
+from joblib import dump
+
+GBR = GradientBoostingRegressor() # Params pour GEL
+params_gbr = {    
+        'max_depth': [1], 
+#         'n_estimators': [i for i in np.arange(1100, 1500,100 )],
+#         'learning_rate': [i for i in np.arange(0.0095, 0.010,0.0001 )]
+        'n_estimators': [1400],
+        'learning_rate': [0.099]
+}
 
 
 def construct_month_df(columns_list, df, month, year):   
@@ -98,3 +118,336 @@ def proximite_jour_ferie(jour, param='next'):
 
     
    
+def test_model(df_kept,Model,params,secteur, nom_model):
+
+    gridcv_model = 0
+    y_test = 0
+    pred_test = 0
+
+    if 'y_test' + "_" + secteur in st.session_state and 'pred_test_' + nom_model + "_" + secteur  in st.session_state:
+        gridcv_model = st.session_state['model_' + nom_model + "_" + secteur] 
+        y_test  = st.session_state['y_test' + "_" + secteur] 
+        pred_test  = st.session_state['pred_test_' + nom_model + "_" + secteur] 
+        score_test = st.session_state['score_test_' + nom_model + "_" + secteur]
+        score_train = st.session_state['score_train_' + nom_model + "_" + secteur]
+
+        col1, col2 = st.columns(2)
+        with col1:
+            st.metric("Score train",score_train)
+        with col2:
+            st.metric("Score test",score_test)   
+
+    else :
+        placeholder_button = st.empty()
+        button_test_model = placeholder_button.button('Test modèle ' + nom_model)
+        if button_test_model:
+            placeholder2 = st.empty()
+            placeholder2.warning("Veuillez patienter pendant l'évaluation du modèle ...")
+            gridcv_model, X_train_scaled, X_test_scaled, y_train, y_test = train_model(df_kept,Model,params,secteur)
+            score_train = np.round(gridcv_model.score(X_train_scaled, y_train),4)
+            score_test =  np.round(gridcv_model.score(X_test_scaled, y_test),4)
+
+            col1, col2 = st.columns(2)
+            with col1:
+                st.metric("Score train",score_train)
+            with col2:
+                st.metric("Score test",score_test)   
+            
+            placeholder2.empty()    
+            placeholder_button.empty()        
+
+            pred_test = gridcv_model.predict(X_test_scaled) 
+            # st.write(pd.DataFrame(pred_test))
+
+            st.session_state['score_test_' + nom_model + "_" + secteur ] = score_test
+            st.session_state['score_train_' + nom_model + "_" + secteur] = score_train
+            st.session_state['model_' + nom_model + "_" + secteur] = gridcv_model
+            st.session_state['y_test' + "_" + secteur] = y_test
+            st.session_state['pred_test_' + nom_model + "_" + secteur ] = pred_test 
+
+    return gridcv_model, y_test, pred_test
+
+def display_model_comparaison(list_ecart, list_nom_model, type):
+        fig = go.Figure()
+        df_ecart = pd.DataFrame(columns=['jour', 'ecart', 'model'])
+        if type == "MSE" :
+            Title = "Ecarts RMSE moyens par jour"
+        elif type == "MAE":
+            Title = "Ecarts MAE moyens par jour"
+
+        for ecart_nom, ecart_tab in zip(list_nom_model,list_ecart):
+            for jour, ecart_value in zip(['Lun', 'Mar', 'Mer', 'Jeu', 'Ven','Sam'],ecart_tab):
+                df_ecart = df_ecart.append(
+                                {'jour' : jour,
+                                'ecart' : ecart_value,
+                                'model' : ecart_nom}
+                                , ignore_index=True)
+
+        fig = px.bar(df_ecart, x="jour", y="ecart", color='model',  barmode="group", title=Title)
+        st.write(fig)
+
+        return df_ecart
+
+def display_test_pred_graph(y_test, pred_test, df_total):
+        fig = go.Figure()
+        # Add traces
+        fig.add_trace(go.Scatter(x=y_test, y=pred_test,
+                            marker_color = df_total['weekday'].astype('int'),
+                            mode='markers',
+                            text=df_total['weekday'],
+                            name='Previsions'))
+
+        fig.add_trace(go.Scatter(x=[y_test.min(),y_test.max()], y=[y_test.min(),y_test.max()],
+                            mode='lines',
+                            name='prediction parfaite'))
+
+        st.write(fig)
+        
+        
+
+def build_df(df, secteur,drop_list):
+
+    # st.write(df.columns)
+    suppr=[]
+    if secteur == 'REALISE_TOTAL_FRAIS':
+        suppr.append('REALISE_TOTAL_GEL')
+        suppr.append('REALISE_TOTAL_FFL')
+    elif secteur == 'REALISE_TOTAL_GEL':
+        suppr.append('REALISE_TOTAL_FRAIS')
+        suppr.append('REALISE_TOTAL_FFL')
+    elif secteur == 'REALISE_TOTAL_FFL':
+        suppr.append('REALISE_TOTAL_FRAIS')
+        suppr.append('REALISE_TOTAL_GEL')
+
+    # st.write(suppr)
+    df_FPTV = df.drop(suppr, axis = 1)
+    df_FPTV = drop_datas(df_FPTV,drop_list)
+
+    df_min = pd.concat([df.iloc[:, :5],df.iloc[:, 40:48]], axis=1).drop(suppr, axis = 1)
+    df_min = drop_datas(df_min,drop_list)
+
+
+    df_F = df.iloc[:, 5:7]
+    df_P = df.iloc[:, 7:40]
+    df_T = df.iloc[:, 48:50]
+    df_V = df.iloc[:, 50:]
+
+
+    return df_FPTV, df_min, df_F, df_P, df_V, df_T
+
+def build_list_test(df_FPTV, df_min, df_F, df_P, df_V, df_T):
+
+    list_df = [ 
+        df_min,
+        df_FPTV,
+        concat_df_test(df_min,[df_F]),
+        concat_df_test(df_min,[df_F,df_P]),
+        concat_df_test(df_min,[df_F,df_T]),
+        concat_df_test(df_min,[df_F,df_V]),
+        concat_df_test(df_min,[df_F,df_P,df_T]),
+        concat_df_test(df_min,[df_F,df_P,df_V]),
+        concat_df_test(df_min,[df_F,df_T,df_V]),
+        concat_df_test(df_min,[df_P]),
+        concat_df_test(df_min,[df_P,df_T]),
+        concat_df_test(df_min,[df_P,df_V]),
+        concat_df_test(df_min,[df_P,df_T,df_V]),
+        concat_df_test(df_min,[df_T]),
+        concat_df_test(df_min,[df_T,df_V]),
+        concat_df_test(df_min,[df_V])
+    ]
+
+    list_nom_df = [  
+            "No Added Datas",
+            "FPTV" ,
+            "F" ,
+            "FP" ,
+            "FT",
+            "FV" ,
+            "FPT" ,
+            "FPV" ,
+            "FTV" ,
+            "P" ,
+            "PT" ,
+            "PV" ,
+            "PTV" ,
+            "T" ,
+            "TV" ,
+            "V" 
+    ]
+
+
+
+    return list_df, list_nom_df
+
+def drop_datas(df,drop_list):
+    if 'A_' not in  drop_list:
+        df=df.drop(['ANNEE'], axis=1)
+    if 'MP_' not in  drop_list:
+        df=df.drop(['month_period'], axis=1)
+
+    if 'MD_' not in  drop_list:
+        df=df.drop(['monthday_sin', 'monthday_cos'], axis=1)
+
+    if 'WD_' not in  drop_list:
+        df=df.drop(['weekday_sin','weekday_cos'], axis=1)
+
+    if 'M_' not in  drop_list:
+        df=df.drop(['mois_sin','mois_cos'], axis=1)
+
+    if 'W_' not in  drop_list:
+        df=df.drop(['semaine_cos','semaine_sin'], axis=1)
+        
+    return df
+
+def build_df_datas_choice(list_nom_df, list_df, secteur):
+    results = pd.DataFrame(columns=['Nom', 'Train_score', 'Test_score', 'Ecart'])
+    for nom_df, df,i in zip(list_nom_df,list_df, stqdm(range(16))) : 
+
+        gridcv_GRB, X_train_scaled, X_test_scaled, y_train, y_test =  train_model(df,GBR,params_gbr,secteur)  
+        Train_score = gridcv_GRB.score(X_train_scaled, y_train)
+        Test_score = gridcv_GRB.score(X_test_scaled, y_test)
+        results = results.append(
+                        {
+                            'Nom' : nom_df,
+                            'Train_score' : Train_score,
+                            'Test_score' : Test_score,
+                            'Ecart' : Train_score - Test_score                      
+                            
+                        } , ignore_index=True
+        
+        )
+
+    df_datas_choice = results.sort_values(['Test_score', 'Ecart'],
+              ascending = [False, True])
+    
+    return df_datas_choice
+
+
+def concat_df_test (df_min,list_df):    
+    for df_ in list_df:
+          df_min = pd.concat([df_min,df_], axis=1)
+    return df_min
+
+
+
+
+
+def train_model(df, model, param, secteur) : 
+    # st.write(df)
+    target = df[secteur]
+    features = df.drop(secteur, axis=1)
+    X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=22)
+
+    scaler = StandardScaler().fit(X_train)
+    X_train_scaled = pd.DataFrame(scaler.transform(X_train))
+    X_test_scaled = scaler.transform(X_test)  
+    
+    gridcv =  GridSearchCV(estimator = model, param_grid = param)
+    gridcv.fit(X_train_scaled, y_train)
+    
+    return gridcv, X_train_scaled, X_test_scaled, y_train, y_test
+
+
+def store_best_datas(secteur, score_test, ecart, added_datas, data_selection):
+    df = pd.read_csv('datas/df_secteur_best_datas.csv')
+    secteur_serie = df[df['secteur']==secteur]
+    score_test_stored = secteur_serie.iloc[0,1]
+    ecart_stored = secteur_serie.iloc[0,2]
+    basis_data = secteur_serie.iloc[0,3]
+
+    if (score_test > score_test_stored  and ecart < ecart_stored) or (score_test == score_test_stored  and ecart == ecart_stored and len(data_selection)< len(basis_data)): 
+        df.drop( df[ df['secteur'] == secteur ].index, inplace=True)
+        df = df.append({
+                    'secteur': secteur,
+                    'score': score_test,    
+                    'ecart': ecart, 
+                    'basis_data': data_selection,
+                    'added_datas': added_datas      
+        
+                    }, ignore_index=True)
+        df.to_csv('datas/df_secteur_best_datas.csv', index=False)
+
+    return df
+     
+
+
+
+def construc_best_dataset_secteur(secteur, df_min, df_F, df_P, df_V, df_T) :
+    df = pd.read_csv('datas/df_secteur_best_datas.csv')
+    secteur_serie = df[df['secteur']==secteur]
+    basis_data = secteur_serie.iloc[0,3]
+    added_datas = secteur_serie.iloc[0,4]
+    df_secteur = drop_datas(df_min,basis_data)
+
+    suppr=[]
+    if secteur == 'REALISE_TOTAL_FRAIS':
+        suppr.append('REALISE_TOTAL_GEL')
+        suppr.append('REALISE_TOTAL_FFL')
+    elif secteur == 'REALISE_TOTAL_GEL':
+        suppr.append('REALISE_TOTAL_FRAIS')
+        suppr.append('REALISE_TOTAL_FFL')
+    elif secteur == 'REALISE_TOTAL_FFL':
+        suppr.append('REALISE_TOTAL_FRAIS')
+        suppr.append('REALISE_TOTAL_GEL')
+
+    df_secteur = df_secteur.drop(suppr, axis = 1)
+
+    if 'F' in  added_datas:
+        df_secteur = pd.concat([df_secteur, df_F], axis=1)
+
+    if 'P' in  added_datas:
+        df_secteur = pd.concat([df_secteur, df_P], axis=1)
+
+    if 'T' in  added_datas:
+        df_secteur = pd.concat([df_secteur, df_T], axis=1)
+
+    if 'V' in  added_datas:
+        df_secteur = pd.concat([df_secteur, df_V], axis=1)
+
+    return df_secteur 
+
+
+def get_mae_per_day(y_test_df_merge, y_test_ri, y_pred_array, secteur) :
+    from sklearn.metrics import mean_absolute_error
+    # retrouver les index des lignes y_test dans les pred 
+    pred=[]
+    for index, data in zip(y_test_ri['index'], y_pred_array):
+        pred.append([index,data])
+        pred_pd = pd.DataFrame(pred, columns=['index','y_pred'])
+     
+    
+    # réunir dans un même df les test et les pred
+    y_test_pred_merge=pred_pd.merge(y_test_df_merge, how='left', on='index')
+#     print(y_test_pred_merge)
+    # En utilisant le rapprochement test / pred / weekday, calculer la mae par weekday
+    mean_per_weekday=[0,0,0,0,0,0]        
+    for i in range(6):
+        y_test_pred_merge_i = y_test_pred_merge[y_test_pred_merge['weekday']==i]
+        y_test_i = y_test_pred_merge_i[secteur]
+        y_pred_i = y_test_pred_merge_i['y_pred']
+        mean_per_weekday[i]=mean_absolute_error(y_test_i, y_pred_i)
+        
+    return mean_per_weekday 
+
+
+def get_mse_per_day(y_test_df_merge, y_test_ri, y_pred_array, secteur) :
+    from sklearn.metrics import mean_squared_error
+    # retrouver les index des lignes y_test dans les pred 
+    pred=[]
+    for index, data in zip(y_test_ri['index'], y_pred_array):
+        pred.append([index,data])
+        pred_pd = pd.DataFrame(pred, columns=['index','y_pred'])
+     
+    
+    # réunir dans un même df les test et les pred
+    y_test_pred_merge=pred_pd.merge(y_test_df_merge, how='left', on='index')
+#     print(y_test_pred_merge)
+    # En utilisant le rapprochement test / pred / weekday, calculer la mae par weekday
+    mean_per_weekday=[0,0,0,0,0,0]        
+    for i in range(6):
+        y_test_pred_merge_i = y_test_pred_merge[y_test_pred_merge['weekday']==i]
+        y_test_i = y_test_pred_merge_i[secteur]
+        y_pred_i = y_test_pred_merge_i['y_pred']
+        mean_per_weekday[i]=mean_squared_error(y_test_i, y_pred_i)
+        
+    return mean_per_weekday 
