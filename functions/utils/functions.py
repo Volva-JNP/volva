@@ -481,9 +481,10 @@ def selection_data(df,secteur):
             'Temp moy Auvergne' ,
             'Temp moy Bourgogne'
         ]        
-        df.drop(cols_to_drop, inplace=True, axis=1)
-    
+        df.drop(cols_to_drop, inplace=True, axis=1)    
+    return df
 
+def drop_time_and_index_fields(df):
     cols_to_drop = [
         # 'DATE',
         'JOUR',
@@ -492,10 +493,9 @@ def selection_data(df,secteur):
         'SEMAINE' ,
         'index'
     ]
-
     df.drop(cols_to_drop, inplace=True, axis=1)
     return df
-
+    
 
 def drop_datas(df,drop_list):
     if 'A_' not in  drop_list:

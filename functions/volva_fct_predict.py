@@ -80,6 +80,7 @@ def build_page_predict():
                 df = add_promotions(df)
                 df = add_temperatures_data(df)            
                 df = selection_data(df,secteur)
+                df = drop_time_and_index_fields(df)
                 placeholder.empty()
                 with st.expander('Voir le dataset'):   
                     st.write(df)
