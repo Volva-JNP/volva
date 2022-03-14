@@ -12,9 +12,8 @@ from math import *
 from sklearn.ensemble import GradientBoostingRegressor
 from stqdm import stqdm
 from joblib import dump
-import os
-# import simplejson
- 
+from calendar import monthrange
+
 
 from sklearn.model_selection import train_test_split
 
@@ -86,18 +85,31 @@ def build_page_model():
     with st.expander('Ajouter des données'):
         uploaded_file = st.file_uploader("Choisissez un fichier")
         if uploaded_file is not None:
-            uploaded = pd.read_csv(uploaded_file, header=0)
-            if len(uploaded.columns) >4 : 
+            uploaded = pd.read_excel(uploaded_file, header=0)
+            uploaded_year = uploaded.loc[0,'DATE'].year
+            uploaded_month = uploaded.loc[0,'DATE'].month
+            num_days = monthrange(uploaded_year, uploaded_month)[1]
+
+            if len(uploaded.columns) == 4 and \
+                "DATE" in uploaded.columns  and \
+                "REALISE_TOTAL_FRAIS" in uploaded.columns  and \
+                "REALISE_TOTAL_GEL" in uploaded.columns  and \
+                "REALISE_TOTAL_FFL" in uploaded.columns  and \
+                uploaded.shape[0] == num_days  :
+
+                st.write(uploaded)
+
+            else:
+                
                 st.warning("Le format de fichier ne correspond pas à celui attendu.  \n" \
                             " Il doit contenir 4 colonnes :  \n"\
                             "- DATE  \n"\
                             "- REALISE_TOTAL_FRAIS  \n"\
                             "- REALISE_TOTAL_GEL  \n"\
                             "- REALISE_TOTAL_FFL  \n"\
+                            + str(len(uploaded.columns))                            
                 )
-
-            else:
-                st.write(uploaded)
+                
     
 
     st.write("Sélectionner les données à laisser dans le dataset d'origine")
