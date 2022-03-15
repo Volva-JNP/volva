@@ -21,8 +21,6 @@ from sklearn.ensemble import GradientBoostingRegressor
 from stqdm import stqdm
 from joblib import dump
 
-ulti = 'datas/volva_datas_utlimate_one.csv'
-
 GBR = GradientBoostingRegressor() # Params pour GEL
 params_gbr = {    
         'max_depth': [1], 
@@ -31,6 +29,96 @@ params_gbr = {
         'n_estimators': [1400],
         'learning_rate': [0.099]
 }
+
+path = 'datas/volva_datas_utlimate_one.csv'
+
+def redim_df():
+    df= load_csv(path)
+    suppr=[
+            'MOIS',
+            'SEMAINE',
+            'JOUR',
+            # 'DATE',
+            # 'weekday',
+            'monthdays',
+            'prox_jour_ferie' ,    
+            'PREVISION_BUDGET_FRAIS',
+            'NB_HEURES_TOTAL_FRAIS',
+            'OBJECTIF_PROD_FRAIS',
+            'PREVISION_BUDGET_GEL',
+            'NB_HEURES_TOTAL_GEL',
+            'OBJECTIF_PROD_GEL',
+            'PREVISION_BUDGET_FFL',
+            'NB_HEURE_PREPARATION_FFL',
+            'OBJECTIF_PROD_FFL',
+            'REALISE_FLF_EXP',
+            'REALISE_HGE_EXP',
+            'REALISE_MECA_EXP',
+            'TOTAL_EXPE_EXP',
+            'NB_HEURE_EXP',
+            'OBJECTIF_PROD_EXP',
+            'colIndex',
+            'REALISE_GEL_EXP', 
+            'dernier_jour_ferie_nom', 
+            'prochain_jour_ferie_nom', 
+            'prox_jour_ferie_nom',
+            'Sem Juin',
+            'Sem aout',
+            'Sem dec',                  
+        ]
+
+    df_total = df 
+
+    
+    df = df.drop(suppr, axis = 1)
+    df.to_csv('datas/volva_datas_utlimate_one2.csv')
+    
+
+    return df
+
+
+def get_df():
+    df= load_csv(path)
+    suppr=[
+            'MOIS',
+            'SEMAINE',
+            'JOUR',
+            'DATE',
+            'weekday',
+            'monthdays',
+            'prox_jour_ferie' ,    
+            'PREVISION_BUDGET_FRAIS',
+            'NB_HEURES_TOTAL_FRAIS',
+            'OBJECTIF_PROD_FRAIS',
+            'PREVISION_BUDGET_GEL',
+            'NB_HEURES_TOTAL_GEL',
+            'OBJECTIF_PROD_GEL',
+            'PREVISION_BUDGET_FFL',
+            'NB_HEURE_PREPARATION_FFL',
+            'OBJECTIF_PROD_FFL',
+            'REALISE_FLF_EXP',
+            'REALISE_HGE_EXP',
+            'REALISE_MECA_EXP',
+            'TOTAL_EXPE_EXP',
+            'NB_HEURE_EXP',
+            'OBJECTIF_PROD_EXP',
+            'colIndex',
+            'REALISE_GEL_EXP', 
+            'dernier_jour_ferie_nom', 
+            'prochain_jour_ferie_nom', 
+            'prox_jour_ferie_nom',
+            'Sem Juin',
+            'Sem aout',
+            'Sem dec',                  
+        ]
+
+    df_total = df     
+    df = df.drop(suppr, axis = 1)    
+    df_minimum = pd.concat([df.iloc[:, :5],df.iloc[:, 40:48]], axis=1)
+
+    return df, df_total, df_minimum
+
+
 
 
 def construct_month_df(columns_list, df, month, year):   
@@ -524,7 +612,7 @@ def numOfDays(date1, date2):
      
 
 
-def add_time_datas(date_debut,date_fin):
+def add_time_datas(date_debut,date_fin,df):
     nb_days = numOfDays(date_debut, date_fin)
     dates_range=[date_debut]
     temp_date =date_debut
@@ -534,7 +622,7 @@ def add_time_datas(date_debut,date_fin):
         dates_range.append(new_date)
         i+=1
 
-    df = pd.DataFrame(dates_range, columns=['DATE'])
+    df['DATE'] = dates_range
     df['JOUR']=df['DATE'].apply(lambda date : date.day)
     df['weekday'] = df['DATE'].apply(lambda date : get_weekday(date))
     df['MOIS'] = df['DATE'].apply(lambda date : date.month)
@@ -569,6 +657,63 @@ def add_holydays(df):
     
     return df
 
+def add_vacances(df_origin):
+
+    df = pd.read_csv("datas/vacancesFrance.csv", sep =',')
+    df['date'] = pd.to_datetime(df['date'], errors='ignore')
+    df.sort_values(by='date', inplace=True) #import to sort the df by date
+    df.reset_index(drop=True)
+
+    #Filtre sur la période qui nous intéresse
+
+    df = df[(df['date'] > '2019-12-31') & (df['date'] < '2023-06-01')]
+    df.sort_values(by='date', inplace=True) #import to sort the df by date
+    df = df.replace({True:1, False:0})
+    df = df.rename(columns={"date": "DATE"})
+
+    # Renomme les vacances
+    df = df.replace(
+
+        { 
+            "Pont de l'Ascension":"Ascen",
+            "Vacances d'hiver":"winter",
+            "Vacances d'été":"summer",
+            "Vacances de Noël":"xmas",
+            "Vacances de la Toussaint":"halloween",
+            "Vacances de printemps":"spring"
+        }
+
+    )
+
+    df_holydays = df[(df['nom_vacances'].isna()==False)]
+    df = pd.get_dummies(df, columns=['nom_vacances'])
+    
+    df_origin['DATE'] = pd.to_datetime(df_origin['DATE'], errors='ignore')
+    df_utlime =  df_origin.merge(df, on='DATE', how='left')
+
+    df_utlime['to_holydays_a']= df_utlime['DATE'].apply(lambda date: nb_days_to_next_holyday (date, df_holydays,"a"))
+    df_utlime['to_holydays_b']= df_utlime['DATE'].apply(lambda date: nb_days_to_next_holyday (date, df_holydays,"b"))
+    df_utlime['to_holydays_c']= df_utlime['DATE'].apply(lambda date: nb_days_to_next_holyday (date, df_holydays,"c"))
+
+    df_utlime['from_holydays_a']= df_utlime['DATE'].apply(lambda date: nb_days_from_next_holyday (date, df_holydays,"a"))
+    df_utlime['from_holydays_b']= df_utlime['DATE'].apply(lambda date: nb_days_from_next_holyday (date, df_holydays,"b"))
+    df_utlime['from_holydays_c']= df_utlime['DATE'].apply(lambda date: nb_days_from_next_holyday (date, df_holydays,"c"))
+
+    return df_utlime
+
+
+def nb_days_to_next_holyday (date, df_holydays, zone): 
+    zone = "vacances_zone_" + zone
+#     print(zone)
+    df_holydays = df_holydays[(df_holydays['DATE']>=date) & (df_holydays[zone]==1)].sort_values(by='DATE',ascending=True)
+    date_next_holidays = df_holydays.iloc[0,0:1]['DATE']
+    return (date_next_holidays - date).days
+    
+def nb_days_from_next_holyday (date, df_holydays, zone): 
+    zone = "vacances_zone_" + zone
+    df_holydays = df_holydays[(df_holydays['DATE']<=date) & (df_holydays[zone]==1)].sort_values(by='DATE',ascending=False)
+    date_next_holidays = df_holydays.iloc[0,0:1]['DATE']
+    return ( date - date_next_holidays).days
 
 def add_promotions(df):
 

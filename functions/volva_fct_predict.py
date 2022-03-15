@@ -8,8 +8,6 @@ from plotly import tools
 from texts.volva_text import *
 from plotly.subplots import make_subplots
 from functions.volva_fct import *
-from datetime import date
-import datetime
 from functions.utils.functions import *
 from functions.utils.jours_feries import get_nom_jour_ferie
 from sklearn.preprocessing import StandardScaler 

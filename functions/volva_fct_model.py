@@ -18,49 +18,6 @@ from functions.utils.functions import *
 
 from sklearn.model_selection import train_test_split
 
-path = 'datas/volva_datas_utlimate_one.csv'
-
-def get_df():
-    df= load_csv(path)
-    suppr=[
-            'MOIS',
-            'SEMAINE',
-            'JOUR',
-            'DATE',
-            'weekday',
-            'monthdays',
-            'prox_jour_ferie' ,    
-            'PREVISION_BUDGET_FRAIS',
-            'NB_HEURES_TOTAL_FRAIS',
-            'OBJECTIF_PROD_FRAIS',
-            'PREVISION_BUDGET_GEL',
-            'NB_HEURES_TOTAL_GEL',
-            'OBJECTIF_PROD_GEL',
-            'PREVISION_BUDGET_FFL',
-            'NB_HEURE_PREPARATION_FFL',
-            'OBJECTIF_PROD_FFL',
-            'REALISE_FLF_EXP',
-            'REALISE_HGE_EXP',
-            'REALISE_MECA_EXP',
-            'TOTAL_EXPE_EXP',
-            'NB_HEURE_EXP',
-            'OBJECTIF_PROD_EXP',
-            'colIndex',
-            'REALISE_GEL_EXP', 
-            'dernier_jour_ferie_nom', 
-            'prochain_jour_ferie_nom', 
-            'prox_jour_ferie_nom',
-            'Sem Juin',
-            'Sem aout',
-            'Sem dec',                  
-        ]
-
-    df_total = df 
-    df = df.drop(suppr, axis = 1)
-    df_minimum = pd.concat([df.iloc[:, :5],df.iloc[:, 40:48]], axis=1)
-
-    return df, df_total, df_minimum
-
 
 
 

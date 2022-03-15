@@ -22,6 +22,7 @@ from functions.volva_fct_visu import *
 from functions.volva_fct_data import *
 from functions.volva_fct_model import *
 from functions.volva_fct_predict import *
+from functions.volva_fct_add_datas import *
 
 st.set_page_config(page_title='Volva', page_icon='img/favicon/android-chrome-192x192.png')
 
@@ -81,6 +82,7 @@ if button_predict:
     link='[Prédictions sur période](#pr-dictions-sur-une-p-riode)'
     st.sidebar.markdown(link,unsafe_allow_html= True )
 
+button_add_datas = st.sidebar.button('Ajouter des données')
 
 
 if button_intro:
@@ -100,6 +102,9 @@ if button_model:
 
 if button_predict:
     st.session_state.page = 'Predict' 
+
+if button_add_datas:
+    st.session_state.page = 'add_datas' 
     
 
 
@@ -119,6 +124,9 @@ if page == 'Model':
 
 if page == 'Predict':
     build_page_predict()
+
+if page == 'add_datas':
+     build_page_add_datas()
 
 
 st.sidebar.write("")
