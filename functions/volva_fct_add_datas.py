@@ -63,6 +63,8 @@ def build_page_add_datas():
                     volva_datas_utlimate_one['DATE']= pd.to_datetime(volva_datas_utlimate_one['DATE'], dayfirst=True) 
                     result_addition = pd.concat([volva_datas_utlimate_one,df_added_datas])
                     result_addition=result_addition.reset_index()
+                    result_addition.drop('index', inplace=True, axis=1 )
+                    result_addition.dropna(inplace=True )
                     st.write(result_addition)
                     save_dataset = st.button("Sauvegarder le nouveau dataset")
                     if save_dataset:

@@ -30,51 +30,7 @@ def build_page_model():
 
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
-    with st.expander('Ajouter des données'):
-        uploaded_file = st.file_uploader("Choisissez un fichier")
-        if uploaded_file is not None:
-            uploaded = pd.read_excel(uploaded_file, header=0)
-            
-
-            if len(uploaded.columns) == 4 and \
-                "DATE" in uploaded.columns  and \
-                "REALISE_TOTAL_FRAIS" in uploaded.columns  and \
-                "REALISE_TOTAL_GEL" in uploaded.columns  and \
-                "REALISE_TOTAL_FFL" in uploaded.columns  :
-
-                uploaded_year = uploaded.loc[0,'DATE'].year
-                uploaded_month = uploaded.loc[0,'DATE'].month
-                num_days = monthrange(uploaded_year, uploaded_month)[1]
-                nb_line = uploaded.shape[0]
-                if   nb_line != num_days  :
-                    st.warning("Le nombre de lignes ne correspond pas au nombre de jours dans le mois.")  
-                else : 
-                    placeholder = st.empty()
-                    placeholder.warning("Le dataset est en cours de préparation. Veuillez patienter ...")
-                    df = uploaded
-                    date_debut = df.loc[0,'DATE']
-                    date_fin = df.loc[nb_line-1,'DATE']
-                    df = add_time_datas(date_debut,date_fin)
-                    df = add_holydays(df)
-                    df = add_promotions(df)
-                    df = add_temperatures_data(df)            
-                    df = drop_time_and_index_fields(df)
-                    st.write(df)
-                    placeholder = st.empty()
-
-            else:
-                
-                st.warning("Le format de fichier ne correspond pas à celui attendu.  \n" \
-                            " Il doit contenir 4 colonnes :  \n"\
-                            "- DATE  \n"\
-                            "- REALISE_TOTAL_FRAIS  \n"\
-                            "- REALISE_TOTAL_GEL  \n"\
-                            "- REALISE_TOTAL_FFL  \n"\
-                            + str(len(uploaded.columns))                            
-                )
-                
     
-
     st.write("Sélectionner les données à laisser dans le dataset d'origine")
 
     col3, col4, col5 = st.columns(3)
