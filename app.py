@@ -99,7 +99,7 @@ if button_visu:
 
 if button_model:
     st.session_state.page = 'Model'
-
+ 
 if button_predict:
     st.session_state.page = 'Predict' 
 
