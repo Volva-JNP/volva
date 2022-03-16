@@ -15,7 +15,7 @@ def build_page_add_datas():
     uploaded_file = st.file_uploader("Choisissez un fichier")
     if uploaded_file is not None:
         uploaded = pd.read_excel(uploaded_file, header=0)
-        volva_datas_utlimate_one = pd.read_csv('datas/volva_datas_utlimate_one2.csv',';', header=0)
+        volva_datas_utlimate_one = pd.read_csv('datas/volva_datas_utlimate_one2.csv', header=0)
 
         ordre_colonnes = volva_datas_utlimate_one.columns
 
