@@ -89,7 +89,7 @@ def set_data():
     st.title("Construction des données")
     
     with st.expander("Logigramme"):
-        st.image('img/construction_du_dataset.jpg')       
+        st.image('img\Flowchart.jpg')       
 
    
     
