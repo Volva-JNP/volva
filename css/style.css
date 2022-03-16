@@ -9,6 +9,7 @@ div.stButton >
     margin-right: 0px;
     height: 25px;
     width: 250px;
+    text-align: center;
 }
 
 
@@ -19,6 +20,9 @@ a {
 
   }  
 
+.css-ffhzg2 {
+    text-align: center;
+}
 .css-v37k9u a {
     color:whitesmoke;
 }

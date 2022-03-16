@@ -7,20 +7,6 @@ Created on Sat Feb 19 19:03:22 2022
 
 #sidebar
 
-creator = '''
-created by :  
-Volva Team  
-Phil Arrive  
-Nicolas Francois  
-Julien Khenniche
-
-and  
-Paul Datascientest as the Mentor
-'''
-
-
-
-
 
 
 #home

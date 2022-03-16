@@ -29,7 +29,7 @@ st.set_page_config(page_title='Volva', page_icon='img/favicon/android-chrome-192
 with open('css/style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-
+st.sidebar.markdown(f'<center>', unsafe_allow_html=True)
 
 st.sidebar.image('img/volvaF1.png')
 st.sidebar.image('img/projet_volva.png')
@@ -44,7 +44,6 @@ if 'page' not in st.session_state:
 Data=False
 
 st.sidebar.header('MENU')
-
 
 button_intro = st.sidebar.button('Introduction')
 # if button_intro:
@@ -85,8 +84,11 @@ if button_predict:
 button_add_datas = st.sidebar.button('Ajouter des données')
 
 
+
+
+
 if button_intro:
-    st.session_state.page = 'Intro'
+        st.session_state.page = 'Intro'
     
 
 if button_data:
@@ -129,14 +131,22 @@ if page == 'add_datas':
      build_page_add_datas()
 
 
+
 st.sidebar.write("")
-st.sidebar.write(creator)
-
-
-
-
+st.sidebar.write("")
+st.sidebar.write("")
+st.sidebar.markdown(f'<center>created by :</center>', unsafe_allow_html=True)
+st.sidebar.write("")
+st.sidebar.markdown(f'<center><u>Volva Team</u></center>', unsafe_allow_html=True)
+st.sidebar.write("")
+st.sidebar.markdown(f'<center>Phil Arrive</center>', unsafe_allow_html=True)
+st.sidebar.markdown(f'<center>Nicolas Francois</center>', unsafe_allow_html=True)
+st.sidebar.markdown(f'<center>Julien Khenniche</center>', unsafe_allow_html=True)
+st.sidebar.write("")
+st.sidebar.markdown(f'<center>and</center>', unsafe_allow_html=True)
+st.sidebar.markdown(f'<center>Paul Datascientest as the Mentor</center>', unsafe_allow_html=True)
     
- 
+
 
 
 
