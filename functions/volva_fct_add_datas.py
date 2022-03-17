@@ -56,48 +56,46 @@ def build_page_add_datas():
             if   nb_line != num_days  :
                 st.warning("Le nombre de lignes ne correspond pas au nombre de jours dans le mois.")  
             else : 
-                if st.session_state.saving_dataset == False :
+                placeholder = st.empty()
+                placeholder.warning("Le dataset est en cours de préparation. Veuillez patienter ...")
+                df = uploaded
+                date_debut = df.loc[0,'DATE']
+                date_fin = df.loc[nb_line-1,'DATE']
+                df = add_time_datas(date_debut,date_fin, df)
+                df = add_holydays(df)
+                df = add_promotions(df)
+                df = add_temperatures_data(df)            
+                df = add_vacances(df)
+                df = drop_time_and_index_fields(df)
 
-                    placeholder = st.empty()
-                    placeholder.warning("Le dataset est en cours de préparation. Veuillez patienter ...")
-                    df = uploaded
-                    date_debut = df.loc[0,'DATE']
-                    date_fin = df.loc[nb_line-1,'DATE']
-                    df = add_time_datas(date_debut,date_fin, df)
-                    df = add_holydays(df)
-                    df = add_promotions(df)
-                    df = add_temperatures_data(df)            
-                    df = add_vacances(df)
-                    df = drop_time_and_index_fields(df)
+                df_added_datas = pd.DataFrame()
 
-                    df_added_datas = pd.DataFrame()
+                for col in ordre_colonnes:
+                    df_added_datas[col] = df[col]
+                placeholder.empty()                
+                # df_added_datas.to_csv('datas/added_datas.csv')
 
-                    for col in ordre_colonnes:
-                        df_added_datas[col] = df[col]
-                    placeholder.empty()                
-                    # df_added_datas.to_csv('datas/added_datas.csv')
-
-                    with st.expander('Voir le dataset'):
-                        volva_datas_utlimate_one['DATE']= pd.to_datetime(volva_datas_utlimate_one['DATE'], dayfirst=True) 
-                        result_addition = pd.concat([volva_datas_utlimate_one,df_added_datas])
-                        result_addition=result_addition.reset_index()
-                        result_addition.drop('index', inplace=True, axis=1 )
-                        result_addition.dropna(inplace=True )
-                        st.write(result_addition)
+                with st.expander('Voir le dataset'):
+                    volva_datas_utlimate_one['DATE']= pd.to_datetime(volva_datas_utlimate_one['DATE'], dayfirst=True) 
+                    result_addition = pd.concat([volva_datas_utlimate_one,df_added_datas])
+                    result_addition=result_addition.reset_index()
+                    result_addition.drop('index', inplace=True, axis=1 )
+                    result_addition.dropna(inplace=True )
+                    st.write(result_addition)
+                
+                
                     
-                    
-                        
-                    save_dataset = st.button("Enregistrer dataset")
-                    if save_dataset :
-                        today = date.today()
-                        volva_dataset_path = path_datas + volva_dataset
-                        volva_dataset_archives_path = path_datas_archives + str(today) + ' - ' + volva_dataset
-                        shutil.copyfile(volva_dataset_path, volva_dataset_archives_path)
-                        result_addition.to_csv(volva_dataset_path)
+                save_dataset = st.button("Enregistrer dataset")
+                if save_dataset :
+                    today = date.today()
+                    volva_dataset_path = path_datas + volva_dataset
+                    volva_dataset_archives_path = path_datas_archives + str(today) + ' - ' + volva_dataset
+                    shutil.copyfile(volva_dataset_path, volva_dataset_archives_path)
+                    result_addition.to_csv(volva_dataset_path)
 
-                        # st.session_state.temp_dataset_to_save == True
-                        # # uploaded_file = None
-                        # del st.session_state.key                         
+                    # st.session_state.temp_dataset_to_save == True
+                    # # uploaded_file = None
+                    # del st.session_state.key                         
 
                
         else:
