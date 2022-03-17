@@ -70,6 +70,11 @@ path = 'datas/volva_datas_utlimate_one.csv'
 
 def get_df():
     df= load_csv(path)
+
+    if 'Unnamed: 0' in df.columns : 
+        df = df.drop('Unnamed: 0', axis=1)
+
+
     suppr=[
             'DATE',
             'weekday',
