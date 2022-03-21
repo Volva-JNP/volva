@@ -66,13 +66,13 @@ Chaque fichier représente un mois. Grâce à un code Python les mois sont conca
 '''
 data2 = '''
 Les données sont ensuite nettoyées à travers :
- - une selection des variables intéressantes pour les analyses et prévisions
- - un traitement aucas par cas des erreurs
+ - une sélection des variables intéressantes pour les analyses et prévisions
+ - un traitement au cas par cas des erreurs
  - une analyse des outliers
  - une recherche des données manquantes
 '''
 data3 = '''
-Réflexion des hypothèses impactant le volume et intégration des données permettant de valider ces hypothèses
+Réflexion des hypothèses impactant le volume et intégration des données permettant de valider ces hypothèses:
  - position du jour dans l'espace temporel : Est-ce que la position du jour ou semaine dans le mois ou année impact le volume de commande?
  - jours fériés : Est-ce que la proximité d'un jour férié (passé ou à venir) impacte les commandes de supermarchés pour compenser le jour de fermeture ?
  - vacances scolaire par zone : 
