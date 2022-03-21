@@ -18,14 +18,14 @@ Le projet a pour but d'analyser les historiques de volumes des différents
 services d’un site logistique pour en déduire des tendances et développer un outil prévisionnel afin d’adapter les ressources humaines nécessaires aux opérations logistiques avec une projection à plusieurs semaines.  
 
 Nous disposions des historiques de volumes de colis jour/jour sur la période 2020/2021, du nombre d’heures travaillées sur la même période et des notions de productivité par service (18 mois d’historique).
-Ces données sont issues d'une requete Oracle realisé mensuellement.  
+Ces données sont issues d'une requête Oracle réalisée mensuellement.  
 
 Nous avons donc dans un premier temps réuni l'ensemble des infos dans un seul dataset afin de faire une première analyse visuelle de ces données.
 Nous avons ensuite, à partir des hypothèses, cherché d'autres variables explicatives pouvant expliquer les variations d'activité sur le site.  
 
-Dans un autre temps nous avons passer en revue quelques modeles de Machine learning afin de trouver le/les modèles les plus performants pour notre prédiction.
-Nous avons dû devellopper des métriques spécifiques au projet afin de mesurer les modèles entre eux.
-Pour finir nous presenterons une prédiction à partir de ces modèles.
+Dans un autre temps nous avons passé en revue quelques modèles de Machine learning afin de trouver le/les modèles les plus performants pour notre prédiction.
+Nous avons dû developper des métriques spécifiques au projet afin de mesurer les modèles entre eux.
+Pour finir nous présenterons une prédiction à partir de ces modèles.
 '''
 
 definition = '''
