@@ -139,13 +139,20 @@ st.sidebar.markdown(f'<center>created by :</center>', unsafe_allow_html=True)
 st.sidebar.write("")
 st.sidebar.markdown(f'<center><u>Volva Team</u></center>', unsafe_allow_html=True)
 st.sidebar.write("")
-st.sidebar.markdown(f'<center>Phil Arrive</center>', unsafe_allow_html=True)
-st.sidebar.markdown(f'<center>Nicolas Francois</center>', unsafe_allow_html=True)
-st.sidebar.markdown(f'<center>Julien Khenniche</center>', unsafe_allow_html=True)
+link='[Phil Arrive](https://www.linkedin.com/in/philippe-arrive-954765137/)'
+st.sidebar.markdown(link,unsafe_allow_html= True )
+
+link='[Nicolas Francois](https://www.linkedin.com/in/nicolas-francois-finance-and-bi/)'
+st.sidebar.markdown(link,unsafe_allow_html= True )
+
+link='[Julien Khenniche](https://www.linkedin.com/in/philippe-arrive-954765137/)'
+st.sidebar.markdown(link,unsafe_allow_html= True )
+
 st.sidebar.write("")
 st.sidebar.markdown(f'<center>and</center>', unsafe_allow_html=True)
 st.sidebar.markdown(f'<center>Paul Datascientest as the Mentor</center>', unsafe_allow_html=True)
     
+
 
 
 
