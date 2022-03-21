@@ -20,9 +20,7 @@ a {
 
   }  
 
-.css-ffhzg2 {
-    text-align: center;
-}
+
 .css-v37k9u a {
     color:whitesmoke;
 }
@@ -36,5 +34,11 @@ div[role="radiogroup"] >  :first-child{
 }
 
 h2 {
+    text-align: center;
+}
+
+.css-1p1nwyz {
+    width: 304px;
+    position: relative;
     text-align: center;
 }
