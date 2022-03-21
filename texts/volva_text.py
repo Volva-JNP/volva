@@ -18,14 +18,14 @@ Le projet a pour but d'analyser les historiques de volumes des différents
 services d’un site logistique pour en déduire des tendances et développer un outil prévisionnel afin d’adapter les ressources humaines nécessaires aux opérations logistiques avec une projection à plusieurs semaines.  
 
 Nous disposions des historiques de volumes de colis jour/jour sur la période 2020/2021, du nombre d’heures travaillées sur la même période et des notions de productivité par service (18 mois d’historique).
-Ces données sont issues d'une requete Oracle realisé mensuellement.  
+Ces données sont issues d'une requête Oracle réalisée mensuellement.  
 
 Nous avons donc dans un premier temps réuni l'ensemble des infos dans un seul dataset afin de faire une première analyse visuelle de ces données.
 Nous avons ensuite, à partir des hypothèses, cherché d'autres variables explicatives pouvant expliquer les variations d'activité sur le site.  
 
-Dans un autre temps nous avons passer en revue quelques modeles de Machine learning afin de trouver le/les modèles les plus performants pour notre prédiction.
-Nous avons dû devellopper des métriques spécifiques au projet afin de mesurer les modèles entre eux.
-Pour finir nous presenterons une prédiction à partir de ces modèles.
+Dans un autre temps nous avons passé en revue quelques modèles de Machine learning afin de trouver le/les modèles les plus performants pour notre prédiction.
+Nous avons dû developper des métriques spécifiques au projet afin de mesurer les modèles entre eux.
+Pour finir nous présenterons une prédiction à partir de ces modèles.
 '''
 
 definition = '''
@@ -66,13 +66,13 @@ Chaque fichier représente un mois. Grâce à un code Python les mois sont conca
 '''
 data2 = '''
 Les données sont ensuite nettoyées à travers :
- - une selection des variables intéressantes pour les analyses et prévisions
- - un traitement aucas par cas des erreurs
+ - une sélection des variables intéressantes pour les analyses et prévisions
+ - un traitement au cas par cas des erreurs
  - une analyse des outliers
  - une recherche des données manquantes
 '''
 data3 = '''
-Réflexion des hypothèses impactant le volume et intégration des données permettant de valider ces hypothèses
+Réflexion des hypothèses impactant le volume et intégration des données permettant de valider ces hypothèses:
  - position du jour dans l'espace temporel : Est-ce que la position du jour ou semaine dans le mois ou année impact le volume de commande?
  - jours fériés : Est-ce que la proximité d'un jour férié (passé ou à venir) impacte les commandes de supermarchés pour compenser le jour de fermeture ?
  - vacances scolaire par zone : 
