@@ -30,7 +30,7 @@ params_gbr = {
         'learning_rate': [0.099]
 }
 
-path = 'datas/volva_datas_utlimate_one.csv'
+path = 'datas/volva_datas_utlimate_one2.csv'
 
 
 ########################################################

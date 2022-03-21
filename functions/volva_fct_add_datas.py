@@ -16,7 +16,7 @@ import shutil
 def build_page_add_datas():
     # redim_df()
 
-    volva_dataset = 'volva_datas_utlimate_one.csv'
+    volva_dataset = 'volva_datas_utlimate_one2.csv'
     path_datas = 'datas/'
     path_datas_archives = path_datas + 'archives/'
 
@@ -34,12 +34,12 @@ def build_page_add_datas():
 
     if uploaded_file is not None:
         uploaded = pd.read_excel(uploaded_file,  header=0)
-        volva_datas_utlimate_one = pd.read_csv(path_datas + volva_dataset, header=0)
+        volva_datas_utlimate_one2 = pd.read_csv(path_datas + volva_dataset, header=0)
 
-        if 'Unnamed: 0' in volva_datas_utlimate_one.columns : 
-            volva_datas_utlimate_one = volva_datas_utlimate_one.drop('Unnamed: 0', axis=1)
+        if 'Unnamed: 0' in volva_datas_utlimate_one2.columns : 
+            volva_datas_utlimate_one2 = volva_datas_utlimate_one2.drop('Unnamed: 0', axis=1)
 
-        ordre_colonnes = volva_datas_utlimate_one.columns
+        ordre_colonnes = volva_datas_utlimate_one2.columns
 
         if len(uploaded.columns) == 4   and \
             "DATE" in uploaded.columns  and \
@@ -76,8 +76,8 @@ def build_page_add_datas():
                 # df_added_datas.to_csv('datas/added_datas.csv')
 
                 with st.expander('Voir le dataset'):
-                    volva_datas_utlimate_one['DATE']= pd.to_datetime(volva_datas_utlimate_one['DATE'], dayfirst=True) 
-                    result_addition = pd.concat([volva_datas_utlimate_one,df_added_datas])
+                    volva_datas_utlimate_one2['DATE']= pd.to_datetime(volva_datas_utlimate_one2['DATE'], dayfirst=True) 
+                    result_addition = pd.concat([volva_datas_utlimate_one2,df_added_datas])
                     result_addition=result_addition.reset_index()
                     result_addition.drop('index', inplace=True, axis=1 )
                     result_addition.dropna(inplace=True )
