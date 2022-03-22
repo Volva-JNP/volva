@@ -149,9 +149,9 @@ Par contre la distribution du frais est plus étalée ce qui induit un plus gran
 violo = '''
 Représentation graphique des volumes journaliers avec distribution et écart-type.
 les volumes journaliers nous montre que :
-    -le secteur GEL est très homogene dans ses journées (sauf le samedi)
+    -le secteur GEL est très homogène dans ses journées (sauf le samedi)
     -le secteur FFL a deux jours forts (jeudi et vendredi)
-    -le secteur Frais à une journée très forte et homogène (le jeudi) mais les autres jours ont une distribution plus etalée (donc plus de variations)
+    -le secteur Frais à une journée très forte et homogène (le jeudi) mais les autres jours ont une distribution plus étalée (donc plus de variations)
 
 '''
 
