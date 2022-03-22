@@ -157,8 +157,8 @@ les volumes journaliers nous montre que :
 
 
 impact = '''
-Les graphiques ci-dessous representent la variation des volumes la semaine precedant le jour ferié en fonction de la place du jour férié dans la semaine.
-nous pouvons constater que le jour ferié impact fortement l'activité et plus particulierement sur certains jours en fonction du secteur et de la place du jour férié dans la semaine'
+Les graphiques ci-dessous représentent la variation des volumes la semaine précedant le jour ferié en fonction de la place du jour férié dans la semaine.
+Nous pouvons constater que le jour férié impact fortement l'activité et plus particulierement sur certains jours en fonction du secteur et de la place du jour férié dans la semaine'
 '''
 
 
