@@ -140,16 +140,16 @@ st.sidebar.write("")
 st.sidebar.markdown(f'<center><u>Volva Team</u></center>', unsafe_allow_html=True)
 st.sidebar.write("")
 link='[Phil Arrive](https://www.linkedin.com/in/philippe-arrive-954765137/)'
-st.image("img/Image4.jpg")
+st.sidebar.image("img/Image4.jpg")
 st.sidebar.markdown(link,unsafe_allow_html= True )
 
 
 link='[Nicolas Francois](https://www.linkedin.com/in/nicolas-francois-finance-and-bi/)'
-st.image("img/Image6.jpg")
+st.sidebar.image("img/Image6.jpg")
 st.sidebar.markdown(link,unsafe_allow_html= True )
 
 link='[Julien Khenniche](https://www.linkedin.com/in/philippe-arrive-954765137/)'
-st.image("img/Image5.jpg")
+st.sidebar.image("img/Image5.jpg")
 st.sidebar.markdown(link,unsafe_allow_html= True )
 
 st.sidebar.write("")
