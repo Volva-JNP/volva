@@ -149,10 +149,11 @@ st.sidebar.image("img/Image6.jpg",width=50)
 st.sidebar.markdown(link,unsafe_allow_html= True )
 
 link='[Julien Khenniche](https://www.linkedin.com/in/philippe-arrive-954765137/)'
-col1,col2,col3 = st.sidebar.columns(3)
-with col2 :
+col1,col2 = st.sidebar.columns(2)
+with col1 :
     st.sidebar.image("img/Image5.jpg",width=50)
-st.sidebar.markdown(link,unsafe_allow_html= True )
+with col2:
+    st.sidebar.markdown(link,unsafe_allow_html= True )
 
 st.sidebar.write("")
 st.sidebar.markdown(f'<center>and</center>', unsafe_allow_html=True)
