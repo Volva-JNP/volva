@@ -148,6 +148,9 @@ st.sidebar.image("img/Image6.jpg",width=50)
 link='[Nicolas Francois](https://www.linkedin.com/in/nicolas-francois-finance-and-bi/)'
 st.sidebar.markdown(link,unsafe_allow_html= True )
 
+
+with open("style.css") as f:
+    st.markdown('<style>{}</style>'.format(f.read()), unsafe_allow_html=True)
 pat='img/Image5.jpg'
 imagju= Image.open(pat)
 st.sidebar.image(imagju,width=50)
