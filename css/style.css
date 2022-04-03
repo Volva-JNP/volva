@@ -42,12 +42,3 @@ h2 {
     position: relative;
     text-align: center;
 }
-
-body {
-    background-color: #eee;
-}
-
-.fullScreenFrame > div {
-    display: flex;
-    justify-content: center;
-}
