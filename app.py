@@ -151,7 +151,7 @@ st.sidebar.markdown(link,unsafe_allow_html= True )
 link='[Julien Khenniche](https://www.linkedin.com/in/philippe-arrive-954765137/)'
 with open("style.css") as f:
     st.markdown('<style>{}</style>'.format(f.read()), unsafe_allow_html=True)
-    st.sidebar.image(f'<center>"img/Image5.jpg"</center>',width=50)
+st.sidebar.image(f'<center>img/Image5.jpg</center>',width=50)
 
 st.sidebar.markdown(link,unsafe_allow_html= True )
 
