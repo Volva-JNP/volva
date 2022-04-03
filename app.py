@@ -145,7 +145,7 @@ st.sidebar.markdown(link,unsafe_allow_html= True )
 
 
 link='[Nicolas Francois](https://www.linkedin.com/in/nicolas-francois-finance-and-bi/)'
-st.sidebar.image("<center>img/Image6.jpg</center>",width=50)
+st.sidebar.image(f"<center>img/Image6.jpg</center>",width=50)
 st.sidebar.markdown(link,unsafe_allow_html= True )
 
 link='[Julien Khenniche](https://www.linkedin.com/in/philippe-arrive-954765137/)'
