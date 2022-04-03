@@ -149,7 +149,7 @@ st.sidebar.image("img/Image6.jpg")
 st.sidebar.markdown(link,unsafe_allow_html= True )
 
 link='[Julien Khenniche](https://www.linkedin.com/in/philippe-arrive-954765137/)'
-st.sidebar.image("img/Image5.jpg",width=200)
+st.sidebar.image("img/Image5.jpg",width=50)
 st.sidebar.markdown(link,unsafe_allow_html= True )
 
 st.sidebar.write("")
