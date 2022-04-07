@@ -31,7 +31,7 @@ def build_page_model():
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
     
-    st.write("Sélectionner les données à laisser dans le dataset d'origine")
+    st.title("Sélectionner les données pour le secteur")
 
     col3, col4, col5 = st.columns(3)
     with col3:   

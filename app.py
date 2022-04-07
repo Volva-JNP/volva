@@ -64,7 +64,7 @@ if button_visu:
 
 button_model = st.sidebar.button('Modélisation')
 if button_model:
-    link='[Données utiles par secteur](#selection-des-donn-es-utiles-par-test-de-mod-les)'
+    link='[Données utiles par secteur](#s-lectionner-les-donn-es-pour-le-secteur)'
     st.sidebar.markdown(link,unsafe_allow_html= True )
 
     link='[Tests modèles de regression](#tests-des-mod-les-de-regression)'
@@ -157,8 +157,11 @@ st.sidebar.markdown(link,unsafe_allow_html= True )
 
 
 st.sidebar.write("")
-st.sidebar.markdown(f'<center>and</center>', unsafe_allow_html=True)
-st.sidebar.markdown(f'<center>Paul Datascientest as the Mentor</center>', unsafe_allow_html=True)
+st.sidebar.markdown(f'<center><u>from DataScienceTest</u></center>', unsafe_allow_html=True)
+
+link='[Paul Dechorgnat as the Mentor](https://www.linkedin.com/in/paul-dechorgnat/)'
+st.sidebar.markdown(link,unsafe_allow_html= True )
+
     
 
 
