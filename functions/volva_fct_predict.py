@@ -73,7 +73,8 @@ def build_page_predict():
             if button_predict:
                 placeholder = st.empty()
                 placeholder.warning("Le dataset est en cours de préparation. Veuillez patienter ...")
-                df = add_time_datas(date_debut,date_fin)
+                df = pd.DataFrame()
+                df = add_time_datas(date_debut,date_fin,df)
                 df = add_holydays(df)
                 df = add_promotions(df)
                 df = add_temperatures_data(df)            
