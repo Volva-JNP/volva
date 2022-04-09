@@ -18,7 +18,6 @@ from joblib import load
 
 
 
-
 def build_page_predict():
 
     st.title('Prévisions sur une période')
