@@ -97,20 +97,24 @@ def build_page_predict():
 
                 }
                 df_best_model_per_day= df_best_model_per_day.replace(dict_weekday_num)
-
+                # st.write(df_best_model_per_day)
     
                 df_predictions = pd.DataFrame();
                 list_models = df_best_model_per_day['Modèle'].unique()
-                nb_model = len(list_models) - 1
+                nb_model = len(list_models) 
 
+                # st.write(list_models)
                 for model_name,i in zip(list_models, stqdm(range(nb_model))):
-                                
+                    # st.write(model_name) 
+                    # st.write(i)           
                     if model_name == "GBR" : 
                         model_GBR = load('models/model_' + model_name +'_' + secteur + '.joblib')
                         df_best_model_per_day_GBR = df_best_model_per_day[df_best_model_per_day['Modèle']=='GBR']
-
+                        
                         for jour in df_best_model_per_day_GBR['Jours'].unique():
                             df_jour = df[df['weekday'] == jour]
+                            # st.write(jour)
+                            # st.write(df_jour)
                             
                             if df_jour.shape[0] != 0 :
                                 df_jour_DATE_WeekDay = df_jour[['DATE', 'weekday']]
@@ -160,6 +164,8 @@ def build_page_predict():
                         df_best_model_per_day_RFR = df_best_model_per_day[df_best_model_per_day['Modèle']=='RFR']
                         for jour in df_best_model_per_day_RFR['Jours'].unique():
                             df_jour = df[df['weekday'] == jour]
+                            # st.write(jour)
+                            # st.write(df_jour)
                             if df_jour.shape[0] != 0 :
                                 df_jour_DATE_WeekDay = df_jour[['DATE', 'weekday']]
                                 df_jour = df_jour.drop(['DATE', 'weekday'], axis=1)
@@ -206,8 +212,11 @@ def build_page_predict():
                     elif model_name == "DTR":                
                         model_DTR = load('models/model_' + model_name +'_' + secteur + '.joblib')
                         df_best_model_per_day_DTR = df_best_model_per_day[df_best_model_per_day['Modèle']=='DTR']
+                        
                         for jour in df_best_model_per_day_DTR['Jours'].unique():
                                 df_jour = df[df['weekday'] == jour]
+                                # st.write(jour)
+                                # st.write(df_jour)
                                 if df_jour.shape[0] != 0 :
                                     df_jour_DATE_WeekDay = df_jour[['DATE', 'weekday']]
                                     df_jour = df_jour.drop(['DATE', 'weekday'], axis=1)
