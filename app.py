@@ -152,7 +152,7 @@ st.sidebar.markdown(link,unsafe_allow_html= True )
 # pat='img/Image5.jpg'
 # imagju= Image.open(pat)
 # st.sidebar.image(imagju,width=50)
-link='[Julien Khenniche](https://www.linkedin.com/in/philippe-arrive-954765137/)'
+link='[Julien Khenniche](www.linkedin.com/in/julien-khenniche-81954180/)'
 st.sidebar.markdown(link,unsafe_allow_html= True )
 
 
